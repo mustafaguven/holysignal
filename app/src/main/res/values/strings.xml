@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">holy signal</string>
+    <string name="from_x">From: %1s</string>
+</resources>
