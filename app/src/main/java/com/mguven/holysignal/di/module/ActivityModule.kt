@@ -9,7 +9,7 @@ import dagger.Provides
 import io.reactivex.disposables.CompositeDisposable
 
 @Module
-open class ActivityModule(val activity: AbstractBaseActivity) {
+open class ActivityModule(private val activity: AbstractBaseActivity) {
 
   @PerActivity
   @Provides
