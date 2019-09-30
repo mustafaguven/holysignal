@@ -4,32 +4,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#000"
-    tools:context=".ui.NewsActivity">
+    tools:context=".ui.MainActivity">
 
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/swipeToRefresh"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvNews"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:padding="10dp"
-            android:scrollbars="none" />
 
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-    <RelativeLayout
-        android:id="@+id/progressBar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:visibility="visible">
-
-        <ProgressBar
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:layout_marginTop="10dp" />
-    </RelativeLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

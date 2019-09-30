@@ -32,7 +32,6 @@ abstract class AbstractBaseActivity : AppCompatActivity(), LifecycleObserver {
 
     component!!.inject(this)
 
-
   }
 
   protected fun <T : ViewModel> getViewModel(viewModelClz: Class<T>): T =

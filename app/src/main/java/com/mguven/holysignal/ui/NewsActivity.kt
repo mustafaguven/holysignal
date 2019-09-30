@@ -14,7 +14,7 @@ import com.mguven.holysignal.paging.NetworkState
 import com.mguven.holysignal.rx.SchedulerProvider
 import com.mguven.holysignal.ui.adapter.NewsAdapter
 import com.mguven.holysignal.viewmodel.NewsViewModel
-import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_news.*
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -30,7 +30,7 @@ class NewsActivity : AbstractBaseActivity() {
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    setContentView(R.layout.activity_main)
+    setContentView(R.layout.activity_news)
     inject()
     newsViewModel = getViewModel(NewsViewModel::class.java)
     initAdapter()

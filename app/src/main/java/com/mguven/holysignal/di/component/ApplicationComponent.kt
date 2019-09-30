@@ -13,6 +13,7 @@ import dagger.Component
   ApplicationModule::class,
   NetworkModule::class,
   ViewModelModule::class,
+  DatabaseModule::class,
   SchedulerModule::class
 ])
 interface ApplicationComponent {
@@ -21,5 +22,7 @@ interface ApplicationComponent {
 
   operator fun plus(activityModule: ActivityModule): AbstractBaseComponent
 
-  operator fun plus(mainActivityModule: NewsActivityModule): NewsActivityComponent
+  operator fun plus(newsActivityModule: NewsActivityModule): NewsActivityComponent
+
+  operator fun plus(mainActivityModule: MainActivityModule): MainActivityComponent
 }

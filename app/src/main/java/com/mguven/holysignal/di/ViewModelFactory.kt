@@ -23,9 +23,7 @@ class ViewModelFactory @Inject constructor(
         }
       }
     }
-    if (viewModel == null) {
-      throw IllegalArgumentException("None view model found such as $viewModelClz")
-    }
+    requireNotNull(viewModel) { "None view model found such as $viewModelClz" }
     try {
       return viewModel.get() as T
     } catch (e: Exception) {

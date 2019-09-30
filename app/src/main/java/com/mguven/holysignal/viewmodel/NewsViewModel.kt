@@ -1,17 +1,17 @@
 package com.mguven.holysignal.viewmodel
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.Transformations
 import androidx.paging.PagedList
 import androidx.paging.RxPagedListBuilder
 import com.mguven.holysignal.model.Article
 import com.mguven.holysignal.network.NewsApi
+import com.mguven.holysignal.paging.ArticlesDataSource
 import com.mguven.holysignal.paging.ArticlesDataSourceFactory
+import com.mguven.holysignal.paging.NetworkState
 import io.reactivex.Observable
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
-import androidx.lifecycle.Transformations
-import com.mguven.holysignal.paging.ArticlesDataSource
-import com.mguven.holysignal.paging.NetworkState
 
 
 class NewsViewModel @Inject
@@ -23,10 +23,9 @@ constructor(newsApi: NewsApi) : BaseViewModel() {
 
   val networkState: LiveData<NetworkState>
   val newsList: Observable<PagedList<Article>>
-  val articlesDataSourceFactory: ArticlesDataSourceFactory
+  private val articlesDataSourceFactory: ArticlesDataSourceFactory = ArticlesDataSourceFactory(compositeDisposable, newsApi)
 
   init {
-    articlesDataSourceFactory = ArticlesDataSourceFactory(compositeDisposable, newsApi)
 
     networkState = Transformations.switchMap(articlesDataSourceFactory.articlesDataSourceLiveData) { dataSource ->
       dataSource.networkState
