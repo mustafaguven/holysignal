@@ -3,16 +3,14 @@ package com.mguven.holysignal.ui
 import android.os.Bundle
 import android.util.Log
 import androidx.lifecycle.Observer
-import com.evernote.android.job.JobManager
-import com.evernote.android.job.JobRequest
 import com.mguven.holysignal.R
 import com.mguven.holysignal.TheApplication
 import com.mguven.holysignal.db.ApplicationDatabase
 import com.mguven.holysignal.db.entity.AyahSampleData
 import com.mguven.holysignal.db.entity.EditionData
+import com.mguven.holysignal.db.entity.SurahAyahSampleData
 import com.mguven.holysignal.db.entity.SurahData
 import com.mguven.holysignal.di.module.CardActivityModule
-import com.mguven.holysignal.job.LockScreenJob
 import com.mguven.holysignal.rx.SchedulerProvider
 import com.mguven.holysignal.viewmodel.HolyBookViewModel
 import kotlinx.android.synthetic.main.activity_card.*
@@ -30,6 +28,13 @@ class CardActivity : AbstractBaseActivity() {
   private lateinit var holyBookViewModel: HolyBookViewModel
 
 
+  private fun inject() {
+    (application as TheApplication)
+        .applicationComponent
+        .plus(CardActivityModule(this))
+        .inject(this)
+  }
+
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     Log.e("ScreenActionReceiver", "screen is card activity")
@@ -37,35 +42,44 @@ class CardActivity : AbstractBaseActivity() {
     inject()
     holyBookViewModel = getViewModel(HolyBookViewModel::class.java)
 
+    val randomAyahNumber = (1..50).random()
+    getRandomAyah(randomAyahNumber)
+    getRandomSelectedLanguageAyah(randomAyahNumber)
 
-
-    getRandomAyah()
-
-    //getEditionList()
-
-    //getSurahList()
-
+    Log.e("ScreenActionReceiver", "random ayah is taken")
   }
 
+  private fun getRandomAyah(randomAyahNumber: Int) {
+    val editionId = 11
+    holyBookViewModel.getRandomAyah2(editionId, randomAyahNumber).observe(this, Observer<List<SurahAyahSampleData>> { list ->
+      list.forEach {
+        tvAyahArabic.text = it.ayahText
+        tvSurah.text = "${it.surahEnglishName} (${it.surahEnglishNameTranslation})"
+        tvRevelationType.text = it.surahRevelationType
+        Log.e("AAA", "==============> ${it.surahName} == ${it.ayahText}")
+      }
+    })
+  }
 
-
-  private fun getRandomAyah() {
-    val randomAyahNumber = (0..50).random()
+  private fun getRandomSelectedLanguageAyah(randomAyahNumber: Int) {
     val editionId = 53
     holyBookViewModel.getRandomAyah(editionId, randomAyahNumber).observe(this, Observer<List<AyahSampleData>> { list ->
       list.forEach {
-        tvAyah.text = it.text
+        tvAyahSelectedLanguage.text = it.text
         Log.e("AAA", "==============> ${it.Id} == ${it.text}")
       }
     })
   }
 
-  private fun inject() {
-    (application as TheApplication)
-        .applicationComponent
-        .plus(CardActivityModule(this))
-        .inject(this)
-  }
+/*  private fun getSelectedSurah(surahNumber: Int) {
+    holyBookViewModel.getSelectedSurah(surahNumber).observe(this, Observer<List<SurahData>> { list ->
+      list.forEach {
+        tvSurah.text = it.name
+        Log.e("AAA", "==============> ${it.Id} == ${it.name}")
+      }
+    })
+  }*/
+
 
   private fun getAyahList(editionId: Int, randomAyah: Int) {
     holyBookViewModel.getAyahList().observe(this, Observer<List<AyahSampleData>> { list ->

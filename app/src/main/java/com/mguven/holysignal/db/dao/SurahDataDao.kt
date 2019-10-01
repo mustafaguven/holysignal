@@ -19,4 +19,7 @@ interface SurahDataDao {
 
   @Query("DELETE from Surah")
   fun deleteAll()
+
+/*  @Query("select Surah.* from Surah inner join AyahSample on AyahSample.surahNumber=Surah.number WHERE ayah")
+  fun getSurahByAyahId(ayahId: Int): LiveData<List<SurahData>>*/
 }

@@ -18,20 +18,10 @@
             </intent-filter>
         </activity>
 
-        <activity android:name="com.mguven.holysignal.ui.CardActivity" />
+        <activity android:name="com.mguven.holysignal.ui.CardActivity" android:theme="@style/NoActionBarTheme"/>
 
-
-        <receiver android:name=".br.ScreenActionReceiver">
-            <intent-filter android:priority="90000">
-                <action android:name="android.intent.action.USER_PRESENT" />
-            </intent-filter>
-        </receiver>
-
-
-        <service
-            android:name=".service.BackgroundService"
-            android:enabled="true"></service>
     </application>
+
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <uses-permission android:name="android.permission.INTERNET" />

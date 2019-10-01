@@ -3,17 +3,68 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#000"
-    tools:context=".ui.CardActivity">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/bg1"
+    tools:context=".ui.CardActivity"
+    android:layout_centerInParent="true">
+
+    <TextView
+        android:layout_marginTop="50dp"
+        android:id="@+id/tvAyahArabic"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintRight_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/tvAyahSelectedLanguage"
+        android:gravity="center"
+        android:textSize="18sp"
+        tools:text="arabic"
+        android:textColor="@color/black"
+        app:layout_constraintVertical_chainStyle="packed" />
+
+    <TextView
+        android:id="@+id/tvAyahSelectedLanguage"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        app:layout_constraintTop_toBottomOf="@id/tvAyahArabic"
+        app:layout_constraintLeft_toLeftOf="@id/tvAyahArabic"
+        app:layout_constraintRight_toRightOf="@id/tvAyahArabic"
+        app:layout_constraintBottom_toTopOf="@id/tvSurah"
+        android:gravity="center"
+        android:textSize="18sp"
+        tools:text="selected language here"
+        android:textColor="@color/black"/>
 
 
     <TextView
-        android:id="@+id/tvAyah"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:id="@+id/tvSurah"
+        android:layout_marginTop="50dp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/tvAyahSelectedLanguage"
+        app:layout_constraintLeft_toLeftOf="@id/tvAyahSelectedLanguage"
+        app:layout_constraintRight_toRightOf="@id/tvAyahSelectedLanguage"
+        app:layout_constraintBottom_toTopOf="@id/tvRevelationType"
         android:gravity="center"
         android:textSize="18sp"
-        tools:text="asdasd"
-        android:textColor="@color/colorAccent"/>
+        tools:text="selected surah here"
+        android:textColor="@color/black"/>
+
+    <TextView
+        android:id="@+id/tvRevelationType"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/tvSurah"
+        app:layout_constraintLeft_toLeftOf="@id/tvSurah"
+        app:layout_constraintRight_toRightOf="@id/tvSurah"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:gravity="center"
+        android:textSize="18sp"
+        tools:text="revelation type"
+        android:textColor="@color/black"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
