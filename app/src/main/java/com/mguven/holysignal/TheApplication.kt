@@ -1,11 +1,11 @@
 package com.mguven.holysignal
 
 import android.app.Application
-import android.content.Context
-import android.net.ConnectivityManager
+import com.evernote.android.job.JobManager
 import com.mguven.holysignal.di.component.ApplicationComponent
 import com.mguven.holysignal.di.component.DaggerApplicationComponent
 import com.mguven.holysignal.di.module.ApplicationModule
+import com.mguven.holysignal.job.LockScreenJobCreator
 import com.squareup.picasso.Picasso
 import javax.inject.Inject
 
@@ -19,12 +19,8 @@ class TheApplication : Application() {
 
   override fun onCreate() {
     super.onCreate()
+    JobManager.create(this).addJobCreator(LockScreenJobCreator())
     inject()
-  }
-
-  fun isOnline(): Boolean {
-    val cm = applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager?
-    return cm!!.activeNetworkInfo != null && cm.activeNetworkInfo.isConnected
   }
 
   private fun inject() {

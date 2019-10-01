@@ -2,9 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.mguven.holysignal">
 
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-
     <application
         android:name="com.mguven.holysignal.TheApplication"
         android:allowBackup="true"
@@ -21,7 +18,22 @@
             </intent-filter>
         </activity>
 
-        <activity android:name="com.mguven.holysignal.ui.ArticleDetailActivity"/>
+        <activity android:name="com.mguven.holysignal.ui.CardActivity" />
+
+
+        <receiver android:name=".br.ScreenActionReceiver">
+            <intent-filter android:priority="90000">
+                <action android:name="android.intent.action.USER_PRESENT" />
+            </intent-filter>
+        </receiver>
+
+
+        <service
+            android:name=".service.BackgroundService"
+            android:enabled="true"></service>
     </application>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <uses-permission android:name="android.permission.INTERNET" />
 
 </manifest>

@@ -18,4 +18,7 @@ interface AyahSampleDataDao {
 
   @Query("DELETE from AyahSample")
   fun deleteAll()
+
+  @Query("SELECT * from AyahSample WHERE editionId = :editionId AND number = :randomAyahNumber")
+  fun getRandomAyah(editionId: Int, randomAyahNumber: Int): LiveData<List<AyahSampleData>>
 }

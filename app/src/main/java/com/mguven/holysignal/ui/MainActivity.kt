@@ -1,42 +1,20 @@
 package com.mguven.holysignal.ui
 
 import android.os.Bundle
-import android.util.Log
-import androidx.lifecycle.Observer
+import com.evernote.android.job.JobManager
+import com.evernote.android.job.JobRequest
 import com.mguven.holysignal.R
 import com.mguven.holysignal.TheApplication
-import com.mguven.holysignal.db.ApplicationDatabase
-import com.mguven.holysignal.db.entity.AyahSampleData
-import com.mguven.holysignal.db.entity.EditionData
-import com.mguven.holysignal.db.entity.SurahData
 import com.mguven.holysignal.di.module.MainActivityModule
-import com.mguven.holysignal.rx.SchedulerProvider
-import com.mguven.holysignal.viewmodel.MainViewModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
-import javax.inject.Inject
+import com.mguven.holysignal.job.LockScreenJob
 
 class MainActivity : AbstractBaseActivity() {
-
-  @Inject
-  lateinit var schedulerProvider: SchedulerProvider
-
-  private lateinit var mainViewModel: MainViewModel
-
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_main)
     inject()
-    mainViewModel = getViewModel(MainViewModel::class.java)
-
-    getAyahList()
-
-    //getEditionList()
-
-    //getSurahList()
-
+    runJobScheduler()
   }
 
   private fun inject() {
@@ -46,50 +24,48 @@ class MainActivity : AbstractBaseActivity() {
         .inject(this)
   }
 
-  private fun getAyahList() {
-    mainViewModel.getAyahList().observe(this, Observer<List<AyahSampleData>> { list ->
-      Log.e("AAA", "==============> list.size ${list.size}")
-      list.forEach {
-        Log.e("AAA", "==============> ${it.Id} == ${it.text}")
-      }
-    })
+  override fun onStop() {
+    super.onStop()
+    cancelImmediateJobScheduler()
   }
 
-  private fun getSurahList() {
-    mainViewModel.getSurahList().observe(this, Observer<List<SurahData>> { list ->
-      Log.e("AAA", "==============> list.size ${list.size}")
-      list.forEach {
-        Log.e("AAA", "==============> ${it.Id} == ${it.englishName}")
+  private fun runJobScheduler() {
+    var jobSets_I: MutableSet<JobRequest>? = null
+    var jobSets_P: MutableSet<JobRequest>? = null
+    try {
+      jobSets_I = JobManager.instance().getAllJobRequestsForTag(LockScreenJob.TAG_I)
+      jobSets_P = JobManager.instance().getAllJobRequestsForTag(LockScreenJob.TAG_P)
+
+      if (jobSets_I == null || jobSets_I.isEmpty()) {
+        LockScreenJob.runJobImmediately()
       }
-    })
-
-  }
-
-  private fun getEditionList() {
-    ApplicationDatabase(this).editionDataDao().getAll().observe(this, Observer<List<EditionData>> { list ->
-      Log.e("AAA", "==============> list.size ${list.size}")
-      list.forEach {
-        Log.e("AAA", "==============> ${it.Id} == ${it.identifier}")
+      if (jobSets_P == null || jobSets_P.isEmpty()) {
+        LockScreenJob.scheduleJobPeriodic()
       }
-    })
-  }
 
-  private fun deleteAll() = runBlocking {
-    launch(Dispatchers.Default) {
-      Log.e("AAA", "==============> DELETE ${Thread.currentThread().name}")
-      ApplicationDatabase(this@MainActivity).editionDataDao().deleteAll()
+      //Cancel pending job scheduler if mutiple instance are running.
+      if (jobSets_P != null && jobSets_P.size > 2) {
+        JobManager.instance().cancelAllForTag(LockScreenJob.TAG_P)
+      }
+    } catch (e: Exception) {
+
+      e.printStackTrace()
+
+    } finally {
+      jobSets_I?.clear()
+      jobSets_P?.clear()
+      jobSets_P = null
+      jobSets_I = jobSets_P
     }
   }
 
-  private fun insert() = runBlocking {
-    launch(Dispatchers.Default) {
-      for (x in 200..1000) {
-        Log.e("AAA", "==============> INSERT ${Thread.currentThread().name}")
-        ApplicationDatabase(this@MainActivity).editionDataDao().insert(EditionData(x, "d", "tr", "name", "english name here", "text", "translation"))
-      }
-    }
+  /**
+   * cancelImmediateJobScheduler: cancel all instance of running job scheduler by their
+   * TAG name.
+   */
+  private fun cancelImmediateJobScheduler() {
+    JobManager.instance().cancelAllForTag(LockScreenJob.TAG_I)
   }
-
 
 
 }

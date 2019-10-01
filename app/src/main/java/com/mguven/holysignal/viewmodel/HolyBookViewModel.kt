@@ -4,8 +4,11 @@ import com.mguven.holysignal.db.ApplicationDatabase
 import javax.inject.Inject
 
 
-class MainViewModel @Inject
+class HolyBookViewModel @Inject
 constructor(private val database: ApplicationDatabase) : BaseViewModel() {
+
+  fun getRandomAyah(editionId: Int, randomAyahNumber: Int) =
+      database.ayahSampleDataDao().getRandomAyah(editionId, randomAyahNumber)
 
   fun getAyahList() =
       database.ayahSampleDataDao().getAll(53)

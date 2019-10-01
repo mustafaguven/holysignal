@@ -1,8 +1,7 @@
 package com.mguven.holysignal.di
 
 import androidx.lifecycle.ViewModel
-import com.mguven.holysignal.di.module.MainActivityModule
-import com.mguven.holysignal.viewmodel.MainViewModel
+import com.mguven.holysignal.viewmodel.HolyBookViewModel
 
 import com.mguven.holysignal.viewmodel.NewsViewModel
 
@@ -20,7 +19,7 @@ abstract class ViewModelModule {
 
   @Binds
   @IntoMap
-  @ViewModelKey(MainViewModel::class)
-  abstract fun bindMainViewModel(viewModel: MainViewModel): ViewModel
+  @ViewModelKey(HolyBookViewModel::class)
+  abstract fun bindMainViewModel(viewModel: HolyBookViewModel): ViewModel
 
 }
