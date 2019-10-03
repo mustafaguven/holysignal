@@ -6,6 +6,7 @@ import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProviders
 import com.mguven.holysignal.TheApplication
+import com.mguven.holysignal.cache.ApplicationCache
 import com.mguven.holysignal.di.ViewModelFactory
 import com.mguven.holysignal.di.component.AbstractBaseComponent
 import com.mguven.holysignal.di.module.ActivityModule
@@ -19,6 +20,9 @@ abstract class AbstractBaseActivity : AppCompatActivity(), LifecycleObserver {
 
   @Inject
   lateinit var compositeDisposable: CompositeDisposable
+
+  @Inject
+  lateinit var cache: ApplicationCache
 
   private var component: AbstractBaseComponent? = null
 

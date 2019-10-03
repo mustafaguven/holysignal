@@ -1,23 +1,16 @@
 package com.mguven.holysignal.ui
 
 import android.os.Bundle
-import android.util.Log
 import androidx.lifecycle.Observer
 import com.mguven.holysignal.FlowController
 import com.mguven.holysignal.R
 import com.mguven.holysignal.TheApplication
-import com.mguven.holysignal.db.ApplicationDatabase
-import com.mguven.holysignal.db.entity.AyahSampleData
-import com.mguven.holysignal.db.entity.EditionData
+import com.mguven.holysignal.db.entity.FavouritesData
 import com.mguven.holysignal.db.entity.SurahAyahSampleData
-import com.mguven.holysignal.db.entity.SurahData
 import com.mguven.holysignal.di.module.CardActivityModule
 import com.mguven.holysignal.rx.SchedulerProvider
 import com.mguven.holysignal.viewmodel.HolyBookViewModel
 import kotlinx.android.synthetic.main.activity_card.*
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
 
@@ -27,6 +20,8 @@ class CardActivity : AbstractBaseActivity() {
   lateinit var schedulerProvider: SchedulerProvider
 
   private lateinit var holyBookViewModel: HolyBookViewModel
+  private var isFavourite = false
+  private var ayahNumber = 0
 
   private fun inject() {
     (application as TheApplication)
@@ -37,53 +32,63 @@ class CardActivity : AbstractBaseActivity() {
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    Log.e("ScreenActionReceiver", "screen is card activity")
     setContentView(R.layout.activity_card)
     inject()
     holyBookViewModel = getViewModel(HolyBookViewModel::class.java)
 
-    val randomAyahNumber = (1..50).random()
-    getAyahTopText(randomAyahNumber)
-    getAyahBottomText(randomAyahNumber)
-
-    Log.e("ScreenActionReceiver", "random ayah is taken")
+    ayahNumber = (10..15).random()
+    getAyahTopText()
+    getAyahBottomText()
+    getFavouriteStatus()
 
     ivPreferences.setOnClickListener {
       FlowController.launchMainActivity(this)
     }
+
+    //holyBookViewModel.insertFavourite()
+    //getFavourites()
+
+    ivFavourite.setOnClickListener {
+      isFavourite = !isFavourite
+      upsertFavourite()
+    }
   }
 
-  private fun getAyahBottomText(randomAyahNumber: Int) {
-    holyBookViewModel.getAyahBottomText(randomAyahNumber).observe(this, Observer<List<SurahAyahSampleData>> { list ->
+  private fun upsertFavourite() {
+    holyBookViewModel.deleteFavourite(ayahNumber)
+    if (isFavourite) {
+      holyBookViewModel.insertFavourite(ayahNumber)
+    }
+  }
+
+  private fun getFavouriteStatus() {
+    holyBookViewModel.hasFavourite(ayahNumber).observe(this, Observer<List<FavouritesData>> { list ->
+      isFavourite = list.isNotEmpty()
+      ivFavourite.setImageResource(if (isFavourite) R.drawable.ic_star_fill_24px else R.drawable.ic_star_empty_24px)
+    })
+  }
+
+  private fun getAyahTopText() {
+    holyBookViewModel.getAyahTopText(ayahNumber).observe(this, Observer<List<SurahAyahSampleData>> { list ->
       list.forEach {
-        tvAyahBottomText.text = it.ayahText
+        cache.updateLastShownAyah(it)
+        tvAyahNumber.text = "(${it.surahNumber}:${it.numberInSurah})"
+        tvAyahTopText.text = "${it.language}: ${it.ayahText}"
+      }
+    })
+  }
+
+  private fun getAyahBottomText() {
+    holyBookViewModel.getAyahBottomText(ayahNumber).observe(this, Observer<List<SurahAyahSampleData>> { list ->
+      list.forEach {
+        tvAyahBottomText.text = "${it.language}: ${it.ayahText}"
         tvSurah.text = "${it.surahEnglishName} (${it.surahEnglishNameTranslation})"
         tvRevelationType.text = it.surahRevelationType
-        Log.e("AAA", "==============> ${it.surahName} == ${it.ayahText}")
       }
     })
   }
 
-  private fun getAyahTopText(randomAyahNumber: Int) {
-    holyBookViewModel.getAyahTopText(randomAyahNumber).observe(this, Observer<List<AyahSampleData>> { list ->
-      list.forEach {
-        tvAyahTopText.text = it.text
-        Log.e("AAA", "==============> ${it.Id} == ${it.text}")
-      }
-    })
-  }
-
-/*  private fun getSelectedSurah(surahNumber: Int) {
-    holyBookViewModel.getSelectedSurah(surahNumber).observe(this, Observer<List<SurahData>> { list ->
-      list.forEach {
-        tvSurah.text = it.name
-        Log.e("AAA", "==============> ${it.Id} == ${it.name}")
-      }
-    })
-  }*/
-
-
-  private fun getAyahList(randomAyah: Int) {
+  /*private fun getAyahList(randomAyah: Int) {
     holyBookViewModel.getAyahList().observe(this, Observer<List<AyahSampleData>> { list ->
       Log.e("AAA", "==============> list.size ${list.size}")
       list.forEach {
@@ -99,7 +104,6 @@ class CardActivity : AbstractBaseActivity() {
         Log.e("AAA", "==============> ${it.Id} == ${it.englishName}")
       }
     })
-
   }
 
   private fun getEditionList() {
@@ -118,7 +122,7 @@ class CardActivity : AbstractBaseActivity() {
     }
   }
 
-  private fun insert() = runBlocking {
+    private fun insert() = runBlocking {
     launch(Dispatchers.Default) {
       for (x in 200..1000) {
         Log.e("AAA", "==============> INSERT ${Thread.currentThread().name}")
@@ -126,6 +130,16 @@ class CardActivity : AbstractBaseActivity() {
       }
     }
   }
+
+  private fun getFavourites() {
+    holyBookViewModel.getFavourites().observe(this, Observer<List<FavouritesData>> { list ->
+      Log.e("AAA", "favourites ==============> list.size ${list.size}")
+      list.forEach {
+        Log.e("AAA", "favourites ==============> ${it.Id} == ${it.ayahNumber}")
+      }
+    })
+  }
+  */
 
 
 }

@@ -2,6 +2,7 @@ package com.mguven.holysignal.cache
 
 import android.content.SharedPreferences
 import com.google.gson.Gson
+import com.mguven.holysignal.db.entity.SurahAyahSampleData
 
 
 class ApplicationCache(private val applicationSharedPreferences: SharedPreferences,
@@ -32,6 +33,13 @@ class ApplicationCache(private val applicationSharedPreferences: SharedPreferenc
 
   fun getBottomTextEditionId() =
       this.applicationSharedPreferences.getInt(CacheKey.BOTTOM_TEXT_EDITION_ID, 53)
+
+  fun updateLastShownAyah(lastShownAyah: SurahAyahSampleData?) {
+    setObjectWithGenericSerializer(CacheKey.LAST_SHOWN_AYAH, lastShownAyah)
+  }
+
+  fun getLastShownAyah(): SurahAyahSampleData? = getObjectWithGenericDeserializer(CacheKey.LAST_SHOWN_AYAH,
+      SurahAyahSampleData::class.java)
 
 /*  fun updateUserInfo(userInformation: UserInformation?) {
     setObjectWithGenericSerializer(CacheKey.USER_INFO, userInformation)

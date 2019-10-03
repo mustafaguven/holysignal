@@ -73,8 +73,6 @@ class MainActivity : AbstractBaseActivity() {
     } finally {
       jobSets_I?.clear()
       jobSets_P?.clear()
-      jobSets_P = null
-      jobSets_I = jobSets_P
     }
   }
 

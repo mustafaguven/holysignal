@@ -6,7 +6,6 @@ import androidx.room.PrimaryKey
 
 
 @Entity(tableName = "Favourites")
-data class FavouritesData(@PrimaryKey(autoGenerate = true) var Id: Int,
-                          @ColumnInfo(name = "ayahNumber") var ayahNumber: Int,
-                          @ColumnInfo(name = "editionId") var editionId: Int
+data class FavouritesData(@PrimaryKey(autoGenerate = true) var Id: Long,
+                          @ColumnInfo(name = "ayahNumber") var ayahNumber: Int
 )

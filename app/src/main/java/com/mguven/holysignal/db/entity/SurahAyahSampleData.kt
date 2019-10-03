@@ -9,6 +9,7 @@ data class SurahAyahSampleData(@ColumnInfo(name = "surahNumber") var surahNumber
                                @ColumnInfo(name = "surahEnglishName") var surahEnglishName: String,
                                @ColumnInfo(name = "surahEnglishNameTranslation") var surahEnglishNameTranslation: String,
                                @ColumnInfo(name = "surahRevelationType") var surahRevelationType: String,
+                               @ColumnInfo(name = "language") var language: String,
                                @ColumnInfo(name = "ayahNumber") var ayahNumber: Int,
                                @ColumnInfo(name = "ayahText") var ayahText: String,
                                @ColumnInfo(name = "numberInSurah") var numberInSurah: Int,

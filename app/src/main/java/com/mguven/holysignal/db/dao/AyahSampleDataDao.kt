@@ -20,19 +20,18 @@ interface AyahSampleDataDao {
   @Query("DELETE from AyahSample")
   fun deleteAll()
 
-  @Query("SELECT * from AyahSample WHERE editionId = :editionId AND number = :randomAyahNumber")
-  fun getRandomAyah(editionId: Int, randomAyahNumber: Int): LiveData<List<AyahSampleData>>
-
   @Query("SELECT Surah.number as surahNumber,  " +
       " Surah.name as surahName, " +
       " Surah.englishName as surahEnglishName, " +
       " Surah.englishNameTranslation as surahEnglishNameTranslation, " +
       " Surah.revelationType as surahRevelationType, " +
+      " Edition.language as language, " +
       " AyahSample.number as ayahNumber, " +
       " AyahSample.text as ayahText, " +
       " AyahSample.numberInSurah as numberInSurah, " +
       " AyahSample.juz as juz " +
       " from AyahSample inner join Surah on Surah.number = AyahSample.surahNumber " +
-      " WHERE editionId = :editionId AND AyahSample.number = :randomAyahNumber")
-  fun getRandomAyah2(editionId: Int, randomAyahNumber: Int): LiveData<List<SurahAyahSampleData>>
+      " inner join Edition on Edition.Id = AyahSample.editionId " +
+      " WHERE AyahSample.editionId = :editionId AND AyahSample.number = :randomAyahNumber")
+  fun getRandomAyah(editionId: Int, randomAyahNumber: Int): LiveData<List<SurahAyahSampleData>>
 }
