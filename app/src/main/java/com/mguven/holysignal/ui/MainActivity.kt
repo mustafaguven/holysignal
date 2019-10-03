@@ -1,27 +1,46 @@
 package com.mguven.holysignal.ui
 
 import android.os.Bundle
+import android.widget.Toast
+import androidx.lifecycle.Observer
 import com.evernote.android.job.JobManager
 import com.evernote.android.job.JobRequest
 import com.mguven.holysignal.R
-import com.mguven.holysignal.TheApplication
+import com.mguven.holysignal.db.entity.PreferencesData
 import com.mguven.holysignal.di.module.MainActivityModule
 import com.mguven.holysignal.job.LockScreenJob
+import com.mguven.holysignal.viewmodel.PreferencesViewModel
+import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AbstractBaseActivity() {
+
+  private lateinit var preferencesViewModel: PreferencesViewModel
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_main)
-    inject()
+    inject(MainActivityModule(this))
+    preferencesViewModel = getViewModel(PreferencesViewModel::class.java)
+
     runJobScheduler()
+    getPreferences()
+
+    btnOk.setOnClickListener {
+      preferencesViewModel.updateSelectedEditionId(etTopTextEditionId.text.toString().toInt(),
+          etBottomTextEditionId.text.toString().toInt())
+      Toast.makeText(this, "kaydedildi", Toast.LENGTH_SHORT).show()
+      finish()
+    }
+
   }
 
-  private fun inject() {
-    (application as TheApplication)
-        .applicationComponent
-        .plus(MainActivityModule(this))
-        .inject(this)
+  private fun getPreferences() {
+    preferencesViewModel.getPreferences().observe(this, Observer<List<PreferencesData>> { list ->
+      list.forEach {
+        etTopTextEditionId.setText(it.topTextEditionId.toString())
+        etBottomTextEditionId.setText(it.bottomTextEditionId.toString())
+      }
+    })
   }
 
   override fun onStop() {

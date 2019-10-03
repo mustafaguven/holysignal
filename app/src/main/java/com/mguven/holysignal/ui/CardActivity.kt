@@ -3,6 +3,7 @@ package com.mguven.holysignal.ui
 import android.os.Bundle
 import android.util.Log
 import androidx.lifecycle.Observer
+import com.mguven.holysignal.FlowController
 import com.mguven.holysignal.R
 import com.mguven.holysignal.TheApplication
 import com.mguven.holysignal.db.ApplicationDatabase
@@ -27,7 +28,6 @@ class CardActivity : AbstractBaseActivity() {
 
   private lateinit var holyBookViewModel: HolyBookViewModel
 
-
   private fun inject() {
     (application as TheApplication)
         .applicationComponent
@@ -43,17 +43,20 @@ class CardActivity : AbstractBaseActivity() {
     holyBookViewModel = getViewModel(HolyBookViewModel::class.java)
 
     val randomAyahNumber = (1..50).random()
-    getRandomAyah(randomAyahNumber)
-    getRandomSelectedLanguageAyah(randomAyahNumber)
+    getAyahTopText(randomAyahNumber)
+    getAyahBottomText(randomAyahNumber)
 
     Log.e("ScreenActionReceiver", "random ayah is taken")
+
+    ivPreferences.setOnClickListener {
+      FlowController.launchMainActivity(this)
+    }
   }
 
-  private fun getRandomAyah(randomAyahNumber: Int) {
-    val editionId = 11
-    holyBookViewModel.getRandomAyah2(editionId, randomAyahNumber).observe(this, Observer<List<SurahAyahSampleData>> { list ->
+  private fun getAyahBottomText(randomAyahNumber: Int) {
+    holyBookViewModel.getAyahBottomText(randomAyahNumber).observe(this, Observer<List<SurahAyahSampleData>> { list ->
       list.forEach {
-        tvAyahArabic.text = it.ayahText
+        tvAyahBottomText.text = it.ayahText
         tvSurah.text = "${it.surahEnglishName} (${it.surahEnglishNameTranslation})"
         tvRevelationType.text = it.surahRevelationType
         Log.e("AAA", "==============> ${it.surahName} == ${it.ayahText}")
@@ -61,11 +64,10 @@ class CardActivity : AbstractBaseActivity() {
     })
   }
 
-  private fun getRandomSelectedLanguageAyah(randomAyahNumber: Int) {
-    val editionId = 53
-    holyBookViewModel.getRandomAyah(editionId, randomAyahNumber).observe(this, Observer<List<AyahSampleData>> { list ->
+  private fun getAyahTopText(randomAyahNumber: Int) {
+    holyBookViewModel.getAyahTopText(randomAyahNumber).observe(this, Observer<List<AyahSampleData>> { list ->
       list.forEach {
-        tvAyahSelectedLanguage.text = it.text
+        tvAyahTopText.text = it.text
         Log.e("AAA", "==============> ${it.Id} == ${it.text}")
       }
     })
@@ -81,7 +83,7 @@ class CardActivity : AbstractBaseActivity() {
   }*/
 
 
-  private fun getAyahList(editionId: Int, randomAyah: Int) {
+  private fun getAyahList(randomAyah: Int) {
     holyBookViewModel.getAyahList().observe(this, Observer<List<AyahSampleData>> { list ->
       Log.e("AAA", "==============> list.size ${list.size}")
       list.forEach {

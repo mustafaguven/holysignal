@@ -14,7 +14,9 @@ import dagger.Component
   NetworkModule::class,
   ViewModelModule::class,
   DatabaseModule::class,
-  SchedulerModule::class
+  SchedulerModule::class,
+  CacheModule::class,
+  GsonModule::class
 ])
 interface ApplicationComponent {
 

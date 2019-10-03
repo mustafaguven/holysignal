@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import com.mguven.holysignal.viewmodel.HolyBookViewModel
 
 import com.mguven.holysignal.viewmodel.NewsViewModel
+import com.mguven.holysignal.viewmodel.PreferencesViewModel
 
 import dagger.Binds
 import dagger.Module
@@ -20,6 +21,11 @@ abstract class ViewModelModule {
   @Binds
   @IntoMap
   @ViewModelKey(HolyBookViewModel::class)
-  abstract fun bindMainViewModel(viewModel: HolyBookViewModel): ViewModel
+  abstract fun bindHolyBookViewModel(viewModel: HolyBookViewModel): ViewModel
+
+  @Binds
+  @IntoMap
+  @ViewModelKey(PreferencesViewModel::class)
+  abstract fun bindPreferencesViewModel(viewModel: PreferencesViewModel): ViewModel
 
 }

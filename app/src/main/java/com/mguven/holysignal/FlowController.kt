@@ -5,6 +5,7 @@ import android.content.Intent
 import com.mguven.holysignal.constant.BundleKey
 import com.mguven.holysignal.model.Article
 import com.mguven.holysignal.ui.ArticleDetailActivity
+import com.mguven.holysignal.ui.MainActivity
 
 class FlowController {
 
@@ -13,6 +14,12 @@ class FlowController {
       context.startActivity(
           Intent(context, ArticleDetailActivity::class.java)
               .putExtra(BundleKey.ARTICLE, article)
+      )
+    }
+
+    fun launchMainActivity(context: Context) {
+      context.startActivity(
+          Intent(context, MainActivity::class.java)
       )
     }
 

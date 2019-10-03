@@ -1,11 +1,10 @@
 package com.mguven.holysignal.ui
 
+import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProviders
-import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
-
 import com.mguven.holysignal.TheApplication
 import com.mguven.holysignal.di.ViewModelFactory
 import com.mguven.holysignal.di.component.AbstractBaseComponent
@@ -32,6 +31,13 @@ abstract class AbstractBaseActivity : AppCompatActivity(), LifecycleObserver {
 
     component!!.inject(this)
 
+  }
+
+  protected fun inject(module: ActivityModule) {
+    (application as TheApplication)
+        .applicationComponent
+        .plus(module)
+        .inject(this)
   }
 
   protected fun <T : ViewModel> getViewModel(viewModelClz: Class<T>): T =

@@ -1,70 +1,86 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_centerInParent="true"
     android:background="@drawable/bg1"
-    tools:context=".ui.CardActivity"
-    android:layout_centerInParent="true">
+    tools:context=".ui.CardActivity">
+
+    <ImageView
+        android:id="@+id/ivPreferences"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginEnd="20dp"
+        android:src="@android:drawable/ic_menu_preferences"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_default="wrap" />
 
     <TextView
-        android:layout_marginTop="50dp"
-        android:id="@+id/tvAyahArabic"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"
+        android:id="@+id/tvAyahTopText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginEnd="20dp"
+        android:gravity="center"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@id/tvAyahBottomText"
         app:layout_constraintRight_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/tvAyahSelectedLanguage"
-        android:gravity="center"
-        android:textSize="18sp"
-        tools:text="arabic"
-        android:textColor="@color/black"
-        app:layout_constraintVertical_chainStyle="packed" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed"
+        tools:text="top text" />
 
     <TextView
-        android:id="@+id/tvAyahSelectedLanguage"
+        android:id="@+id/tvAyahBottomText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        app:layout_constraintTop_toBottomOf="@id/tvAyahArabic"
-        app:layout_constraintLeft_toLeftOf="@id/tvAyahArabic"
-        app:layout_constraintRight_toRightOf="@id/tvAyahArabic"
-        app:layout_constraintBottom_toTopOf="@id/tvSurah"
         android:gravity="center"
+        android:textColor="@color/black"
         android:textSize="18sp"
-        tools:text="selected language here"
-        android:textColor="@color/black"/>
+        app:layout_constraintBottom_toTopOf="@id/tvSurah"
+        app:layout_constraintLeft_toLeftOf="@id/tvAyahTopText"
+        app:layout_constraintRight_toRightOf="@id/tvAyahTopText"
+        app:layout_constraintTop_toBottomOf="@id/tvAyahTopText"
+        tools:text="bottom text" />
 
 
     <TextView
         android:id="@+id/tvSurah"
-        android:layout_marginTop="50dp"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/tvAyahSelectedLanguage"
-        app:layout_constraintLeft_toLeftOf="@id/tvAyahSelectedLanguage"
-        app:layout_constraintRight_toRightOf="@id/tvAyahSelectedLanguage"
-        app:layout_constraintBottom_toTopOf="@id/tvRevelationType"
+        android:layout_marginTop="50dp"
         android:gravity="center"
+        android:textColor="@color/black"
         android:textSize="18sp"
-        tools:text="selected surah here"
-        android:textColor="@color/black"/>
+        app:layout_constraintBottom_toTopOf="@id/tvRevelationType"
+        app:layout_constraintLeft_toLeftOf="@id/tvAyahBottomText"
+        app:layout_constraintRight_toRightOf="@id/tvAyahBottomText"
+        app:layout_constraintTop_toBottomOf="@id/tvAyahBottomText"
+        tools:text="selected surah here" />
 
     <TextView
         android:id="@+id/tvRevelationType"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/tvSurah"
+        android:gravity="center"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="@id/tvSurah"
         app:layout_constraintRight_toRightOf="@id/tvSurah"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:gravity="center"
-        android:textSize="18sp"
-        tools:text="revelation type"
-        android:textColor="@color/black"/>
+        app:layout_constraintTop_toBottomOf="@id/tvSurah"
+        tools:text="revelation type" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
