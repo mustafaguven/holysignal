@@ -82,7 +82,7 @@ class LockScreenJob : Job() {
     fun scheduleJobPeriodic(): Int {
 
       return JobRequest.Builder(TAG_P)
-          .setPeriodic(TimeUnit.MINUTES.toMillis(10), TimeUnit.MINUTES.toMillis(5))
+          .setPeriodic(TimeUnit.MINUTES.toMillis(15), TimeUnit.MINUTES.toMillis(5))
           .setRequiredNetworkType(JobRequest.NetworkType.ANY)
           .build()
           .schedule()

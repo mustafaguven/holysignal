@@ -1,6 +1,8 @@
 package com.mguven.holysignal.ui
 
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.lifecycle.Observer
 import com.mguven.holysignal.FlowController
 import com.mguven.holysignal.R
@@ -8,6 +10,8 @@ import com.mguven.holysignal.TheApplication
 import com.mguven.holysignal.db.entity.FavouritesData
 import com.mguven.holysignal.db.entity.SurahAyahSampleData
 import com.mguven.holysignal.di.module.CardActivityModule
+import com.mguven.holysignal.inline.whenNotNull
+import com.mguven.holysignal.job.UnlockReceiver
 import com.mguven.holysignal.rx.SchedulerProvider
 import com.mguven.holysignal.viewmodel.HolyBookViewModel
 import kotlinx.android.synthetic.main.activity_card.*
@@ -34,9 +38,10 @@ class CardActivity : AbstractBaseActivity() {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_card)
     inject()
+    Log.e("AAA", "card activity is on")
     holyBookViewModel = getViewModel(HolyBookViewModel::class.java)
 
-    ayahNumber = (10..15).random()
+    ayahNumber = (1..50).random()
     getAyahTopText()
     getAyahBottomText()
     getFavouriteStatus()
@@ -45,12 +50,23 @@ class CardActivity : AbstractBaseActivity() {
       FlowController.launchMainActivity(this)
     }
 
-    //holyBookViewModel.insertFavourite()
-    //getFavourites()
-
     ivFavourite.setOnClickListener {
       isFavourite = !isFavourite
       upsertFavourite()
+    }
+
+    ivShare.setOnClickListener {
+      whenNotNull(cache.getLastShownAyah()) {
+        val shareText = "(${cache.getLastShownAyah()?.surahNumber}:${cache.getLastShownAyah()?.numberInSurah})" +
+            " ${cache.getLastShownAyah()?.ayahText} (via www.holysignal.com)"
+        val sendIntent: Intent = Intent().apply {
+          action = Intent.ACTION_SEND
+          putExtra(Intent.EXTRA_TEXT, shareText)
+          type = "text/plain"
+        }
+        val shareIntent = Intent.createChooser(sendIntent, null)
+        startActivity(shareIntent)
+      }
     }
   }
 
