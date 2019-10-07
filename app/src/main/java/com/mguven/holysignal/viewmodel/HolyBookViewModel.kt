@@ -36,13 +36,4 @@ constructor(private val database: ApplicationDatabase,
 
   fun hasFavourite(ayahNumber: Int) = database.favouritesDataDao().getByAyahNumber(ayahNumber)
 
-
-/*  fun getAyahList() =
-      database.ayahSampleDataDao().getAll(53)
-
-  fun getSurahList() =
-      database.surahDataDao().getAll()
-
-  fun getEditionList() = database.editionDataDao().getAll()*/
-
 }

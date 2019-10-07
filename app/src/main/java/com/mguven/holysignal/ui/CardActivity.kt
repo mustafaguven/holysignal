@@ -52,11 +52,15 @@ class CardActivity : AbstractBaseActivity() {
 
   private fun getAyahNumberByPlaymode(): Int {
     return try {
-      when (playmode) {
+      return when (playmode) {
         Playmode.RANDOM -> (1..cache.getMaxAyahCount()).random()
         Playmode.REPEAT_AYAH -> cache.getLastShownAyahNumber()
         else ->
-          (cache.getLastShownAyah()!!.startingAyahNumber..cache.getMaxAyahCount()).random()
+          return if(cache.getLastShownAyah()!!.endingAyahNumber <= cache.getMaxAyahCount()){
+            (cache.getLastShownAyah()!!.startingAyahNumber..cache.getLastShownAyah()!!.endingAyahNumber).random()
+          } else {
+            (cache.getLastShownAyah()!!.startingAyahNumber..cache.getMaxAyahCount()).random()
+          }
       }
     } catch (ex: Exception) {
       (1..cache.getMaxAyahCount()).random()
