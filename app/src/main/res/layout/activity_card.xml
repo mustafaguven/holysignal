@@ -41,6 +41,21 @@
         app:layout_constraintWidth_default="wrap" />
 
     <ImageView
+        android:id="@+id/ivAddNote"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginEnd="20dp"
+        android:src="@drawable/ic_note_add_24px"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintEnd_toStartOf="@id/ivShare"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_default="wrap" />
+
+    <ImageView
         android:id="@+id/ivFavourite"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -52,6 +67,21 @@
         android:textSize="18sp"
         app:layout_constrainedWidth="true"
         app:layout_constraintStart_toEndOf="@id/ivPreferences"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_default="wrap" />
+
+    <ImageView
+        android:id="@+id/ivPlayMode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginEnd="20dp"
+        android:src="@drawable/ic_repeat_surah24px"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintStart_toEndOf="@id/ivFavourite"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintWidth_default="wrap" />
 

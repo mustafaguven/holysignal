@@ -7,23 +7,23 @@ import androidx.lifecycle.Observer
 import com.mguven.holysignal.FlowController
 import com.mguven.holysignal.R
 import com.mguven.holysignal.TheApplication
+import com.mguven.holysignal.constant.Playmode
 import com.mguven.holysignal.db.entity.FavouritesData
 import com.mguven.holysignal.db.entity.SurahAyahSampleData
 import com.mguven.holysignal.di.module.CardActivityModule
 import com.mguven.holysignal.inline.whenNotNull
-import com.mguven.holysignal.job.UnlockReceiver
-import com.mguven.holysignal.rx.SchedulerProvider
 import com.mguven.holysignal.viewmodel.HolyBookViewModel
 import kotlinx.android.synthetic.main.activity_card.*
-import javax.inject.Inject
 
 
 class CardActivity : AbstractBaseActivity() {
 
-  @Inject
-  lateinit var schedulerProvider: SchedulerProvider
-
   private lateinit var holyBookViewModel: HolyBookViewModel
+
+  private val playmode by lazy {
+    return@lazy cache.getPlaymode()
+  }
+
   private var isFavourite = false
   private var ayahNumber = 0
 
@@ -41,11 +41,29 @@ class CardActivity : AbstractBaseActivity() {
     Log.e("AAA", "card activity is on")
     holyBookViewModel = getViewModel(HolyBookViewModel::class.java)
 
-    ayahNumber = (1..50).random()
+    ayahNumber = getAyahNumberByPlaymode()
+
     getAyahTopText()
     getAyahBottomText()
     getFavouriteStatus()
+    initPlaymode()
+    initListeners()
+  }
 
+  private fun getAyahNumberByPlaymode(): Int {
+    return try {
+      when (playmode) {
+        Playmode.RANDOM -> (1..cache.getMaxAyahCount()).random()
+        Playmode.REPEAT_AYAH -> cache.getLastShownAyahNumber()
+        else ->
+          (cache.getLastShownAyah()!!.startingAyahNumber..cache.getLastShownAyah()!!.endingAyahNumber).random()
+      }
+    } catch (ex: Exception) {
+      (1..cache.getMaxAyahCount()).random()
+    }
+  }
+
+  private fun initListeners() {
     ivPreferences.setOnClickListener {
       FlowController.launchMainActivity(this)
     }
@@ -68,6 +86,22 @@ class CardActivity : AbstractBaseActivity() {
         startActivity(shareIntent)
       }
     }
+
+    ivPlayMode.setOnClickListener {
+      val newPlayMode = (cache.getPlaymode() + 1) % 3
+      ivPlayMode.setImageResource(
+          if (newPlayMode == 0) R.drawable.ic_random_24px else {
+            if (newPlayMode == 1) R.drawable.ic_repeat_surah24px else R.drawable.ic_repeat_ayah_24px
+          })
+      cache.updatePlaymode(newPlayMode)
+    }
+  }
+
+  private fun initPlaymode() {
+    ivPlayMode.setImageResource(
+        if (playmode == Playmode.RANDOM) R.drawable.ic_random_24px else {
+          if (playmode == Playmode.REPEAT_SURAH) R.drawable.ic_repeat_surah24px else R.drawable.ic_repeat_ayah_24px
+        })
   }
 
   private fun upsertFavourite() {

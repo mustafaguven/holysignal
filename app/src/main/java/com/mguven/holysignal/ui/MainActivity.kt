@@ -1,16 +1,20 @@
 package com.mguven.holysignal.ui
 
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import com.evernote.android.job.JobManager
 import com.evernote.android.job.JobRequest
 import com.mguven.holysignal.R
-import com.mguven.holysignal.db.entity.PreferencesData
+import com.mguven.holysignal.db.entity.EditionAdapterData
+import com.mguven.holysignal.db.entity.MaxAyahCountData
 import com.mguven.holysignal.di.module.MainActivityModule
 import com.mguven.holysignal.job.LockScreenJob
+import com.mguven.holysignal.ui.adapter.EditionAdapter
 import com.mguven.holysignal.viewmodel.PreferencesViewModel
 import kotlinx.android.synthetic.main.activity_main.*
+
 
 class MainActivity : AbstractBaseActivity() {
 
@@ -23,23 +27,46 @@ class MainActivity : AbstractBaseActivity() {
     preferencesViewModel = getViewModel(PreferencesViewModel::class.java)
 
     runJobScheduler()
-    getPreferences()
+
+    initEditionSpinners()
 
     btnOk.setOnClickListener {
-      preferencesViewModel.updateSelectedEditionId(etTopTextEditionId.text.toString().toInt(),
-          etBottomTextEditionId.text.toString().toInt())
-      Toast.makeText(this, "kaydedildi", Toast.LENGTH_SHORT).show()
-      finish()
+      val topTextEditionSpinnerSelectedItem = spTopTextEdition.selectedItem as EditionAdapterData
+      val bottomTextEditionSpinnerSelectedItem = spBottomTextEdition.selectedItem as EditionAdapterData
+      cache.updateTopTextEditionId(topTextEditionSpinnerSelectedItem.value)
+      cache.updateBottomTextEditionId(bottomTextEditionSpinnerSelectedItem.value)
+      getMaxAyahCount()
+      Toast.makeText(this, getString(R.string.preferences_saved), Toast.LENGTH_SHORT).show()
     }
-
   }
 
-  private fun getPreferences() {
-    preferencesViewModel.getPreferences().observe(this, Observer<List<PreferencesData>> { list ->
-      list.forEach {
-        etTopTextEditionId.setText(it.topTextEditionId.toString())
-        etBottomTextEditionId.setText(it.bottomTextEditionId.toString())
+  private fun initEditionSpinners() {
+    preferencesViewModel.getEditionNameIdList().observe(this, Observer<List<EditionAdapterData>> { list ->
+      val res = resources
+      val adapter = EditionAdapter(this, R.layout.status_item, list, res)
+      spTopTextEdition.adapter = adapter
+      list.forEachIndexed { index, it ->
+        if (it.value == cache.getTopTextEditionId()) {
+          spTopTextEdition.setSelection(index)
+          return@forEachIndexed
+        }
       }
+
+      spBottomTextEdition.adapter = adapter
+      list.forEachIndexed { index, it ->
+        if (it.value == cache.getBottomTextEditionId()) {
+          spBottomTextEdition.setSelection(index)
+          return@forEachIndexed
+        }
+      }
+    })
+  }
+
+  private fun getMaxAyahCount() {
+    preferencesViewModel.getMaxAyahCount().observe(this, Observer<MaxAyahCountData> { item ->
+      Log.e("AAA", "=====> MAX AYAH COUNT ${item.max}")
+      cache.updateMaxAyahCount(item.max)
+      finish()
     })
   }
 

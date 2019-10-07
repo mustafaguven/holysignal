@@ -6,6 +6,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy.REPLACE
 import androidx.room.Query
 import com.mguven.holysignal.db.entity.AyahSampleData
+import com.mguven.holysignal.db.entity.MaxAyahCountData
 import com.mguven.holysignal.db.entity.SurahAyahSampleData
 
 @Dao
@@ -25,6 +26,8 @@ interface AyahSampleDataDao {
       " Surah.englishName as surahEnglishName, " +
       " Surah.englishNameTranslation as surahEnglishNameTranslation, " +
       " Surah.revelationType as surahRevelationType, " +
+      " Surah.StartingAyahNumber as startingAyahNumber, " +
+      " Surah.EndingAyahNumber as endingAyahNumber, " +
       " Edition.language as language, " +
       " AyahSample.number as ayahNumber, " +
       " AyahSample.text as ayahText, " +
@@ -34,4 +37,7 @@ interface AyahSampleDataDao {
       " inner join Edition on Edition.Id = AyahSample.editionId " +
       " WHERE AyahSample.editionId = :editionId AND AyahSample.number = :randomAyahNumber")
   fun getRandomAyah(editionId: Int, randomAyahNumber: Int): LiveData<List<SurahAyahSampleData>>
+
+  @Query(" SELECT max(number) as max from AyahSample WHERE editionId = :editionId ")
+  fun getMaxAyahCountByEditionId(editionId: Int): LiveData<MaxAyahCountData>
 }

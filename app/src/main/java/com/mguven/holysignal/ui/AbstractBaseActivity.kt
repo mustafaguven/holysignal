@@ -34,7 +34,6 @@ abstract class AbstractBaseActivity : AppCompatActivity(), LifecycleObserver {
         .plus(ActivityModule(this))
 
     component!!.inject(this)
-
   }
 
   protected fun inject(module: ActivityModule) {

@@ -1,4 +1,5 @@
 <resources>
-    <string name="app_name">holy signal</string>
-    <string name="from_x">From: %1s</string>
+    <string name="app_name">Holy Signal</string>
+    <string name="preferences_saved">Başarıyla kaydedildi</string>
+    <string name="edition_select_text">Please select an edition</string>
 </resources>

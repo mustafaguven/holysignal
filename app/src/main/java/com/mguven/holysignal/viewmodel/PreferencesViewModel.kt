@@ -1,14 +1,14 @@
 package com.mguven.holysignal.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.Observer
 import com.mguven.holysignal.cache.ApplicationCache
 import com.mguven.holysignal.db.ApplicationDatabase
-import com.mguven.holysignal.db.entity.PreferencesData
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
+import com.mguven.holysignal.db.entity.EditionAdapterData
+import com.mguven.holysignal.db.entity.MaxAyahCountData
+import kotlinx.coroutines.*
+import java.util.concurrent.ExecutorService
+import java.util.concurrent.Executors
 import javax.inject.Inject
 
 
@@ -16,28 +16,15 @@ class PreferencesViewModel @Inject
 constructor(private val database: ApplicationDatabase,
             private val cache: ApplicationCache) : BaseViewModel() {
 
-  lateinit var preferencesLiveData: LiveData<List<PreferencesData>>
-
-  fun getPreferences(): LiveData<List<PreferencesData>> {
-    preferencesLiveData = database.preferencesDataDao().getAll()
-    preferencesLiveData.observeForever(observer)
-    return preferencesLiveData
+  fun getMaxAyahCount(): LiveData<MaxAyahCountData> {
+    return database.ayahSampleDataDao().getMaxAyahCountByEditionId(cache.getTopTextEditionId())
   }
 
-  private val observer = Observer<List<PreferencesData>> {
-    cache.updateTopTextEditionId(it[0].topTextEditionId)
-    cache.updateBottomTextEditionId(it[0].bottomTextEditionId)
+  fun getEditionNameIdList(): LiveData<List<EditionAdapterData>> {
+    return database.editionDataDao().getNameIdList()
   }
 
-  override fun onCleared() {
-    super.onCleared()
-    preferencesLiveData.removeObserver(observer)
-  }
 
-  fun updateSelectedEditionId(topTextEditionId: Int, bottomTextEditionId: Int): Job = runBlocking {
-    launch(Dispatchers.Default){
-      database.preferencesDataDao().upsertEditionId(topTextEditionId, bottomTextEditionId)
-    }
-  }
+
 
 }

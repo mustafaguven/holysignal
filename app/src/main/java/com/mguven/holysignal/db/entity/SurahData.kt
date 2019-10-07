@@ -11,5 +11,7 @@ data class SurahData(@PrimaryKey(autoGenerate = true) var Id: Int,
                      @ColumnInfo(name = "name") var name: String,
                      @ColumnInfo(name = "englishName") var englishName: String,
                      @ColumnInfo(name = "englishNameTranslation") var englishNameTranslation: String,
-                     @ColumnInfo(name = "revelationType") var revelationType: String
+                     @ColumnInfo(name = "revelationType") var revelationType: String,
+                     @ColumnInfo(name = "startingAyahNumber") var startingAyahNumber: Int,
+                     @ColumnInfo(name = "endingAyahNumber") var endingAyahNumber: Int
 )

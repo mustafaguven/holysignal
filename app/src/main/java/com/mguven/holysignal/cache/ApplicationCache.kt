@@ -3,6 +3,7 @@ package com.mguven.holysignal.cache
 import android.content.SharedPreferences
 import com.google.gson.Gson
 import com.mguven.holysignal.db.entity.SurahAyahSampleData
+import com.mguven.holysignal.inline.whenNotNull
 
 
 class ApplicationCache(private val applicationSharedPreferences: SharedPreferences,
@@ -36,10 +37,35 @@ class ApplicationCache(private val applicationSharedPreferences: SharedPreferenc
 
   fun updateLastShownAyah(lastShownAyah: SurahAyahSampleData?) {
     setObjectWithGenericSerializer(CacheKey.LAST_SHOWN_AYAH, lastShownAyah)
+    whenNotNull(lastShownAyah) {
+      updateLastShownAyahNumber(it.ayahNumber)
+    }
   }
 
   fun getLastShownAyah(): SurahAyahSampleData? = getObjectWithGenericDeserializer(CacheKey.LAST_SHOWN_AYAH,
       SurahAyahSampleData::class.java)
+
+  fun getPlaymode(): Int {
+    return this.applicationSharedPreferences.getInt(CacheKey.PLAY_MODE, 0)
+  }
+
+  fun updatePlaymode(playmode: Int) {
+    this.applicationSharedPreferences.edit().putInt(CacheKey.PLAY_MODE, playmode).apply()
+  }
+
+  fun updateLastShownAyahNumber(ayahNumber: Int) {
+    this.applicationSharedPreferences.edit().putInt(CacheKey.LAST_SHOWN_AYAH_NUMBER, ayahNumber).apply()
+  }
+
+  fun getLastShownAyahNumber() =
+      this.applicationSharedPreferences.getInt(CacheKey.LAST_SHOWN_AYAH_NUMBER, 1)
+
+  fun updateMaxAyahCount(maxAyahCount: Int) =
+    this.applicationSharedPreferences.edit().putInt(CacheKey.MAX_AYAH_COUNT, maxAyahCount).apply()
+
+  fun getMaxAyahCount() =
+      this.applicationSharedPreferences.getInt(CacheKey.MAX_AYAH_COUNT, 50)
+
 
 /*  fun updateUserInfo(userInformation: UserInformation?) {
     setObjectWithGenericSerializer(CacheKey.USER_INFO, userInformation)

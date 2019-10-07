@@ -1,6 +1,5 @@
 package com.mguven.holysignal.viewmodel
 
-import android.util.Log
 import com.mguven.holysignal.cache.ApplicationCache
 import com.mguven.holysignal.db.ApplicationDatabase
 import com.mguven.holysignal.db.entity.FavouritesData
@@ -22,14 +21,12 @@ constructor(private val database: ApplicationDatabase,
 
   fun deleteFavourite(ayahNumber: Int) = runBlocking {
     launch(Dispatchers.Default) {
-      Log.e("AAA", "favourites ==============> DELETE FAVOURITE ${Thread.currentThread().name}")
       database.favouritesDataDao().delete(ayahNumber)
     }
   }
 
   fun insertFavourite(ayahNumber: Int) = runBlocking {
     launch(Dispatchers.Default) {
-      Log.e("AAA", "favourites ==============> INSERT FAVOURITE ${Thread.currentThread().name}")
       database.favouritesDataDao().insert(FavouritesData(0, ayahNumber))
     }
   }
@@ -38,6 +35,7 @@ constructor(private val database: ApplicationDatabase,
       database.favouritesDataDao().getAll()
 
   fun hasFavourite(ayahNumber: Int) = database.favouritesDataDao().getByAyahNumber(ayahNumber)
+
 
 /*  fun getAyahList() =
       database.ayahSampleDataDao().getAll(53)
