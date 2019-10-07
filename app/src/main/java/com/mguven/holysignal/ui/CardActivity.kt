@@ -56,7 +56,7 @@ class CardActivity : AbstractBaseActivity() {
         Playmode.RANDOM -> (1..cache.getMaxAyahCount()).random()
         Playmode.REPEAT_AYAH -> cache.getLastShownAyahNumber()
         else ->
-          (cache.getLastShownAyah()!!.startingAyahNumber..cache.getLastShownAyah()!!.endingAyahNumber).random()
+          (cache.getLastShownAyah()!!.startingAyahNumber..cache.getMaxAyahCount()).random()
       }
     } catch (ex: Exception) {
       (1..cache.getMaxAyahCount()).random()
