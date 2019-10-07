@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">Holy Signal</string>
+    <string name="preferences_saved">Tercihler başarıyla kaydedildi</string>
+    <string name="edition_select_text">Lütfen bir versiyon seçin</string>
+    <string name="main_save_and_close">Kaydet ve Kapat</string>
+</resources>
