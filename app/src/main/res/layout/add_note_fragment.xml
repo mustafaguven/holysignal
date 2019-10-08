@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimary"
+    android:orientation="vertical"
+    android:padding="10dp">
+
+    <Button
+        android:id="@+id/btnSave"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:text="@string/main_save_and_close"
+        android:layout_alignParentEnd="true"/>
+
+    <androidx.appcompat.widget.AppCompatEditText
+        android:layout_above="@id/btnSave"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:minHeight="200dp"
+        android:hint="@string/add_note_hint"
+        android:gravity="top|start"
+        android:background="@color/white"
+        android:textColor="@color/black"
+        android:padding="5dp"/>
+
+</RelativeLayout>

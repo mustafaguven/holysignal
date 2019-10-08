@@ -12,6 +12,7 @@ import com.mguven.holysignal.db.entity.FavouritesData
 import com.mguven.holysignal.db.entity.SurahAyahSampleData
 import com.mguven.holysignal.di.module.CardActivityModule
 import com.mguven.holysignal.inline.whenNotNull
+import com.mguven.holysignal.ui.fragment.AddNoteFragment
 import com.mguven.holysignal.viewmodel.HolyBookViewModel
 import kotlinx.android.synthetic.main.activity_card.*
 
@@ -104,7 +105,11 @@ class CardActivity : AbstractBaseActivity() {
           })
       cache.updatePlaymode(newPlayMode)
       showSnackbar(playmodes[newPlayMode])
+    }
 
+    ivAddNote.setOnClickListener {
+      val addNoteFragment = AddNoteFragment.newInstance()
+      addNoteFragment.show(supportFragmentManager, addNoteFragment.javaClass.simpleName)
     }
   }
 
