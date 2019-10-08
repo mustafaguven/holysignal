@@ -24,6 +24,10 @@ class CardActivity : AbstractBaseActivity() {
     return@lazy cache.getPlaymode()
   }
 
+  private val playmodes by lazy {
+    return@lazy resources.getStringArray(R.array.playmodes)
+  }
+
   private var isFavourite = false
   private var ayahNumber = 0
 
@@ -56,7 +60,7 @@ class CardActivity : AbstractBaseActivity() {
         Playmode.RANDOM -> (1..cache.getMaxAyahCount()).random()
         Playmode.REPEAT_AYAH -> cache.getLastShownAyahNumber()
         else ->
-          return if(cache.getLastShownAyah()!!.endingAyahNumber <= cache.getMaxAyahCount()){
+          return if (cache.getLastShownAyah()!!.endingAyahNumber <= cache.getMaxAyahCount()) {
             (cache.getLastShownAyah()!!.startingAyahNumber..cache.getLastShownAyah()!!.endingAyahNumber).random()
           } else {
             (cache.getLastShownAyah()!!.startingAyahNumber..cache.getMaxAyahCount()).random()
@@ -75,6 +79,7 @@ class CardActivity : AbstractBaseActivity() {
     ivFavourite.setOnClickListener {
       isFavourite = !isFavourite
       upsertFavourite()
+      showSnackbar(if (isFavourite) getString(R.string.added_to_favourites) else getString(R.string.removed_from_favourites))
     }
 
     ivShare.setOnClickListener {
@@ -98,6 +103,8 @@ class CardActivity : AbstractBaseActivity() {
             if (newPlayMode == 1) R.drawable.ic_repeat_surah24px else R.drawable.ic_repeat_ayah_24px
           })
       cache.updatePlaymode(newPlayMode)
+      showSnackbar(playmodes[newPlayMode])
+
     }
   }
 

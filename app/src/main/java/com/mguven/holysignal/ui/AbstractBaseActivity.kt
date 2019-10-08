@@ -2,9 +2,12 @@ package com.mguven.holysignal.ui
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProviders
+import com.google.android.material.snackbar.Snackbar
+import com.mguven.holysignal.R
 import com.mguven.holysignal.TheApplication
 import com.mguven.holysignal.cache.ApplicationCache
 import com.mguven.holysignal.di.ViewModelFactory
@@ -51,5 +54,13 @@ abstract class AbstractBaseActivity : AppCompatActivity(), LifecycleObserver {
     if (!compositeDisposable.isDisposed) {
       compositeDisposable.dispose()
     }
+  }
+
+  fun showSnackbar(str: String){
+    val snackbar = Snackbar.make(findViewById(android.R.id.content),
+        str,
+        Snackbar.LENGTH_SHORT)
+    snackbar.view.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimaryDark))
+    snackbar.show()
   }
 }

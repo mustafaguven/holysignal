@@ -3,4 +3,15 @@
     <string name="preferences_saved">Tercihler başarıyla kaydedildi</string>
     <string name="edition_select_text">Lütfen bir versiyon seçin</string>
     <string name="main_save_and_close">Kaydet ve Kapat</string>
+
+
+    <string name="added_to_favourites">Favorilere eklendi</string>
+    <string name="removed_from_favourites">Favorilerden çıkarıldı</string>
+
+    <string name="playmode_snackbar_message">Yeni oynatma listesi: %1$s</string>
+    <string-array name="playmodes">
+        <item>Ayetler karışık şekilde gösterilsin</item>
+        <item>Sadece bu sureye ait ayetler gösterilsin</item>
+        <item>Sadece bu ayet gösterilsin</item>
+    </string-array>
 </resources>
