@@ -8,7 +8,7 @@ import com.mguven.holysignal.db.dao.*
 import com.mguven.holysignal.db.entity.*
 
 @Database(entities = [EditionData::class, SurahData::class, AyahSampleData::class,
-  FavouritesData::class, PreferencesData::class, DisplayModeData::class], version = 1)
+  FavouritesData::class, PreferencesData::class, DisplayModeData::class, NotesData::class], version = 1)
 
 abstract class ApplicationDatabase : RoomDatabase() {
 
@@ -18,6 +18,7 @@ abstract class ApplicationDatabase : RoomDatabase() {
   abstract fun favouritesDataDao(): FavouritesDataDao
   abstract fun preferencesDataDao(): PreferencesDataDao
   abstract fun displayModeDataDao(): DisplayModeDataDao
+  abstract fun notesDataDao(): NotesDataDao
 
   companion object {
     @Volatile

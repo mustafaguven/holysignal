@@ -12,5 +12,6 @@ data class AyahSampleData(@PrimaryKey(autoGenerate = true) var Id: Int,
                           @ColumnInfo(name = "number") var number: Int,
                           @ColumnInfo(name = "text") var text: String,
                           @ColumnInfo(name = "numberInSurah") var numberInSurah: Int,
-                          @ColumnInfo(name = "juz") var juz: Int
+                          @ColumnInfo(name = "juz") var juz: Int,
+                          @ColumnInfo(name = "noteId") var noteId: Int?
 )

@@ -32,7 +32,8 @@ interface AyahSampleDataDao {
       " AyahSample.number as ayahNumber, " +
       " AyahSample.text as ayahText, " +
       " AyahSample.numberInSurah as numberInSurah, " +
-      " AyahSample.juz as juz " +
+      " AyahSample.juz as juz, " +
+      " AyahSample.noteId as noteId " +
       " from AyahSample inner join Surah on Surah.number = AyahSample.surahNumber " +
       " inner join Edition on Edition.Id = AyahSample.editionId " +
       " WHERE AyahSample.editionId = :editionId AND AyahSample.number = :randomAyahNumber")
