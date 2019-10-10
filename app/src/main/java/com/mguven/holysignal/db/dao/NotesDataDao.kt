@@ -19,7 +19,7 @@ interface NotesDataDao {
   fun delete(id: Int)
 
   @Insert(onConflict = REPLACE)
-  fun insert(notesData: NotesData): Long
+  suspend fun insert(notesData: NotesData): Long
 
   @Query("SELECT * FROM Notes WHERE Id = :id")
   fun getNoteById(id: Int): LiveData<List<NotesData>>

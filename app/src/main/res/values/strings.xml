@@ -3,24 +3,15 @@
     <string name="preferences_saved">Preferences are saved successfully</string>
     <string name="edition_select_text">Please select an edition</string>
     <string name="main_save_and_close">Save and Close</string>
+    <string name="main_save">Save</string>
 
     <string name="added_to_favourites">Added to favourites</string>
     <string name="removed_from_favourites">Removed from favourites</string>
 
     <string name="playmode_snackbar_message">New playmode is: %1$s</string>
     <string name="add_note_hint">enter note</string>
-
-
-
-
-
-
-
-
-
-
-
-
+    <string name="note_saved_successfully">Note saved successfully</string>
+    <string name="note_should_be_filled">Please fill the content area</string>
 
 
     <string-array name="playmodes">

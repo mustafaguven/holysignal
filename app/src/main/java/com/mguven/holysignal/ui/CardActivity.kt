@@ -17,7 +17,8 @@ import com.mguven.holysignal.viewmodel.HolyBookViewModel
 import kotlinx.android.synthetic.main.activity_card.*
 
 
-class CardActivity : AbstractBaseActivity() {
+class CardActivity : AbstractBaseActivity(), AddNoteFragment.OnFragmentInteractionListener {
+
 
   private lateinit var holyBookViewModel: HolyBookViewModel
 
@@ -28,6 +29,11 @@ class CardActivity : AbstractBaseActivity() {
   private val playmodes by lazy {
     return@lazy resources.getStringArray(R.array.playmodes)
   }
+
+  private val addNoteFragment by lazy {
+    return@lazy AddNoteFragment.newInstance(cache.getLastShownAyah()?.noteId)
+  }
+
 
   private var isFavourite = false
   private var ayahNumber = 0
@@ -108,7 +114,6 @@ class CardActivity : AbstractBaseActivity() {
     }
 
     ivAddNote.setOnClickListener {
-      val addNoteFragment = AddNoteFragment.newInstance()
       addNoteFragment.show(supportFragmentManager, addNoteFragment.javaClass.simpleName)
     }
   }
@@ -154,5 +159,11 @@ class CardActivity : AbstractBaseActivity() {
     })
   }
 
+  override fun onNoteInserted(insertNo: Long) {
+    holyBookViewModel.updateNoteOfAyah(insertNo.toInt()).observe(this, Observer {
+      addNoteFragment.dismiss()
+      showSnackbar(getString(R.string.note_saved_successfully))
+    })
+  }
 }
 

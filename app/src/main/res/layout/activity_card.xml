@@ -54,6 +54,21 @@
         app:layout_constraintWidth_default="wrap" />
 
     <ImageView
+        android:id="@+id/ivAddNote"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginEnd="20dp"
+        android:src="@drawable/ic_note"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintEnd_toStartOf="@id/ivSearch"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_default="wrap" />
+
+    <ImageView
         android:id="@+id/ivFavourite"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -83,6 +98,19 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintWidth_default="wrap" />
 
+    <ImageView
+        android:id="@+id/ivSelectSurah"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginEnd="20dp"
+        android:src="@drawable/ic_select_surah"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintStart_toEndOf="@id/ivPlayMode"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_default="wrap" />
+
     <TextView
         android:id="@+id/tvAyahNumber"
         android:layout_width="wrap_content"
@@ -99,16 +127,16 @@
         app:layout_constraintVertical_chainStyle="packed"
         tools:text="ayah number" />
 
-    <ImageView
+<!--    <ImageView
         android:id="@+id/ivAddNote"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
         android:src="@drawable/ic_note"
         app:layout_constrainedWidth="true"
-        android:layout_marginLeft="5dp"
         app:layout_constraintStart_toEndOf="@id/tvAyahNumber"
         app:layout_constraintTop_toTopOf="@id/tvAyahNumber"
-        app:layout_constraintWidth_default="wrap" />
+        app:layout_constraintWidth_default="wrap" />-->
 
     <TextView
         android:id="@+id/tvAyahTopText"

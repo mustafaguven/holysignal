@@ -29,6 +29,7 @@ interface AyahSampleDataDao {
       " Surah.StartingAyahNumber as startingAyahNumber, " +
       " Surah.EndingAyahNumber as endingAyahNumber, " +
       " Edition.language as language, " +
+      " AyahSample.Id as ayahId, " +
       " AyahSample.number as ayahNumber, " +
       " AyahSample.text as ayahText, " +
       " AyahSample.numberInSurah as numberInSurah, " +
@@ -41,4 +42,7 @@ interface AyahSampleDataDao {
 
   @Query(" SELECT max(number) as max from AyahSample WHERE editionId = :editionId ")
   fun getMaxAyahCountByEditionId(editionId: Int): LiveData<MaxAyahCountData>
+
+  @Query("UPDATE AyahSample SET noteId = :noteId WHERE Id = :ayahId")
+  suspend fun updateNoteId(ayahId: Int, noteId: Int)
 }

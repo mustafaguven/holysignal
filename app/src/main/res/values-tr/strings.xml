@@ -3,7 +3,7 @@
     <string name="preferences_saved">Tercihler başarıyla kaydedildi</string>
     <string name="edition_select_text">Lütfen bir versiyon seçin</string>
     <string name="main_save_and_close">Kaydet ve Kapat</string>
-
+    <string name="main_save">Kaydet</string>
 
     <string name="added_to_favourites">Favorilere eklendi</string>
     <string name="removed_from_favourites">Favorilerden çıkarıldı</string>
@@ -12,8 +12,8 @@
     <string name="playmode_snackbar_message">Yeni oynatma listesi: %1$s</string>
     <string name="add_note_hint">Notunuzu girin</string>
 
-
-
+    <string name="note_saved_successfully">Notunuz başarıyla kaydedildi</string>
+    <string name="note_should_be_filled">Lütfen eklemek istediğiniz notu girin</string>
 
 
 
