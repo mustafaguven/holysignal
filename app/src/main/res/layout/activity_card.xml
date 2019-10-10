@@ -8,6 +8,19 @@
     android:background="@drawable/bg1"
     tools:context=".ui.CardActivity">
 
+    <Spinner
+        android:id="@+id/spSurahList"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="30dp"
+        android:background="@color/white"
+        android:spinnerMode="dialog"
+        app:layout_constraintTop_toBottomOf="@id/ivAddNote"
+        app:layout_constraintRight_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:visibility="gone"/>
+
     <ImageView
         android:id="@+id/ivPreferences"
         android:layout_width="wrap_content"
@@ -105,11 +118,11 @@
         android:layout_marginStart="20dp"
         android:layout_marginTop="50dp"
         android:layout_marginEnd="20dp"
-        android:src="@drawable/ic_select_surah"
+        android:src="@drawable/ic_select_surah_disabled"
         app:layout_constrainedWidth="true"
         app:layout_constraintStart_toEndOf="@id/ivPlayMode"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintWidth_default="wrap" />
+        app:layout_constraintWidth_default="wrap"/>
 
     <TextView
         android:id="@+id/tvAyahNumber"

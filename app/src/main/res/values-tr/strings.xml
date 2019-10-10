@@ -25,7 +25,7 @@
 
     <string-array name="playmodes">
         <item>Ayetler karışık şekilde gösterilsin</item>
-        <item>Sadece bu sureye ait ayetler gösterilsin</item>
+        <item>Sadece seçili sureye ait ayetler gösterilsin</item>
         <item>Sadece bu ayet gösterilsin</item>
     </string-array>
 </resources>

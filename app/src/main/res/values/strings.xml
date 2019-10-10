@@ -16,7 +16,7 @@
 
     <string-array name="playmodes">
         <item>Shuffle all ayahs</item>
-        <item>Retrieve ayahs from this surah only</item>
+        <item>Retrieve ayahs from the selected surah only</item>
         <item>Repeat this ayah</item>
     </string-array>
 </resources>
