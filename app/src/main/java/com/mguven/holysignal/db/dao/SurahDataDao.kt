@@ -14,7 +14,7 @@ interface SurahDataDao {
   @Query("SELECT * from Surah")
   fun getAll(): LiveData<List<SurahData>>
 
-  @Query("SELECT S.englishName as 'key', S.number as value, min(A.numberInSurah) as 'min', max(A.numberInSurah) as 'max' " +
+  @Query("SELECT '(' || S.number || ')'  || ' ' ||  S.englishName as 'key', S.number as value, min(A.numberInSurah) as 'min', max(A.numberInSurah) as 'max' " +
       " FROM Surah S INNER JOIN AyahSample A on S.number = A.surahNumber " +
       " WHERE editionId = :editionId " +
       " group by S.englishName " +

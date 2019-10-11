@@ -29,6 +29,8 @@ class CardActivity : AbstractBaseActivity(), AddNoteFragment.OnFragmentInteracti
   private var playmode: Int = Int.MIN_VALUE
   private var availableSurahList: List<AvailableSurahItem>? = null
 
+  private var spSurahOpeningClick = true
+
   private val playmodes by lazy {
     return@lazy resources.getStringArray(R.array.playmodes)
   }
@@ -132,6 +134,7 @@ class CardActivity : AbstractBaseActivity(), AddNoteFragment.OnFragmentInteracti
     }
 
     ivSelectSurah.setOnClickListener {
+      spSurahOpeningClick = true
       if (playmode != Playmode.REPEAT_SURAH) return@setOnClickListener
       if (availableSurahList == null) {
         holyBookViewModel.getAvailableSurahList().observe(this, Observer<List<AvailableSurahItem>> { list ->
@@ -145,22 +148,27 @@ class CardActivity : AbstractBaseActivity(), AddNoteFragment.OnFragmentInteracti
   }
 
   private fun updateAvailableSurahListAdapter(list: List<AvailableSurahItem>) {
-    val adapter = AvailableSurahAdapter(this, R.layout.status_item, list)
-    spSurahList.adapter = adapter
-/*    list.forEachIndexed { index, it ->
+    var selectedItem = 0
+    list.forEachIndexed { index, it ->
       if (it.value == cache.getLastShownAyah()?.surahNumber) {
-        spSurahList.setSelection(index)
+        selectedItem = index
         return@forEachIndexed
       }
-    }*/
+    }
+
+    spSurahList.adapter = AvailableSurahAdapter(this, R.layout.status_item, list, selectedItem)
+    spSurahList.setSelection(selectedItem)
     spSurahList.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
       override fun onNothingSelected(adapterView: AdapterView<*>?) {
-        val a = 0
+        //do nothing
       }
 
       override fun onItemSelected(adapterView: AdapterView<*>?, view: View?, position: Int, id: Long) {
-        ayahNumber = (availableSurahList!![position].min..availableSurahList!![position].max).random()
-        initData()
+        if (!spSurahOpeningClick) {
+          ayahNumber = (availableSurahList!![position].min..availableSurahList!![position].max).random()
+          initData()
+        }
+        spSurahOpeningClick = false
       }
     }
     spSurahList.performClick()
