@@ -4,6 +4,8 @@
     <string name="edition_select_text">Lütfen bir versiyon seçin</string>
     <string name="main_save_and_close">Kaydet ve Kapat</string>
     <string name="main_save">Kaydet</string>
+    <string name="main_primary_text">Birincil Metin</string>
+    <string name="main_alternative_text">Alternatif Metin</string>
 
     <string name="added_to_favourites">Favorilere eklendi</string>
     <string name="removed_from_favourites">Favorilerden çıkarıldı</string>
@@ -14,11 +16,6 @@
 
     <string name="note_saved_successfully">Notunuz başarıyla kaydedildi</string>
     <string name="note_should_be_filled">Lütfen eklemek istediğiniz notu girin</string>
-
-
-
-
-
 
 
 

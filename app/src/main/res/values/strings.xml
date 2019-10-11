@@ -4,6 +4,8 @@
     <string name="edition_select_text">Please select an edition</string>
     <string name="main_save_and_close">Save and Close</string>
     <string name="main_save">Save</string>
+    <string name="main_primary_text">Primary Text</string>
+    <string name="main_alternative_text">Alternative Text</string>
 
     <string name="added_to_favourites">Added to favourites</string>
     <string name="removed_from_favourites">Removed from favourites</string>

@@ -14,7 +14,7 @@ interface EditionDataDao {
   @Query("SELECT * from Edition")
   fun getAll(): LiveData<List<EditionData>>
 
-  @Query("SELECT name || ' ' || '(' || language || ')' as 'key', Id as value from Edition WHERE type = 'translation'")
+  @Query("SELECT '(' || type || ')' || ' ' || name || ' ' || '(' || language || ')' as 'key', Id as value from Edition WHERE type in ('translation', 'quran', 'transliteration') order by type ")
   fun getNameIdList(): LiveData<List<EditionAdapterData>>
 
   @Insert(onConflict = REPLACE)
