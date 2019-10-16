@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.AdapterView
+import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
 import com.mguven.holysignal.FlowController
 import com.mguven.holysignal.R
@@ -35,9 +36,7 @@ class CardActivity : AbstractBaseActivity(), AddNoteFragment.OnFragmentInteracti
     return@lazy resources.getStringArray(R.array.playmodes)
   }
 
-  private val addNoteFragment by lazy {
-    return@lazy AddNoteFragment.newInstance(cache.getLastShownAyah()?.noteId)
-  }
+  private lateinit var addNoteFragment: DialogFragment
 
 
   private var isFavourite = false
@@ -124,12 +123,14 @@ class CardActivity : AbstractBaseActivity(), AddNoteFragment.OnFragmentInteracti
           })
 
       ivSelectSurah.setImageResource(if (newPlayMode == Playmode.REPEAT_SURAH) R.drawable.ic_select_surah else R.drawable.ic_select_surah_disabled)
+      tvNext.visibility = if (newPlayMode == Playmode.REPEAT_AYAH) View.GONE else View.VISIBLE
       cache.updatePlaymode(newPlayMode)
       playmode = newPlayMode
       showSnackbar(playmodes[newPlayMode])
     }
 
     ivAddNote.setOnClickListener {
+      addNoteFragment = AddNoteFragment.newInstance(cache.getLastShownAyah()?.noteId)
       addNoteFragment.show(supportFragmentManager, addNoteFragment.javaClass.simpleName)
     }
 
@@ -138,12 +139,19 @@ class CardActivity : AbstractBaseActivity(), AddNoteFragment.OnFragmentInteracti
       if (playmode != Playmode.REPEAT_SURAH) return@setOnClickListener
       if (availableSurahList == null) {
         holyBookViewModel.getAvailableSurahList().observe(this, Observer<List<AvailableSurahItem>> { list ->
-          availableSurahList = list
-          updateAvailableSurahListAdapter(list)
+          if (availableSurahList != list) {
+            availableSurahList = list
+            updateAvailableSurahListAdapter(list)
+          }
         })
       } else {
         updateAvailableSurahListAdapter(availableSurahList!!)
       }
+    }
+
+    tvNext.setOnClickListener {
+      ayahNumber = getAyahNumberByPlaymode()
+      initData()
     }
   }
 

@@ -22,7 +22,6 @@ class UnlockReceiver : BroadcastReceiver() {
 
     Log.e("AAA", "screen is off")
     if (intent.action!!.equals(Intent.ACTION_SCREEN_OFF, ignoreCase = true)) {
-      //TODO:: perform action for SCREEN_OFF
       val intent =
           Intent(context.applicationContext, CardActivity::class.java)
       intent.addFlags(
