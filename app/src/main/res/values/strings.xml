@@ -23,5 +23,6 @@
         <item>Shuffle all ayahs</item>
         <item>Retrieve ayahs from the selected surah only</item>
         <item>Repeat this ayah</item>
+        <item>Retrieve ayahs by sequentially</item>
     </string-array>
 </resources>

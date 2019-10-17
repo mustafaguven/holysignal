@@ -68,18 +68,18 @@ class CardActivity : AbstractBaseActivity(), AddNoteFragment.OnFragmentInteracti
     showFavouriteStatus()
   }
 
-  private fun getAyahNumberByPlaymode(): Int {
-    return try {
-      ivSelectSurah.setImageResource(R.drawable.ic_select_surah_disabled)
-      return when (playmode) {
-        Playmode.RANDOM -> (1..cache.getMaxAyahCount()).random()
-        Playmode.REPEAT_AYAH -> cache.getLastShownAyahNumber()
-        else -> return onSelectSurah()
-      }
-    } catch (ex: Exception) {
-      (1..cache.getMaxAyahCount()).random()
+  private fun getAyahNumberByPlaymode() = try {
+    ivSelectSurah.setImageResource(R.drawable.ic_select_surah_disabled)
+    when (playmode) {
+      Playmode.RANDOM -> (1..cache.getMaxAyahCount()).random()
+      Playmode.REPEAT_AYAH -> cache.getLastShownAyahNumber()
+      Playmode.AYAH_BY_AYAH -> cache.getLastShownAyahNumber() + 1
+      else -> onSelectSurah()
     }
+  } catch (ex: Exception) {
+    (1..cache.getMaxAyahCount()).random()
   }
+
 
   private fun onSelectSurah(): Int {
     ivSelectSurah.setImageResource(R.drawable.ic_select_surah)
@@ -116,12 +116,8 @@ class CardActivity : AbstractBaseActivity(), AddNoteFragment.OnFragmentInteracti
     }
 
     ivPlayMode.setOnClickListener {
-      val newPlayMode = (playmode + 1) % 3
-      ivPlayMode.setImageResource(
-          if (newPlayMode == Playmode.RANDOM) R.drawable.ic_random_24px else {
-            if (newPlayMode == Playmode.REPEAT_SURAH) R.drawable.ic_repeat_surah24px else R.drawable.ic_repeat_ayah_24px
-          })
-
+      val newPlayMode = (playmode + 1) % 4
+      initPlaymode(newPlayMode)
       ivSelectSurah.setImageResource(if (newPlayMode == Playmode.REPEAT_SURAH) R.drawable.ic_select_surah else R.drawable.ic_select_surah_disabled)
       tvNext.visibility = if (newPlayMode == Playmode.REPEAT_AYAH) View.GONE else View.VISIBLE
       cache.updatePlaymode(newPlayMode)
@@ -155,6 +151,17 @@ class CardActivity : AbstractBaseActivity(), AddNoteFragment.OnFragmentInteracti
       ayahNumber = getAyahNumberByPlaymode()
       initData()
     }
+  }
+
+  private fun initPlaymode(mode: Int) {
+    ivPlayMode.setImageResource(
+        when (mode) {
+          Playmode.RANDOM -> R.drawable.ic_random_24px
+          Playmode.REPEAT_SURAH -> R.drawable.ic_repeat_surah24px
+          Playmode.REPEAT_AYAH -> R.drawable.ic_repeat_ayah_24px
+          else -> R.drawable.ic_loop_24px
+        }
+    )
   }
 
   private fun updateAvailableSurahListAdapter(list: List<AvailableSurahItem>) {
