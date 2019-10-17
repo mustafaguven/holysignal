@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.AdapterView
+import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.lifecycleScope
 import com.mguven.holysignal.FlowController
@@ -58,7 +59,7 @@ class CardActivity : AbstractBaseActivity(), AddNoteFragment.OnFragmentInteracti
     playmode = cache.getPlaymode()
     ayahNumber = getAyahNumberByPlaymode()
     initData()
-    initPlaymode()
+    initPlaymode(playmode)
     initListeners()
   }
 
@@ -119,7 +120,7 @@ class CardActivity : AbstractBaseActivity(), AddNoteFragment.OnFragmentInteracti
       val newPlayMode = (playmode + 1) % 4
       initPlaymode(newPlayMode)
       ivSelectSurah.setImageResource(if (newPlayMode == Playmode.REPEAT_SURAH) R.drawable.ic_select_surah else R.drawable.ic_select_surah_disabled)
-      tvNext.visibility = if (newPlayMode == Playmode.REPEAT_AYAH) View.GONE else View.VISIBLE
+      clNextAyah.visibility = if (newPlayMode == Playmode.REPEAT_AYAH) View.GONE else View.VISIBLE
       cache.updatePlaymode(newPlayMode)
       playmode = newPlayMode
       showSnackbar(playmodes[newPlayMode])
@@ -147,7 +148,11 @@ class CardActivity : AbstractBaseActivity(), AddNoteFragment.OnFragmentInteracti
       }
     }
 
-    tvNext.setOnClickListener {
+    ivSearch.setOnClickListener {
+      Toast.makeText(this, "Hazir degil", Toast.LENGTH_SHORT).show()
+    }
+
+    clNextAyah.setOnClickListener {
       ayahNumber = getAyahNumberByPlaymode()
       initData()
     }
@@ -191,13 +196,6 @@ class CardActivity : AbstractBaseActivity(), AddNoteFragment.OnFragmentInteracti
       }
     }
     spSurahList.performClick()
-  }
-
-  private fun initPlaymode() {
-    ivPlayMode.setImageResource(
-        if (playmode == Playmode.RANDOM) R.drawable.ic_random_24px else {
-          if (playmode == Playmode.REPEAT_SURAH) R.drawable.ic_repeat_surah24px else R.drawable.ic_repeat_ayah_24px
-        })
   }
 
   private fun upsertFavourite() = runBlocking {
