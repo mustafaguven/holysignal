@@ -46,7 +46,7 @@ constructor(private val database: ApplicationDatabase,
     }
   }
 
-  fun getAvailableSurahList() =
+  suspend fun getAvailableSurahList() =
       database.surahDataDao().getAvailableSurahListByEditionId(cache.getTopTextEditionId())
 
 }

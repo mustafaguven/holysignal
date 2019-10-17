@@ -16,6 +16,7 @@
     <string name="note_should_be_filled">Please fill the content area</string>
     <string name="next_ayah">next ayah</string>
     <string name="note">Note</string>
+    <string name="via_holy_signal">(via www.holysignal.com)</string>
 
 
     <string-array name="playmodes">

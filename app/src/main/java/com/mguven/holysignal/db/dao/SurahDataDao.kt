@@ -1,6 +1,5 @@
 package com.mguven.holysignal.db.dao
 
-import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy.REPLACE
@@ -12,20 +11,20 @@ import com.mguven.holysignal.db.entity.SurahData
 interface SurahDataDao {
 
   @Query("SELECT * from Surah")
-  fun getAll(): LiveData<List<SurahData>>
+  suspend fun getAll(): List<SurahData>
 
-  @Query("SELECT '(' || S.number || ')'  || ' ' ||  S.englishName as 'key', S.number as value, min(A.numberInSurah) as 'min', max(A.numberInSurah) as 'max' " +
+  @Query("SELECT '(' || S.number || ')'  || ' ' ||  S.englishName as 'key', S.number as value, S.startingAyahNumber as 'min', S.endingAyahNumber as 'max' " +
       " FROM Surah S INNER JOIN AyahSample A on S.number = A.surahNumber " +
       " WHERE editionId = :editionId " +
       " group by S.englishName " +
       " order by S.Id ")
-  fun getAvailableSurahListByEditionId(editionId: Int): LiveData<List<AvailableSurahItem>>
+  suspend fun getAvailableSurahListByEditionId(editionId: Int): List<AvailableSurahItem>
 
   @Insert(onConflict = REPLACE)
-  fun insert(surahData: SurahData)
+  suspend fun insert(surahData: SurahData)
 
   @Query("DELETE from Surah")
-  fun deleteAll()
+  suspend fun deleteAll()
 
 
 

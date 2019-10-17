@@ -6,7 +6,6 @@ import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import androidx.fragment.app.DialogFragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import com.mguven.holysignal.FlowController
 import com.mguven.holysignal.R
@@ -105,7 +104,7 @@ class CardActivity : AbstractBaseActivity(), AddNoteFragment.OnFragmentInteracti
     ivShare.setOnClickListener {
       whenNotNull(cache.getLastShownAyah()) {
         val shareText = "(${cache.getLastShownAyah()?.surahNumber}:${cache.getLastShownAyah()?.numberInSurah})" +
-            " ${cache.getLastShownAyah()?.ayahText} (via www.holysignal.com)"
+            " ${cache.getLastShownAyah()?.ayahText} ${getString(R.string.via_holy_signal)}"
         val sendIntent: Intent = Intent().apply {
           action = Intent.ACTION_SEND
           putExtra(Intent.EXTRA_TEXT, shareText)
@@ -139,12 +138,14 @@ class CardActivity : AbstractBaseActivity(), AddNoteFragment.OnFragmentInteracti
       spSurahOpeningClick = true
       if (playmode != Playmode.REPEAT_SURAH) return@setOnClickListener
       if (availableSurahList == null) {
-        holyBookViewModel.getAvailableSurahList().observe(this, Observer<List<AvailableSurahItem>> { list ->
-          if (availableSurahList != list) {
-            availableSurahList = list
-            updateAvailableSurahListAdapter(list)
+        lifecycleScope.launch {
+          holyBookViewModel.getAvailableSurahList().also { list ->
+            if (availableSurahList != list) {
+              availableSurahList = list
+              updateAvailableSurahListAdapter(list)
+            }
           }
-        })
+        }
       } else {
         updateAvailableSurahListAdapter(availableSurahList!!)
       }
@@ -174,7 +175,9 @@ class CardActivity : AbstractBaseActivity(), AddNoteFragment.OnFragmentInteracti
 
       override fun onItemSelected(adapterView: AdapterView<*>?, view: View?, position: Int, id: Long) {
         if (!spSurahOpeningClick) {
-          ayahNumber = (availableSurahList!![position].min..availableSurahList!![position].max).random()
+          Log.e("AAA", "position ==> $position ---- min ==> ${availableSurahList!![position].min} ----- max ==> ${availableSurahList!![position].max}")
+          val maxAyah = if (availableSurahList!![position].max >= cache.getMaxAyahCount()) cache.getMaxAyahCount() else availableSurahList!![position].max
+          ayahNumber = (availableSurahList!![position].min..maxAyah).random()
           initData()
         }
         spSurahOpeningClick = false
