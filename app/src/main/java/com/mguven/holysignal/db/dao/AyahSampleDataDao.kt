@@ -38,7 +38,7 @@ interface AyahSampleDataDao {
       " from AyahSample inner join Surah on Surah.number = AyahSample.surahNumber " +
       " inner join Edition on Edition.Id = AyahSample.editionId " +
       " WHERE AyahSample.editionId = :editionId AND AyahSample.number = :randomAyahNumber")
-  fun getRandomAyah(editionId: Int, randomAyahNumber: Int): LiveData<List<SurahAyahSampleData>>
+  suspend fun getRandomAyah(editionId: Int, randomAyahNumber: Int): List<SurahAyahSampleData>
 
   @Query(" SELECT max(number) as max from AyahSample WHERE editionId = :editionId ")
   fun getMaxAyahCountByEditionId(editionId: Int): LiveData<MaxAyahCountData>

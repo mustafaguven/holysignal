@@ -9,11 +9,13 @@ import android.view.ViewGroup
 import android.view.Window
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
 import com.mguven.holysignal.R
 import com.mguven.holysignal.db.entity.NotesData
 import com.mguven.holysignal.ui.AbstractBaseActivity
 import com.mguven.holysignal.viewmodel.HolyBookViewModel
 import kotlinx.android.synthetic.main.add_note_fragment.*
+import kotlinx.coroutines.launch
 
 class AddNoteFragment : DialogFragment() {
 
@@ -45,9 +47,13 @@ class AddNoteFragment : DialogFragment() {
     }
 
     btnSave.setOnClickListener {
-      holyBookViewModel.upsertNote(noteId, etNote.text.toString()).observe(this, Observer<Long> { insertNo ->
+      /*holyBookViewModel.upsertNote(noteId, etNote.text.toString()).observe(this, Observer<Long> { insertNo ->
         listener?.onNoteInserted(insertNo)
-      })
+      })*/
+      lifecycleScope.launch {
+        val insertNo = holyBookViewModel.upsertNote(noteId, etNote.text.toString())
+        listener?.onNoteInserted(insertNo)
+      }
     }
 
     arguments?.let {
@@ -68,11 +74,12 @@ class AddNoteFragment : DialogFragment() {
 
   private fun getNote() {
     if (noteId > Int.MIN_VALUE) {
-      holyBookViewModel.getNoteById(noteId).observe(this, Observer<List<NotesData>> { list ->
+      lifecycleScope.launch {
+        val list = holyBookViewModel.getNoteById(noteId)
         if (list.isNotEmpty()) {
           etNote.setText(list[0].content)
         }
-      })
+      }
     }
   }
 

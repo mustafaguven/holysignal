@@ -1,26 +1,27 @@
 package com.mguven.holysignal.db.dao
 
-import androidx.lifecycle.LiveData
-import androidx.room.*
+import androidx.room.Dao
+import androidx.room.Insert
 import androidx.room.OnConflictStrategy.REPLACE
+import androidx.room.Query
 import com.mguven.holysignal.db.entity.FavouritesData
 
 @Dao
 interface FavouritesDataDao {
 
   @Query("SELECT * from Favourites")
-  fun getAll(): LiveData<List<FavouritesData>>
+  suspend fun getAll(): List<FavouritesData>
 
   @Query("DELETE FROM Favourites")
-  fun deleteAll()
+  suspend fun deleteAll()
 
   @Query("DELETE FROM Favourites WHERE ayahNumber = :ayahNumber")
-  fun delete(ayahNumber: Int)
+  suspend fun delete(ayahNumber: Int)
 
   @Insert(onConflict = REPLACE)
-  fun insert(favouritesData: FavouritesData): Long
+  suspend fun insert(favouritesData: FavouritesData): Long
 
   @Query("SELECT * FROM Favourites WHERE ayahNumber = :ayahNumber")
-  fun getByAyahNumber(ayahNumber: Int): LiveData<List<FavouritesData>>
+  suspend fun getByAyahNumber(ayahNumber: Int): List<FavouritesData>
 
 }

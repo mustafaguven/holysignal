@@ -7,19 +7,20 @@ import android.view.View
 import android.widget.AdapterView
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
 import com.mguven.holysignal.FlowController
 import com.mguven.holysignal.R
 import com.mguven.holysignal.TheApplication
 import com.mguven.holysignal.constant.Playmode
 import com.mguven.holysignal.db.entity.AvailableSurahItem
-import com.mguven.holysignal.db.entity.FavouritesData
-import com.mguven.holysignal.db.entity.SurahAyahSampleData
 import com.mguven.holysignal.di.module.CardActivityModule
 import com.mguven.holysignal.inline.whenNotNull
 import com.mguven.holysignal.ui.adapter.AvailableSurahAdapter
 import com.mguven.holysignal.ui.fragment.AddNoteFragment
 import com.mguven.holysignal.viewmodel.HolyBookViewModel
 import kotlinx.android.synthetic.main.activity_card.*
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 
 class CardActivity : AbstractBaseActivity(), AddNoteFragment.OnFragmentInteractionListener {
@@ -65,7 +66,7 @@ class CardActivity : AbstractBaseActivity(), AddNoteFragment.OnFragmentInteracti
   private fun initData() {
     getAyahTopText()
     getAyahBottomText()
-    getFavouriteStatus()
+    showFavouriteStatus()
   }
 
   private fun getAyahNumberByPlaymode(): Int {
@@ -189,45 +190,51 @@ class CardActivity : AbstractBaseActivity(), AddNoteFragment.OnFragmentInteracti
         })
   }
 
-  private fun upsertFavourite() {
+  private fun upsertFavourite() = runBlocking {
     holyBookViewModel.deleteFavourite(ayahNumber)
     if (isFavourite) {
       holyBookViewModel.insertFavourite(ayahNumber)
     }
+    showFavouriteStatus()
   }
 
-  private fun getFavouriteStatus() {
-    holyBookViewModel.hasFavourite(ayahNumber).observe(this, Observer<List<FavouritesData>> { list ->
-      isFavourite = list.isNotEmpty()
-      ivFavourite.setImageResource(if (isFavourite) R.drawable.ic_star_fill_24px else R.drawable.ic_star_empty_24px)
-    })
+  private fun showFavouriteStatus() {
+    lifecycleScope.launch {
+      holyBookViewModel.hasFavourite(ayahNumber).also { list ->
+        isFavourite = list.isNotEmpty()
+        ivFavourite.setImageResource(if (isFavourite) R.drawable.ic_star_fill_24px else R.drawable.ic_star_empty_24px)
+      }
+    }
   }
 
   private fun getAyahTopText() {
-    holyBookViewModel.getAyahTopText(ayahNumber).observe(this, Observer<List<SurahAyahSampleData>> { list ->
+    lifecycleScope.launch {
+      val list = holyBookViewModel.getAyahTopText(ayahNumber)
       list.forEach {
         cache.updateLastShownAyah(it)
         tvAyahNumber.text = "(${it.surahNumber}:${it.numberInSurah})"
         tvAyahTopText.text = "${it.language}: ${it.ayahText}"
       }
-    })
+    }
   }
 
   private fun getAyahBottomText() {
-    holyBookViewModel.getAyahBottomText(ayahNumber).observe(this, Observer<List<SurahAyahSampleData>> { list ->
+    lifecycleScope.launch {
+      val list = holyBookViewModel.getAyahBottomText(ayahNumber)
       list.forEach {
         tvAyahBottomText.text = "${it.language}: ${it.ayahText}"
         tvSurah.text = "${it.surahEnglishName} (${it.surahEnglishNameTranslation})"
         tvRevelationType.text = it.surahRevelationType
       }
-    })
+    }
   }
 
   override fun onNoteInserted(insertNo: Long) {
-    holyBookViewModel.updateNoteOfAyah(insertNo.toInt()).observe(this, Observer {
+    lifecycleScope.launch {
+      holyBookViewModel.updateNoteOfAyah(insertNo.toInt())
       addNoteFragment.dismiss()
       showSnackbar(getString(R.string.note_saved_successfully))
-    })
+    }
   }
 }
 

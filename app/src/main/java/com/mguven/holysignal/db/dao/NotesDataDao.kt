@@ -16,12 +16,12 @@ interface NotesDataDao {
   fun deleteAll()
 
   @Query("DELETE FROM Notes WHERE Id = :id")
-  fun delete(id: Int)
+  suspend fun delete(id: Int)
 
   @Insert(onConflict = REPLACE)
   suspend fun insert(notesData: NotesData): Long
 
   @Query("SELECT * FROM Notes WHERE Id = :id")
-  fun getNoteById(id: Int): LiveData<List<NotesData>>
+  suspend fun getNoteById(id: Int): List<NotesData>
 
 }
