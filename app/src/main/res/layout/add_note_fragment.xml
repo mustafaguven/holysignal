@@ -34,7 +34,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_above="@id/btnSave"
-                android:layout_marginTop="15dp"
                 android:background="@color/white"
                 android:gravity="top|start"
                 android:hint="@string/add_note_hint"
@@ -45,12 +44,12 @@
 
     </androidx.cardview.widget.CardView>
 
-    <ImageView
-        android:id="@+id/btnTitle"
-        android:layout_width="65dp"
-        android:layout_height="50dp"
-        android:layout_centerHorizontal="true"
-        android:background="@drawable/rounded"
-        android:src="@drawable/ornament2" />
+<!--    <ImageView-->
+<!--        android:id="@+id/btnTitle"-->
+<!--        android:layout_width="65dp"-->
+<!--        android:layout_height="50dp"-->
+<!--        android:layout_centerHorizontal="true"-->
+<!--        android:background="@drawable/rounded"-->
+<!--        android:src="@drawable/ornament2" />-->
 
 </RelativeLayout>

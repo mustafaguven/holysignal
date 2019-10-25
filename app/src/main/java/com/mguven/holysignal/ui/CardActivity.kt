@@ -105,7 +105,7 @@ class CardActivity : AbstractBaseActivity(), AddNoteFragment.OnFragmentInteracti
     ivShare.setOnClickListener {
       whenNotNull(cache.getLastShownAyah()) {
         val shareText = "(${cache.getLastShownAyah()?.surahNumber}:${cache.getLastShownAyah()?.numberInSurah})" +
-            " ${cache.getLastShownAyah()?.ayahText} ${getString(R.string.via_holy_signal)}"
+            " ${cache.getLastShownAyah()?.ayahText} *** ${tvAyahBottomText.text} ${getString(R.string.via_holy_signal)}"
         val sendIntent: Intent = Intent().apply {
           action = Intent.ACTION_SEND
           putExtra(Intent.EXTRA_TEXT, shareText)
@@ -117,7 +117,7 @@ class CardActivity : AbstractBaseActivity(), AddNoteFragment.OnFragmentInteracti
     }
 
     ivPlayMode.setOnClickListener {
-      val newPlayMode = (playmode + 1) % 4
+      val newPlayMode = (playmode + 1) % playmodes.size
       initPlaymode(newPlayMode)
       ivSelectSurah.setImageResource(if (newPlayMode == Playmode.REPEAT_SURAH) R.drawable.ic_select_surah else R.drawable.ic_select_surah_disabled)
       clNextAyah.visibility = if (newPlayMode == Playmode.REPEAT_AYAH) View.GONE else View.VISIBLE
