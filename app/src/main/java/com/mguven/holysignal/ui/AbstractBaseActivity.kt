@@ -56,11 +56,19 @@ abstract class AbstractBaseActivity : AppCompatActivity(), LifecycleObserver {
     }
   }
 
-  fun showSnackbar(str: String){
+  fun showSnackbar(str: String, isError: Boolean = false) {
     val snackbar = Snackbar.make(findViewById(android.R.id.content),
         str,
         Snackbar.LENGTH_SHORT)
-    snackbar.view.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimaryDark))
+    snackbar.view.setBackgroundColor(ContextCompat.getColor(this, if (isError) R.color.error else R.color.green))
     snackbar.show()
+  }
+
+  fun showErrorSnackBar(res: Int) {
+    showErrorSnackBar(getString(res))
+  }
+
+  fun showErrorSnackBar(errorMessage: String) {
+    showSnackbar(errorMessage, true)
   }
 }

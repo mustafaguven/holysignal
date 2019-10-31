@@ -4,6 +4,7 @@ import android.content.SharedPreferences
 import com.google.gson.Gson
 import com.mguven.holysignal.db.entity.SurahAyahSampleData
 import com.mguven.holysignal.inline.whenNotNull
+import com.mguven.holysignal.model.AyahSearchResult
 
 
 class ApplicationCache(private val applicationSharedPreferences: SharedPreferences,
@@ -61,11 +62,23 @@ class ApplicationCache(private val applicationSharedPreferences: SharedPreferenc
       this.applicationSharedPreferences.getInt(CacheKey.LAST_SHOWN_AYAH_NUMBER, 1)
 
   fun updateMaxAyahCount(maxAyahCount: Int) =
-    this.applicationSharedPreferences.edit().putInt(CacheKey.MAX_AYAH_COUNT, maxAyahCount).apply()
+      this.applicationSharedPreferences.edit().putInt(CacheKey.MAX_AYAH_COUNT, maxAyahCount).apply()
 
   fun getMaxAyahCount() =
       this.applicationSharedPreferences.getInt(CacheKey.MAX_AYAH_COUNT, 50)
 
+/*  fun updateSearchKeyword(words: String) =
+      this.applicationSharedPreferences.edit().putString(CacheKey.SEARCH_KEYWORD, words).apply()
+
+  fun getSearchKeyword() =
+      this.applicationSharedPreferences.getString(CacheKey.SEARCH_KEYWORD, "")*/
+
+  fun updateAyahSearchResult(obj: AyahSearchResult?) {
+    setObjectWithGenericSerializer(CacheKey.AYAH_SEARCH_RESULT, obj)
+  }
+
+  fun getAyahSearchResult(): AyahSearchResult? = getObjectWithGenericDeserializer(CacheKey.AYAH_SEARCH_RESULT,
+      AyahSearchResult::class.java)
 
 /*  fun updateUserInfo(userInformation: UserInformation?) {
     setObjectWithGenericSerializer(CacheKey.USER_INFO, userInformation)

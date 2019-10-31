@@ -108,7 +108,7 @@
         app:layout_constrainedWidth="true"
         app:layout_constraintStart_toEndOf="@id/ivFavourite"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintWidth_default="wrap" />
+        app:layout_constraintWidth_default="wrap"/>
 
     <ImageView
         android:id="@+id/ivSelectSurah"
@@ -123,6 +123,24 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintWidth_default="wrap" />
 
+
+    <ImageView
+        android:id="@+id/ivSearchClose"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginEnd="20dp"
+        android:src="@drawable/ic_cancel_24px"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintStart_toEndOf="@id/ivPlayMode"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_default="wrap"
+        android:visibility="gone"/>
+
+
+
+
     <!--    <ImageView
         android:id="@+id/ivNext"
         android:layout_width="40dp"
@@ -134,7 +152,25 @@
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_marginBottom="10dp"/>-->
 
+
+    <TextView
+        android:id="@+id/tvKeywords"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_marginTop="5dp"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@id/scrollview"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ivPreferences"
+        tools:text="mercy, justice, book, adalet"
+        tools:visibility="visible"
+        android:visibility="gone"/>
+
     <ScrollView
+        android:id="@+id/scrollview"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="15dp"
@@ -143,7 +179,8 @@
         app:layout_constraintBottom_toTopOf="@id/clNextAyah"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ivPreferences">
+        app:layout_constraintTop_toBottomOf="@+id/tvKeywords">
+
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -157,7 +194,8 @@
                 android:layout_marginEnd="20dp"
                 android:gravity="center"
                 android:textColor="@color/black"
-                android:textSize="18sp"
+                android:textSize="20sp"
+                android:textStyle="bold"
                 app:layout_constraintBottom_toTopOf="@id/tvAyahTopText"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -165,23 +203,23 @@
                 app:layout_constraintVertical_chainStyle="packed"
                 tools:text="ayah number" />
 
-            <!--    <ImageView
-                android:id="@+id/ivAddNote"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:src="@drawable/ic_note"
-                app:layout_constrainedWidth="true"
-                app:layout_constraintStart_toEndOf="@id/tvAyahNumber"
-                app:layout_constraintTop_toTopOf="@id/tvAyahNumber"
-                app:layout_constraintWidth_default="wrap" />-->
+<!--            <ImageView-->
+<!--                android:id="@+id/ivAudio"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginLeft="5dp"-->
+<!--                android:src="@drawable/ic_volume_up_24px"-->
+<!--                app:layout_constrainedWidth="true"-->
+<!--                app:layout_constraintStart_toEndOf="@id/tvAyahNumber"-->
+<!--                app:layout_constraintTop_toTopOf="@id/tvAyahNumber"-->
+<!--                app:layout_constraintWidth_default="wrap" />-->
 
             <TextView
                 android:id="@+id/tvAyahTopText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="10dp"
                 android:layout_marginEnd="20dp"
                 android:gravity="center"
                 android:textColor="@color/black"
@@ -199,12 +237,24 @@
                 android:layout_marginTop="10dp"
                 android:gravity="center"
                 android:textColor="@color/black"
-                android:textSize="18sp"
+                android:textSize="20sp"
                 app:layout_constraintBottom_toTopOf="@id/tvSurah"
                 app:layout_constraintLeft_toLeftOf="@id/tvAyahTopText"
                 app:layout_constraintRight_toRightOf="@id/tvAyahTopText"
                 app:layout_constraintTop_toBottomOf="@id/tvAyahTopText"
                 tools:text="bottom text" />
+
+<!--            <ImageView-->
+<!--                android:id="@+id/ivAudio"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:src="@drawable/ic_volume_up_24px"-->
+<!--                android:layout_width="0dp"-->
+<!--                android:layout_marginTop="40dp"-->
+<!--                app:layout_constraintBottom_toTopOf="@id/tvRevelationType"-->
+<!--                app:layout_constraintLeft_toLeftOf="@id/tvAyahBottomText"-->
+<!--                app:layout_constraintRight_toRightOf="@id/tvAyahBottomText"-->
+<!--                app:layout_constraintTop_toBottomOf="@id/tvAyahBottomText" />-->
+
 
             <TextView
                 android:id="@+id/tvSurah"
@@ -214,6 +264,7 @@
                 android:gravity="center"
                 android:textColor="@color/black"
                 android:textSize="18sp"
+                android:visibility="gone"
                 app:layout_constraintBottom_toTopOf="@id/tvRevelationType"
                 app:layout_constraintLeft_toLeftOf="@id/tvAyahBottomText"
                 app:layout_constraintRight_toRightOf="@id/tvAyahBottomText"
@@ -227,6 +278,7 @@
                 android:gravity="center"
                 android:textColor="@color/black"
                 android:textSize="18sp"
+                android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="@id/tvSurah"
                 app:layout_constraintRight_toRightOf="@id/tvSurah"
@@ -241,19 +293,19 @@
         android:id="@+id/clNextAyah"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        android:layout_marginBottom="20dp">
+        app:layout_constraintRight_toRightOf="parent">
 
         <ImageView
             android:id="@+id/ivNext"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:src="@drawable/ic_forward_24px"
-            app:layout_constraintTop_toTopOf="@id/clNextAyah"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent" />
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="@id/clNextAyah" />
 
         <TextView
             android:id="@+id/tvNext"
@@ -263,10 +315,10 @@
             android:text="@string/next_ayah"
             android:textColor="@color/black"
             android:textSize="18sp"
-            app:layout_constraintTop_toBottomOf="@id/ivNext"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"/>
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ivNext" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -5,8 +5,6 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.AdapterView
-import android.widget.Toast
-import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.lifecycleScope
 import com.mguven.holysignal.FlowController
 import com.mguven.holysignal.R
@@ -14,17 +12,26 @@ import com.mguven.holysignal.TheApplication
 import com.mguven.holysignal.constant.Playmode
 import com.mguven.holysignal.db.entity.AvailableSurahItem
 import com.mguven.holysignal.di.module.CardActivityModule
+import com.mguven.holysignal.extension.*
 import com.mguven.holysignal.inline.whenNotNull
+import com.mguven.holysignal.model.AyahSearchResult
 import com.mguven.holysignal.ui.adapter.AvailableSurahAdapter
 import com.mguven.holysignal.ui.fragment.AddNoteFragment
+import com.mguven.holysignal.ui.fragment.BaseDialogFragment
+import com.mguven.holysignal.ui.fragment.SearchWordInAyahsFragment
 import com.mguven.holysignal.viewmodel.HolyBookViewModel
 import kotlinx.android.synthetic.main.activity_card.*
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
 
-class CardActivity : AbstractBaseActivity(), AddNoteFragment.OnFragmentInteractionListener {
+class CardActivity : AbstractBaseActivity(),
+    AddNoteFragment.OnFragmentInteractionListener,
+    SearchWordInAyahsFragment.OnFragmentInteractionListener {
 
+  companion object {
+    private const val MAX_SEARCH_KEYWORD_THRESHOLD = 3
+  }
 
   private lateinit var holyBookViewModel: HolyBookViewModel
 
@@ -37,9 +44,8 @@ class CardActivity : AbstractBaseActivity(), AddNoteFragment.OnFragmentInteracti
     return@lazy resources.getStringArray(R.array.playmodes)
   }
 
-  private lateinit var addNoteFragment: DialogFragment
-
-
+  private lateinit var addNoteFragment: BaseDialogFragment
+  private lateinit var searchWordInAyahsFragment: BaseDialogFragment
   private var isFavourite = false
   private var ayahNumber = 0
 
@@ -69,16 +75,27 @@ class CardActivity : AbstractBaseActivity(), AddNoteFragment.OnFragmentInteracti
     showFavouriteStatus()
   }
 
-  private fun getAyahNumberByPlaymode() = try {
-    ivSelectSurah.setImageResource(R.drawable.ic_select_surah_disabled)
-    when (playmode) {
-      Playmode.RANDOM -> (1..cache.getMaxAyahCount()).random()
-      Playmode.REPEAT_AYAH -> cache.getLastShownAyahNumber()
-      Playmode.AYAH_BY_AYAH -> cache.getLastShownAyahNumber() + 1
-      else -> onSelectSurah()
+  private fun getAyahNumberByPlaymode(): Int {
+    try {
+      val searchCriteriaResult = cache.getAyahSearchResult()
+      if (searchCriteriaResult != null && searchCriteriaResult.list.isNotNullAndNotEmpty()) {
+        ++searchCriteriaResult.lastIndex
+        cache.updateAyahSearchResult(searchCriteriaResult)
+        arrangeViewsBySearch(searchCriteriaResult)
+        return searchCriteriaResult.list!![searchCriteriaResult.lastIndex % searchCriteriaResult.list.size]
+      }
+
+      tvKeywords.visibility = View.GONE
+      ivSelectSurah.setImageResource(R.drawable.ic_select_surah_disabled)
+      return when (playmode) {
+        Playmode.RANDOM -> (1..cache.getMaxAyahCount()).random()
+        Playmode.REPEAT_AYAH -> cache.getLastShownAyahNumber()
+        Playmode.AYAH_BY_AYAH -> cache.getLastShownAyahNumber() + 1
+        else -> onSelectSurah()
+      }
+    } catch (ex: Exception) {
+      return (1..cache.getMaxAyahCount()).random()
     }
-  } catch (ex: Exception) {
-    (1..cache.getMaxAyahCount()).random()
   }
 
 
@@ -149,10 +166,22 @@ class CardActivity : AbstractBaseActivity(), AddNoteFragment.OnFragmentInteracti
     }
 
     ivSearch.setOnClickListener {
-      Toast.makeText(this, "Hazir degil", Toast.LENGTH_SHORT).show()
+      searchWordInAyahsFragment = SearchWordInAyahsFragment.newInstance()
+      searchWordInAyahsFragment.show(supportFragmentManager, searchWordInAyahsFragment.javaClass.simpleName)
     }
 
     clNextAyah.setOnClickListener {
+      ayahNumber = getAyahNumberByPlaymode()
+      initData()
+    }
+
+    ivSearchClose.setOnClickListener {
+      cache.updateAyahSearchResult(null)
+      clNextAyah.visibility = View.VISIBLE
+      ivPlayMode.visibility = View.VISIBLE
+      ivSelectSurah.visibility = View.VISIBLE
+      ivSearchClose.visibility = View.GONE
+      tvKeywords.visibility = View.GONE
       ayahNumber = getAyahNumberByPlaymode()
       initData()
     }
@@ -220,8 +249,8 @@ class CardActivity : AbstractBaseActivity(), AddNoteFragment.OnFragmentInteracti
       val list = holyBookViewModel.getAyahTopText(ayahNumber)
       list.forEach {
         cache.updateLastShownAyah(it)
-        tvAyahNumber.text = "(${it.surahNumber}:${it.numberInSurah})"
-        tvAyahTopText.text = "${it.language}: ${it.ayahText}"
+        tvAyahNumber.text = "${it.surahEnglishName} : ${it.numberInSurah}"
+        tvAyahTopText.highlighted("<b>${it.language}:</b> ${it.ayahText}", cache.getAyahSearchResult()?.keywords)
       }
     }
   }
@@ -230,9 +259,10 @@ class CardActivity : AbstractBaseActivity(), AddNoteFragment.OnFragmentInteracti
     lifecycleScope.launch {
       val list = holyBookViewModel.getAyahBottomText(ayahNumber)
       list.forEach {
-        tvAyahBottomText.text = "${it.language}: ${it.ayahText}"
-        tvSurah.text = "${it.surahEnglishName} (${it.surahEnglishNameTranslation})"
-        tvRevelationType.text = it.surahRevelationType
+        tvAyahBottomText.highlighted("<b>${it.language}:</b> ${it.ayahText}")
+        //tvAyahBottomText.text = "${it.language}: ${it.ayahText}"
+        //tvSurah.text = "${it.surahEnglishName} (${it.surahEnglishNameTranslation})"
+        //tvRevelationType.text = it.surahRevelationType
       }
     }
   }
@@ -244,5 +274,49 @@ class CardActivity : AbstractBaseActivity(), AddNoteFragment.OnFragmentInteracti
       showSnackbar(getString(R.string.note_saved_successfully))
     }
   }
+
+  override fun onSearchWordEntered(words: MutableSet<String>) {
+    try {
+      words.removeAll { it.trim() == "" }
+      if (words.isEmpty() || words.size > MAX_SEARCH_KEYWORD_THRESHOLD) {
+        showErrorSnackBar(R.string.ayah_search_validation_error)
+      } else {
+        lifecycleScope.launch {
+          val ayahNumbersBySearch: List<Int>? = holyBookViewModel.getAyahsByKeywords(cache.getTopTextEditionId(), words.toList())
+          val keywords = words.toString().removeBoxBracketsAndPutSpaceAfterComma()
+          val searchResult = AyahSearchResult(ayahNumbersBySearch, keywords)
+          cache.updateAyahSearchResult(searchResult)
+          arrangeViewsBySearch(searchResult)
+
+          if (ayahNumbersBySearch.isNotNullAndNotEmpty()) {
+            ayahNumber = getAyahNumberByPlaymode()
+            initData()
+          } else {
+            tvAyahNumber.setEmpty()
+            tvAyahTopText.setEmpty()
+            tvAyahBottomText.setEmpty()
+            tvSurah.setEmpty()
+            tvRevelationType.setEmpty()
+          }
+        }
+      }
+    } catch (ex: Exception) {
+      showErrorSnackBar(ex.message!!)
+    } finally {
+      searchWordInAyahsFragment.dismiss()
+    }
+
+  }
+
+  private fun arrangeViewsBySearch(searchResult: AyahSearchResult) {
+    ivPlayMode.visibility = View.INVISIBLE
+    ivSelectSurah.visibility = View.GONE
+    ivSearchClose.visibility = View.VISIBLE
+    clNextAyah.visibilityByIfCollectionHasItems(searchResult.list)
+    tvKeywords.visibility = View.VISIBLE
+    tvKeywords.text = getString(R.string.ayah_search_found_text, searchResult.keywords, searchResult.list?.size)
+  }
+
+
 }
 

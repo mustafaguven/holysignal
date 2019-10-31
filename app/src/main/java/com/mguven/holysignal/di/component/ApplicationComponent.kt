@@ -3,10 +3,8 @@ package com.mguven.holysignal.di.component
 import com.mguven.holysignal.TheApplication
 import com.mguven.holysignal.di.ViewModelModule
 import com.mguven.holysignal.di.module.*
-
-import javax.inject.Singleton
-
 import dagger.Component
+import javax.inject.Singleton
 
 @Singleton
 @Component(modules = [
@@ -29,4 +27,6 @@ interface ApplicationComponent {
   operator fun plus(mainActivityModule: MainActivityModule): MainActivityComponent
 
   operator fun plus(cardActivityModule: CardActivityModule): CardActivityComponent
+
+  operator fun plus(searchWordInAyahsFragmentModule: SearchWordInAyahsFragmentModule): SearchWordInAyahsFragmentComponent
 }

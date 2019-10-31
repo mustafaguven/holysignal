@@ -5,6 +5,8 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy.REPLACE
 import androidx.room.Query
+import androidx.room.RawQuery
+import androidx.sqlite.db.SupportSQLiteQuery
 import com.mguven.holysignal.db.entity.AyahSampleData
 import com.mguven.holysignal.db.entity.MaxAyahCountData
 import com.mguven.holysignal.db.entity.SurahAyahSampleData
@@ -45,4 +47,7 @@ interface AyahSampleDataDao {
 
   @Query("UPDATE AyahSample SET noteId = :noteId WHERE Id = :ayahId")
   suspend fun updateNoteId(ayahId: Int, noteId: Int)
+
+  @RawQuery
+  suspend fun getAyahsByKeyword(query: SupportSQLiteQuery): List<Int>
 }

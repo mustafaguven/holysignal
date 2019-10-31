@@ -6,10 +6,6 @@ import org.joda.time.format.DateTimeFormat
 import kotlin.math.absoluteValue
 
 fun String.hoursAgo(): String {
-  //2018-10-11T17:34:00Z
-  //2018-10-11T14:40:08.8578193Z
-  // java.lang.IllegalArgumentException: Invalid format: "2018-10-11T14:40:08.8578193Z" is malformed at ".8578193Z"
-  //todo: fix this
   try {
     val duration = Duration(this.parseDateTime(), DateTime.now())
     if (duration.standardDays.absoluteValue == 0L) {
@@ -31,3 +27,14 @@ fun String.parseDateTime(): DateTime {
   val formatter = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss")
   return formatter.parseDateTime(substring(0, 19))
 }
+
+fun String?.removeBoxBrackets() = this?.replace("[", "")
+    ?.replace("]", "")
+    ?.replace(" ", "")
+    ?: ""
+
+fun String?.removeBoxBracketsAndPutSpaceAfterComma() = this?.replace("[", "")
+    ?.replace("]", "")
+    ?.replace(" ", "")
+    ?.replace(",", ", ")
+    ?: ""

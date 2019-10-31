@@ -1,7 +1,9 @@
 package com.mguven.holysignal.viewmodel
 
+import androidx.sqlite.db.SimpleSQLiteQuery
 import com.mguven.holysignal.cache.ApplicationCache
 import com.mguven.holysignal.db.ApplicationDatabase
+import com.mguven.holysignal.db.entity.AyahSampleData
 import com.mguven.holysignal.db.entity.FavouritesData
 import com.mguven.holysignal.db.entity.NotesData
 import javax.inject.Inject
@@ -48,5 +50,20 @@ constructor(private val database: ApplicationDatabase,
 
   suspend fun getAvailableSurahList() =
       database.surahDataDao().getAvailableSurahListByEditionId(cache.getTopTextEditionId())
+
+  suspend fun getAyahsByKeywords(editionId: Int, words: List<String>): List<Int> {
+    val query = SimpleSQLiteQuery("""
+      SELECT number FROM AyahSample WHERE editionId = $editionId 
+       AND (${getLikeCriteria(words)})
+    """.trimMargin())
+    return database.ayahSampleDataDao().getAyahsByKeyword(query)
+  }
+
+  private fun getLikeCriteria(words: List<String>): String {
+    val criteria = StringBuilder()
+    words.forEach { criteria.append(" text like '%$it%' OR ") }
+    return criteria.toString().dropLast(3)
+  }
+
 
 }

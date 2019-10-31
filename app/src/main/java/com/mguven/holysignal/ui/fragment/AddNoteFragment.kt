@@ -1,23 +1,18 @@
 package com.mguven.holysignal.ui.fragment
 
 import android.content.Context
-import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import android.view.Window
-import androidx.fragment.app.DialogFragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import com.mguven.holysignal.R
-import com.mguven.holysignal.db.entity.NotesData
 import com.mguven.holysignal.ui.AbstractBaseActivity
 import com.mguven.holysignal.viewmodel.HolyBookViewModel
 import kotlinx.android.synthetic.main.add_note_fragment.*
 import kotlinx.coroutines.launch
 
-class AddNoteFragment : DialogFragment() {
+class AddNoteFragment : BaseDialogFragment() {
+
+  override fun getLayoutResource() = R.layout.add_note_fragment
 
   private lateinit var holyBookViewModel: HolyBookViewModel
 
@@ -32,14 +27,6 @@ class AddNoteFragment : DialogFragment() {
     }
   }
 
-  override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-    val view = inflater.inflate(R.layout.add_note_fragment, container)
-    dialog!!.window!!.setBackgroundDrawable(ColorDrawable(0))
-    dialog!!.window!!.requestFeature(Window.FEATURE_NO_TITLE)
-    dialog!!.setCanceledOnTouchOutside(true)
-    return view
-  }
-
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
     activity?.let {
@@ -47,9 +34,6 @@ class AddNoteFragment : DialogFragment() {
     }
 
     btnSave.setOnClickListener {
-      /*holyBookViewModel.upsertNote(noteId, etNote.text.toString()).observe(this, Observer<Long> { insertNo ->
-        listener?.onNoteInserted(insertNo)
-      })*/
       lifecycleScope.launch {
         val insertNo = holyBookViewModel.upsertNote(noteId, etNote.text.toString())
         listener?.onNoteInserted(insertNo)
@@ -80,16 +64,6 @@ class AddNoteFragment : DialogFragment() {
           etNote.setText(list[0].content)
         }
       }
-    }
-  }
-
-  override fun onStart() {
-    super.onStart()
-    val dialog = dialog
-    if (dialog != null) {
-      val width = ViewGroup.LayoutParams.MATCH_PARENT
-      val height = ViewGroup.LayoutParams.WRAP_CONTENT
-      dialog.window!!.setLayout(width, height)
     }
   }
 

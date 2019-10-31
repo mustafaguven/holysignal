@@ -10,16 +10,19 @@
     <string name="added_to_favourites">Favorilere eklendi</string>
     <string name="removed_from_favourites">Favorilerden çıkarıldı</string>
 
-
     <string name="playmode_snackbar_message">Yeni oynatma listesi: %1$s</string>
-    <string name="add_note_hint">Notunuzu girin</string>
+    <string name="add_note_hint">Bu ayet ile ilgili notunuzu girin</string>
 
     <string name="note_saved_successfully">Notunuz başarıyla kaydedildi</string>
     <string name="note_should_be_filled">Lütfen eklemek istediğiniz notu girin</string>
     <string name="next_ayah">sonraki ayet</string>
     <string name="note">Not</string>
     <string name="via_holy_signal">(www.holysignal.com aracılığıyla)</string>
-
+    <string name="search">Ara</string>
+    <string name="ayah_search_hint">merhamet, ramazan, kitap</string>
+    <string name="ayah_search_validation_error">En fazla 3 kelime girilebilir</string>
+    <string name="ayah_search_no_data_found">Ayet bulunamadı.\n\n(Aranan kelimeler: %1$s)</string>
+    <string name="ayah_search_found_text">%1$s\n(%2$d ayet bulundu)</string>
 
     <string-array name="playmodes">
         <item>Ayetler karışık şekilde gösterilsin</item>
