@@ -60,7 +60,7 @@ abstract class AbstractBaseActivity : AppCompatActivity(), LifecycleObserver {
     val snackbar = Snackbar.make(findViewById(android.R.id.content),
         str,
         Snackbar.LENGTH_SHORT)
-    snackbar.view.setBackgroundColor(ContextCompat.getColor(this, if (isError) R.color.error else R.color.green))
+    snackbar.view.setBackgroundColor(ContextCompat.getColor(this, if (isError) R.color.error else R.color.black))
     snackbar.show()
   }
 

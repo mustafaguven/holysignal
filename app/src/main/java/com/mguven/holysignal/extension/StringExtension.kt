@@ -28,13 +28,11 @@ fun String.parseDateTime(): DateTime {
   return formatter.parseDateTime(substring(0, 19))
 }
 
-fun String?.removeBoxBrackets() = this?.replace("[", "")
+fun String?.removeBoxBrackets() = this?.toLowerCase()?.replace("[", "")
     ?.replace("]", "")
     ?.replace(" ", "")
     ?: ""
 
-fun String?.removeBoxBracketsAndPutSpaceAfterComma() = this?.replace("[", "")
-    ?.replace("]", "")
-    ?.replace(" ", "")
+fun String?.removeBoxBracketsAndPutSpaceAfterComma() = this?.removeBoxBrackets()
     ?.replace(",", ", ")
     ?: ""

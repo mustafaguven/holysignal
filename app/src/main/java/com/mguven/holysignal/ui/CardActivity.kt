@@ -69,13 +69,14 @@ class CardActivity : AbstractBaseActivity(),
     initListeners()
   }
 
+
   private fun initData() {
     getAyahTopText()
     getAyahBottomText()
     showFavouriteStatus()
   }
 
-  private fun getAyahNumberByPlaymode(): Int {
+  private fun getAyahNumberByPlaymode(increment: Int = 1): Int {
     try {
       val searchCriteriaResult = cache.getAyahSearchResult()
       if (searchCriteriaResult != null && searchCriteriaResult.list.isNotNullAndNotEmpty()) {
@@ -87,10 +88,11 @@ class CardActivity : AbstractBaseActivity(),
 
       tvKeywords.visibility = View.GONE
       ivSelectSurah.setImageResource(R.drawable.ic_select_surah_disabled)
+
       return when (playmode) {
         Playmode.RANDOM -> (1..cache.getMaxAyahCount()).random()
         Playmode.REPEAT_AYAH -> cache.getLastShownAyahNumber()
-        Playmode.AYAH_BY_AYAH -> cache.getLastShownAyahNumber() + 1
+        Playmode.AYAH_BY_AYAH -> cache.getLastShownAyahNumber() + increment
         else -> onSelectSurah()
       }
     } catch (ex: Exception) {
@@ -136,8 +138,6 @@ class CardActivity : AbstractBaseActivity(),
     ivPlayMode.setOnClickListener {
       val newPlayMode = (playmode + 1) % playmodes.size
       initPlaymode(newPlayMode)
-      ivSelectSurah.setImageResource(if (newPlayMode == Playmode.REPEAT_SURAH) R.drawable.ic_select_surah else R.drawable.ic_select_surah_disabled)
-      clNextAyah.visibility = if (newPlayMode == Playmode.REPEAT_AYAH) View.GONE else View.VISIBLE
       cache.updatePlaymode(newPlayMode)
       playmode = newPlayMode
       showSnackbar(playmodes[newPlayMode])
@@ -170,14 +170,19 @@ class CardActivity : AbstractBaseActivity(),
       searchWordInAyahsFragment.show(supportFragmentManager, searchWordInAyahsFragment.javaClass.simpleName)
     }
 
-    clNextAyah.setOnClickListener {
+    tvNext.setOnClickListener {
       ayahNumber = getAyahNumberByPlaymode()
+      initData()
+    }
+
+    tvPrevious.setOnClickListener {
+      ayahNumber = getAyahNumberByPlaymode(-1)
       initData()
     }
 
     ivSearchClose.setOnClickListener {
       cache.updateAyahSearchResult(null)
-      clNextAyah.visibility = View.VISIBLE
+      tvNext.visibility = View.VISIBLE
       ivPlayMode.visibility = View.VISIBLE
       ivSelectSurah.visibility = View.VISIBLE
       ivSearchClose.visibility = View.GONE
@@ -196,6 +201,9 @@ class CardActivity : AbstractBaseActivity(),
           else -> R.drawable.ic_loop_24px
         }
     )
+    ivSelectSurah.setImageResource(if (mode == Playmode.REPEAT_SURAH) R.drawable.ic_select_surah else R.drawable.ic_select_surah_disabled)
+    tvNext.visibility = if (mode == Playmode.REPEAT_AYAH) View.GONE else View.VISIBLE
+    tvPrevious.visibility = if (mode == Playmode.AYAH_BY_AYAH) View.VISIBLE else View.GONE
   }
 
   private fun updateAvailableSurahListAdapter(list: List<AvailableSurahItem>) {
@@ -295,8 +303,6 @@ class CardActivity : AbstractBaseActivity(),
             tvAyahNumber.setEmpty()
             tvAyahTopText.setEmpty()
             tvAyahBottomText.setEmpty()
-            tvSurah.setEmpty()
-            tvRevelationType.setEmpty()
           }
         }
       }
@@ -312,7 +318,7 @@ class CardActivity : AbstractBaseActivity(),
     ivPlayMode.visibility = View.INVISIBLE
     ivSelectSurah.visibility = View.GONE
     ivSearchClose.visibility = View.VISIBLE
-    clNextAyah.visibilityByIfCollectionHasItems(searchResult.list)
+    tvNext.visibilityByIfCollectionHasItems(searchResult.list)
     tvKeywords.visibility = View.VISIBLE
     tvKeywords.text = getString(R.string.ayah_search_found_text, searchResult.keywords, searchResult.list?.size)
   }

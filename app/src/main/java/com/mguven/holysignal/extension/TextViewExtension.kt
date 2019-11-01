@@ -9,8 +9,8 @@ fun TextView.highlighted(text: String, highlightKeywords: String? = "") {
   var newText = text
   if (!highlightKeywords.isNullOrEmpty()) {
     highlightKeywords.removeBoxBrackets().split(",").forEach { word ->
-      newText = newText.replace(word, "<span style='background-color:#FFFF00; color:#000;'>${word}</span>")
-          .replace(word.capitalize(), "<span style='background-color:#FFFF00; color:#000;'>${word.capitalize()}</span>")
+      newText = newText.replace(word, "<span style='background-color:#FFFF00; color:#000;'><b>${word}</b></span>")
+          .replace(word.capitalize(), "<span style='background-color:#FFFF00; color:#000;'><b>${word.capitalize()}</b></span>")
     }
   }
   if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {

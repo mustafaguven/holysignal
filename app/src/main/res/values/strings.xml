@@ -14,7 +14,6 @@
     <string name="add_note_hint">Please enter your note about the ayah</string>
     <string name="note_saved_successfully">Note saved successfully</string>
     <string name="note_should_be_filled">Please fill the content area</string>
-    <string name="next_ayah">next ayah</string>
     <string name="note">Note</string>
     <string name="via_holy_signal">(via www.holysignal.com)</string>
     <string name="search">Search</string>
@@ -22,6 +21,8 @@
     <string name="ayah_search_validation_error">Maximum 3 words can be filled</string>
     <string name="ayah_search_no_data_found">None ayah found.\n\n(keywords: %1$s)</string>
     <string name="ayah_search_found_text">%1$s\n(%2$d ayahs found)</string>
+    <string name="next_ayah">next\nayah</string>
+    <string name="previous_ayah">previous\nayah</string>
 
     <string-array name="playmodes">
         <item>Shuffle all ayahs</item>
