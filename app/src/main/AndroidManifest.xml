@@ -18,7 +18,9 @@
             </intent-filter>
         </activity>
 
-        <activity android:name="com.mguven.holysignal.ui.CardActivity" android:theme="@style/NoActionBarTheme"/>
+        <activity
+            android:name="com.mguven.holysignal.ui.CardActivity"
+            android:theme="@style/NoActionBarTheme" />
 
     </application>
 

@@ -32,6 +32,7 @@ class CardActivity : AbstractBaseActivity(),
   companion object {
     private const val MAX_SEARCH_KEYWORD_THRESHOLD = 3
     private const val FAVOURITE_STARTER_AYAH_ID = -100
+    private const val SAVED_AYAH_NUMBER = "SAVED_AYAH_NUMBER"
   }
 
   private lateinit var holyBookViewModel: HolyBookViewModel
@@ -66,7 +67,7 @@ class CardActivity : AbstractBaseActivity(),
     holyBookViewModel = getViewModel(HolyBookViewModel::class.java)
     playmode = cache.getPlaymode()
     initPlaymode(playmode)
-    ayahNumber = getAyahNumberByPlaymode()
+    ayahNumber = savedInstanceState?.getInt(SAVED_AYAH_NUMBER) ?: getAyahNumberByPlaymode()
     initData()
     initListeners()
   }
@@ -127,9 +128,9 @@ class CardActivity : AbstractBaseActivity(),
     return FAVOURITE_STARTER_AYAH_ID
   }
 
-  private fun getRandomFavouriteIndex(favouriteIdList: List<Long>?) : Int {
+  private fun getRandomFavouriteIndex(favouriteIdList: List<Long>?): Int {
     var index = (favouriteIdList!!.indices).random()
-    if(cache.getLatestShownFavouriteIndex() == index && favouriteIdList.size > 1){
+    if (cache.getLatestShownFavouriteIndex() == index && favouriteIdList.size > 1) {
       index = getRandomFavouriteIndex(favouriteIdList)
     }
     return index
@@ -346,7 +347,6 @@ class CardActivity : AbstractBaseActivity(),
     } finally {
       searchWordInAyahsFragment.dismiss()
     }
-
   }
 
   private fun arrangeViewsBySearch(searchResult: AyahSearchResult) {
@@ -356,6 +356,17 @@ class CardActivity : AbstractBaseActivity(),
     tvNext.visibilityByIfCollectionHasItems(searchResult.list)
     tvKeywords.visibility = View.VISIBLE
     tvKeywords.text = getString(R.string.ayah_search_found_text, searchResult.keywords, searchResult.list?.size)
+  }
+
+
+  override fun onSaveInstanceState(outState: Bundle) {
+    super.onSaveInstanceState(outState)
+    outState.putInt(SAVED_AYAH_NUMBER, ayahNumber)
+  }
+
+  override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+    super.onRestoreInstanceState(savedInstanceState)
+    savedInstanceState.getInt(SAVED_AYAH_NUMBER)
   }
 
 

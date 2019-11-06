@@ -47,7 +47,7 @@ abstract class AbstractBaseActivity : AppCompatActivity(), LifecycleObserver {
   }
 
   fun <T : ViewModel> getViewModel(viewModelClz: Class<T>): T =
-      ViewModelProviders.of(this, viewModelFactory).get(viewModelClz)
+      ViewModelProviders.of(this,  viewModelFactory).get(viewModelClz)
 
   override fun onStop() {
     super.onStop()
