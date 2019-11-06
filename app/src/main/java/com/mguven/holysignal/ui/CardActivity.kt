@@ -65,9 +65,9 @@ class CardActivity : AbstractBaseActivity(),
     Log.e("AAA", "card activity is on")
     holyBookViewModel = getViewModel(HolyBookViewModel::class.java)
     playmode = cache.getPlaymode()
+    initPlaymode(playmode)
     ayahNumber = getAyahNumberByPlaymode()
     initData()
-    initPlaymode(playmode)
     initListeners()
   }
 
@@ -129,7 +129,7 @@ class CardActivity : AbstractBaseActivity(),
 
   private fun getRandomFavouriteIndex(favouriteIdList: List<Long>?) : Int {
     var index = (favouriteIdList!!.indices).random()
-    if(cache.getLatestShownFavouriteIndex() == index){
+    if(cache.getLatestShownFavouriteIndex() == index && favouriteIdList.size > 1){
       index = getRandomFavouriteIndex(favouriteIdList)
     }
     return index
