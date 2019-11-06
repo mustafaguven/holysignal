@@ -24,6 +24,8 @@
     <string name="ayah_search_found_text">%1$s\n(%2$d ayet bulundu)</string>
     <string name="next_ayah">sonraki\nayet</string>
     <string name="previous_ayah">önceki\nayet</string>
+    <string name="none_favourite_found">Favori bulunamadı</string>
+    <string name="favourites_are_getting_randomly">(*) Favoriler karışık olarak getirilir</string>
 
 
     <string-array name="playmodes">
@@ -31,5 +33,6 @@
         <item>Sadece seçili sureye ait ayetler gösterilsin</item>
         <item>Sadece bu ayet gösterilsin</item>
         <item>Ayetler sırayla gösterilsin</item>
+        <item>Favori ayetler gösterilsin</item>
     </string-array>
 </resources>

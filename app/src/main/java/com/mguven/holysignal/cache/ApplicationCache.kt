@@ -5,6 +5,7 @@ import com.google.gson.Gson
 import com.mguven.holysignal.db.entity.SurahAyahSampleData
 import com.mguven.holysignal.inline.whenNotNull
 import com.mguven.holysignal.model.AyahSearchResult
+import com.mguven.holysignal.model.FavouriteAyahList
 
 
 class ApplicationCache(private val applicationSharedPreferences: SharedPreferences,
@@ -79,6 +80,26 @@ class ApplicationCache(private val applicationSharedPreferences: SharedPreferenc
 
   fun getAyahSearchResult(): AyahSearchResult? = getObjectWithGenericDeserializer(CacheKey.AYAH_SEARCH_RESULT,
       AyahSearchResult::class.java)
+
+  fun updateFavouriteAyahs(obj: FavouriteAyahList?) {
+    setObjectWithGenericSerializer(CacheKey.FAVOURITE_AYAH_LIST, obj)
+  }
+
+  fun getFavouriteAyahs(): FavouriteAyahList? = getObjectWithGenericDeserializer(CacheKey.FAVOURITE_AYAH_LIST,
+      FavouriteAyahList::class.java)
+
+  private var lastShownFavouriteIndex = Int.MIN_VALUE
+  fun updateLastShownFavouriteIndex(randomIndex: Int) {
+    lastShownFavouriteIndex = randomIndex
+    this.applicationSharedPreferences.edit().putInt(CacheKey.LAST_SHOWN_FAVOURITE_INDEX, randomIndex).apply()
+  }
+
+  fun getLatestShownFavouriteIndex(): Int {
+    if (lastShownFavouriteIndex == Int.MIN_VALUE) {
+      lastShownFavouriteIndex = this.applicationSharedPreferences.getInt(CacheKey.LAST_SHOWN_FAVOURITE_INDEX, 0)
+    }
+    return lastShownFavouriteIndex
+  }
 
 /*  fun updateUserInfo(userInformation: UserInformation?) {
     setObjectWithGenericSerializer(CacheKey.USER_INFO, userInformation)

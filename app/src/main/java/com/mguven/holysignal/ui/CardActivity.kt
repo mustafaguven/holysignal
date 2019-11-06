@@ -31,6 +31,7 @@ class CardActivity : AbstractBaseActivity(),
 
   companion object {
     private const val MAX_SEARCH_KEYWORD_THRESHOLD = 3
+    private const val FAVOURITE_STARTER_AYAH_ID = -100
   }
 
   private lateinit var holyBookViewModel: HolyBookViewModel
@@ -48,6 +49,7 @@ class CardActivity : AbstractBaseActivity(),
   private lateinit var searchWordInAyahsFragment: BaseDialogFragment
   private var isFavourite = false
   private var ayahNumber = 0
+
 
   private fun inject() {
     (application as TheApplication)
@@ -69,12 +71,17 @@ class CardActivity : AbstractBaseActivity(),
     initListeners()
   }
 
-
   private fun initData() {
-    getAyahTopText()
-    getAyahBottomText()
-    showFavouriteStatus()
+    if (!isFavourite()) {
+      ivFavourite.visibility = View.VISIBLE
+      tvNext.visibility = View.VISIBLE
+      getAyahTopText()
+      getAyahBottomText()
+      showFavouriteStatus()
+    }
   }
+
+  private fun isFavourite() = ayahNumber == FAVOURITE_STARTER_AYAH_ID
 
   private fun getAyahNumberByPlaymode(increment: Int = 1): Int {
     try {
@@ -93,6 +100,7 @@ class CardActivity : AbstractBaseActivity(),
         Playmode.RANDOM -> (1..cache.getMaxAyahCount()).random()
         Playmode.REPEAT_AYAH -> cache.getLastShownAyahNumber()
         Playmode.AYAH_BY_AYAH -> cache.getLastShownAyahNumber() + increment
+        Playmode.FAVOURITES -> byFavourites()
         else -> onSelectSurah()
       }
     } catch (ex: Exception) {
@@ -100,6 +108,32 @@ class CardActivity : AbstractBaseActivity(),
     }
   }
 
+  private fun byFavourites(): Int {
+    val favouriteIdList = holyBookViewModel.getFavouriteIdList()
+    if (favouriteIdList.isNotNullAndNotEmpty()) {
+      tvKeywords.visibility = View.VISIBLE
+      tvKeywords.text = getString(R.string.favourites_are_getting_randomly)
+      val randomIndex = getRandomFavouriteIndex(favouriteIdList)
+      cache.updateLastShownFavouriteIndex(randomIndex)
+      return favouriteIdList!![randomIndex].toInt()
+    } else {
+      tvAyahTopText.text = getString(R.string.none_favourite_found)
+      ivFavourite.visibility = View.INVISIBLE
+      tvNext.visibility = View.GONE
+      tvPrevious.visibility = View.GONE
+      tvAyahBottomText.setEmpty()
+      tvAyahNumber.setEmpty()
+    }
+    return FAVOURITE_STARTER_AYAH_ID
+  }
+
+  private fun getRandomFavouriteIndex(favouriteIdList: List<Long>?) : Int {
+    var index = (favouriteIdList!!.indices).random()
+    if(cache.getLatestShownFavouriteIndex() == index){
+      index = getRandomFavouriteIndex(favouriteIdList)
+    }
+    return index
+  }
 
   private fun onSelectSurah(): Int {
     ivSelectSurah.setImageResource(R.drawable.ic_select_surah)
@@ -124,7 +158,7 @@ class CardActivity : AbstractBaseActivity(),
     ivShare.setOnClickListener {
       whenNotNull(cache.getLastShownAyah()) {
         val shareText = "(${cache.getLastShownAyah()?.surahNumber}:${cache.getLastShownAyah()?.numberInSurah})" +
-            " ${cache.getLastShownAyah()?.ayahText} *** ${tvAyahBottomText.text} ${getString(R.string.via_holy_signal)}"
+            " ${tvAyahTopText.text} *** ${tvAyahBottomText.text} ${getString(R.string.via_holy_signal)}"
         val sendIntent: Intent = Intent().apply {
           action = Intent.ACTION_SEND
           putExtra(Intent.EXTRA_TEXT, shareText)
@@ -141,6 +175,8 @@ class CardActivity : AbstractBaseActivity(),
       cache.updatePlaymode(newPlayMode)
       playmode = newPlayMode
       showSnackbar(playmodes[newPlayMode])
+      ayahNumber = getAyahNumberByPlaymode()
+      initData()
     }
 
     ivAddNote.setOnClickListener {
@@ -198,6 +234,7 @@ class CardActivity : AbstractBaseActivity(),
           Playmode.RANDOM -> R.drawable.ic_random_24px
           Playmode.REPEAT_SURAH -> R.drawable.ic_repeat_surah24px
           Playmode.REPEAT_AYAH -> R.drawable.ic_repeat_ayah_24px
+          Playmode.FAVOURITES -> R.drawable.ic_star_playlist_24px
           else -> R.drawable.ic_loop_24px
         }
     )
@@ -240,6 +277,7 @@ class CardActivity : AbstractBaseActivity(),
     if (isFavourite) {
       holyBookViewModel.insertFavourite(ayahNumber)
     }
+    holyBookViewModel.clearFavouriteCache()
     showFavouriteStatus()
   }
 
@@ -268,9 +306,6 @@ class CardActivity : AbstractBaseActivity(),
       val list = holyBookViewModel.getAyahBottomText(ayahNumber)
       list.forEach {
         tvAyahBottomText.highlighted("<b>${it.language}:</b> ${it.ayahText}")
-        //tvAyahBottomText.text = "${it.language}: ${it.ayahText}"
-        //tvSurah.text = "${it.surahEnglishName} (${it.surahEnglishNameTranslation})"
-        //tvRevelationType.text = it.surahRevelationType
       }
     }
   }

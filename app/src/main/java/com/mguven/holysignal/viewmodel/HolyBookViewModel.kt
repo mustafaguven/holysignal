@@ -3,15 +3,29 @@ package com.mguven.holysignal.viewmodel
 import androidx.sqlite.db.SimpleSQLiteQuery
 import com.mguven.holysignal.cache.ApplicationCache
 import com.mguven.holysignal.db.ApplicationDatabase
-import com.mguven.holysignal.db.entity.AyahSampleData
 import com.mguven.holysignal.db.entity.FavouritesData
 import com.mguven.holysignal.db.entity.NotesData
+import com.mguven.holysignal.extension.isNotNullAndNotEmpty
+import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
 
 class HolyBookViewModel @Inject
 constructor(private val database: ApplicationDatabase,
             private val cache: ApplicationCache) : BaseViewModel() {
+
+  private var favouriteIdList: List<Long>? = null
+  fun getFavouriteIdList(): List<Long>? {
+    if (!favouriteIdList.isNotNullAndNotEmpty()) {
+      favouriteIdList = cache.getFavouriteAyahs()?.ayahNumbers
+      if (!favouriteIdList.isNotNullAndNotEmpty()) {
+        runBlocking {
+          favouriteIdList = getFavouritesOnlyAyahNumbers()
+        }
+      }
+    }
+    return favouriteIdList
+  }
 
   suspend fun getAyahTopText(randomAyahNumber: Int) =
       database.ayahSampleDataDao().getRandomAyah(cache.getTopTextEditionId(), randomAyahNumber)
@@ -25,6 +39,8 @@ constructor(private val database: ApplicationDatabase,
       database.favouritesDataDao().insert(FavouritesData(0, ayahNumber))
 
   suspend fun getFavourites() = database.favouritesDataDao().getAll()
+
+  private suspend fun getFavouritesOnlyAyahNumbers() = database.favouritesDataDao().getAllAyahNumbersAsList()
 
   suspend fun hasFavourite(ayahNumber: Int) = database.favouritesDataDao().getByAyahNumber(ayahNumber)
 
@@ -63,6 +79,11 @@ constructor(private val database: ApplicationDatabase,
     val criteria = StringBuilder()
     words.forEach { criteria.append(" text like '%$it%' OR ") }
     return criteria.toString().dropLast(3)
+  }
+
+  fun clearFavouriteCache() {
+    favouriteIdList = null
+    cache.updateFavouriteAyahs(null)
   }
 
 

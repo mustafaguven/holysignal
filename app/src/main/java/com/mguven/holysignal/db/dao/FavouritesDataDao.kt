@@ -12,6 +12,9 @@ interface FavouritesDataDao {
   @Query("SELECT * from Favourites")
   suspend fun getAll(): List<FavouritesData>
 
+  @Query("SELECT ayahNumber from Favourites")
+  suspend fun getAllAyahNumbersAsList(): List<Long>
+
   @Query("DELETE FROM Favourites")
   suspend fun deleteAll()
 

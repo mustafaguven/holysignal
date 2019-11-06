@@ -28,16 +28,16 @@
                 android:text="@string/search"
                 android:enabled="false"
                 android:textAllCaps="false"
-                android:textSize="16sp" />
+                android:textSize="20sp" />
 
             <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/etWord"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
-                android:background="@color/white"
                 android:textSize="30sp"
                 android:maxLines="1"
+                android:background="@android:color/transparent"
                 android:inputType="text"
                 android:gravity="top|start"
                 android:hint="@string/ayah_search_hint"
