@@ -22,6 +22,9 @@
             android:name="com.mguven.holysignal.ui.CardActivity"
             android:theme="@style/NoActionBarTheme" />
 
+        <activity
+            android:name="com.mguven.holysignal.ui.DownloadActivity" />
+
     </application>
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />

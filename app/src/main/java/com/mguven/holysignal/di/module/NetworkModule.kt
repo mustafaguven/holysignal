@@ -7,6 +7,7 @@ import com.mguven.holysignal.di.interceptor.CacheInterceptor
 import com.mguven.holysignal.di.interceptor.HeaderInterceptor
 import com.mguven.holysignal.di.interceptor.LoggingInterceptor
 import com.mguven.holysignal.network.NewsApi
+import com.mguven.holysignal.network.SurahApi
 import dagger.Module
 import dagger.Provides
 import okhttp3.Cache
@@ -24,7 +25,7 @@ import javax.inject.Singleton
 class NetworkModule {
 
   companion object {
-    const val BASE_API = "https://newsapi.org/v2/"
+    const val BASE_API = "https://talmmc6e1j.execute-api.eu-west-1.amazonaws.com/test/"
     const val CONNECTION_TIMEOUT = 60L //as milliseconds
     const val READ_TIMEOUT = 60L //as milliseconds
     const val APPLICATION_JSON = "application/json"
@@ -46,6 +47,10 @@ class NetworkModule {
   @Provides
   @Singleton
   fun provideNewsApi(retrofit: Retrofit): NewsApi = retrofit.create(NewsApi::class.java)
+
+  @Provides
+  @Singleton
+  fun provideSurahApi(retrofit: Retrofit): SurahApi = retrofit.create(SurahApi::class.java)
 
   @Provides
   @Singleton

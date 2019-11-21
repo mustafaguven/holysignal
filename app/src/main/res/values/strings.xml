@@ -4,8 +4,8 @@
     <string name="edition_select_text">Please select an edition</string>
     <string name="main_save_and_close">Save and Close</string>
     <string name="main_save">Save</string>
-    <string name="main_primary_text">Top Text</string>
-    <string name="main_alternative_text">Bottom Text</string>
+    <string name="main_primary_text">Top Text Source</string>
+    <string name="main_alternative_text">Bottom Text Source</string>
 
     <string name="added_to_favourites">Added to favourites</string>
     <string name="removed_from_favourites">Removed from favourites</string>
@@ -25,6 +25,8 @@
     <string name="previous_ayah">previous\nayah</string>
     <string name="none_favourite_found">None Favourite Found</string>
     <string name="favourites_are_getting_randomly">(*) Favourites are getting randomly</string>
+    <string name="download">Download</string>
+    <string name="download_book">Download Book</string>
 
     <string-array name="playmodes">
         <item>Shuffle all ayahs</item>

@@ -7,10 +7,10 @@ import io.reactivex.Observable
 import retrofit2.http.GET
 import retrofit2.http.Query
 
-interface NewsApi {
+interface SurahApi {
 
-  @GET("top-headlines?q=a")
-  fun getNews(@Query("page") page: Int = 1,
-              @Query("pageSize") pageSize: Int): Observable<SurahEntity>
+  @GET("surah")
+  fun getSurahByEditionId(@Query("surahNumber") surahNumber: Int,
+              @Query("editionId") editionId: Int): Observable<SurahEntity>
 
 }

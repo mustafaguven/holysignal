@@ -17,6 +17,9 @@ interface EditionDataDao {
   @Query("SELECT '(' || type || ')' || ' ' || name || ' ' || '(' || language || ')' as 'key', Id as value from Edition WHERE type in ('translation', 'quran', 'transliteration') order by type ")
   fun getNameIdList(): LiveData<List<EditionAdapterData>>
 
+  @Query("SELECT '(' || type || ')' || ' ' || name || ' ' || '(' || language || ')' as 'key', Id as value from Edition WHERE type in ('translation', 'quran', 'transliteration') order by type ")
+  suspend fun getDownloadableEditions(): List<EditionAdapterData>
+
   @Insert(onConflict = REPLACE)
   fun insert(editionData: EditionData)
 

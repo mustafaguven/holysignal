@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
 import com.evernote.android.job.JobManager
 import com.evernote.android.job.JobRequest
 import com.mguven.holysignal.R
@@ -14,6 +15,7 @@ import com.mguven.holysignal.job.LockScreenJob
 import com.mguven.holysignal.ui.adapter.EditionAdapter
 import com.mguven.holysignal.viewmodel.PreferencesViewModel
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.coroutines.launch
 
 
 class MainActivity : AbstractBaseActivity() {
@@ -30,6 +32,8 @@ class MainActivity : AbstractBaseActivity() {
 
     initEditionSpinners()
 
+    initDownloadBookSpinner()
+
     btnOk.setOnClickListener {
       val topTextEditionSpinnerSelectedItem = spTopTextEdition.selectedItem as EditionAdapterData
       val bottomTextEditionSpinnerSelectedItem = spBottomTextEdition.selectedItem as EditionAdapterData
@@ -37,6 +41,18 @@ class MainActivity : AbstractBaseActivity() {
       cache.updateBottomTextEditionId(bottomTextEditionSpinnerSelectedItem.value)
       getMaxAyahCount()
       Toast.makeText(this, getString(R.string.preferences_saved), Toast.LENGTH_SHORT).show()
+    }
+
+    btnDownload.setOnClickListener {
+      preferencesViewModel.startDownload(53)
+    }
+  }
+
+  private fun initDownloadBookSpinner() {
+    lifecycleScope.launch {
+      val downloadableBooks: List<EditionAdapterData> = preferencesViewModel.getDownloadableEditions()
+      val adapter = EditionAdapter(this@MainActivity, R.layout.status_item, downloadableBooks, resources)
+      spDownloadableTexts.adapter = adapter
     }
   }
 

@@ -1,6 +1,7 @@
 package com.mguven.holysignal.di
 
 import androidx.lifecycle.ViewModel
+import com.mguven.holysignal.viewmodel.DownloadViewModel
 import com.mguven.holysignal.viewmodel.HolyBookViewModel
 
 import com.mguven.holysignal.viewmodel.NewsViewModel
@@ -27,5 +28,10 @@ abstract class ViewModelModule {
   @IntoMap
   @ViewModelKey(PreferencesViewModel::class)
   abstract fun bindPreferencesViewModel(viewModel: PreferencesViewModel): ViewModel
+
+  @Binds
+  @IntoMap
+  @ViewModelKey(DownloadViewModel::class)
+  abstract fun bindDownloadViewModel(viewModel: DownloadViewModel): ViewModel
 
 }

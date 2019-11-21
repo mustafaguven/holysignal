@@ -4,8 +4,8 @@
     <string name="edition_select_text">Lütfen bir versiyon seçin</string>
     <string name="main_save_and_close">Kaydet ve Kapat</string>
     <string name="main_save">Kaydet</string>
-    <string name="main_primary_text">Üst Metin</string>
-    <string name="main_alternative_text">Alt Metin</string>
+    <string name="main_primary_text">Üst Metin Kaynağı</string>
+    <string name="main_alternative_text">Alt Metin Kaynağı</string>
 
     <string name="added_to_favourites">Favorilere eklendi</string>
     <string name="removed_from_favourites">Favorilerden çıkarıldı</string>
@@ -26,7 +26,8 @@
     <string name="previous_ayah">önceki\nayet</string>
     <string name="none_favourite_found">Favori bulunamadı</string>
     <string name="favourites_are_getting_randomly">(*) Favoriler karışık olarak getirilir</string>
-
+    <string name="download">İndir</string>
+    <string name="download_book">İndirilecek Kitap</string>
 
     <string-array name="playmodes">
         <item>Ayetler karışık şekilde gösterilsin</item>

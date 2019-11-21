@@ -34,21 +34,21 @@ class ArticlesDataSource(private val newsApi: NewsApi,
                                requestedLoadSize: Int,
                                initialCallback: LoadInitialCallback<Int, Article>?,
                                callback: LoadCallback<Int, Article>?) {
-    compositeDisposable.add(
-        newsApi.getNews(page, requestedLoadSize)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(
-                { response ->
-                  networkState.postValue(NetworkState.LOADED)
-                  initialCallback?.onResult(response.articles!!, null, adjacentPage)
-                  callback?.onResult(response.articles!!, adjacentPage)
-                },
-                {
-                  Timber.e(it)
-                  networkState.postValue(NetworkState.FAILED)
-                }
-            ))
+//    compositeDisposable.add(
+//        newsApi.getNews(page, requestedLoadSize)
+//            .subscribeOn(Schedulers.io())
+//            .observeOn(AndroidSchedulers.mainThread())
+//            .subscribe(
+//                { response ->
+//                  networkState.postValue(NetworkState.LOADED)
+//                  initialCallback?.onResult(response.articles!!, null, adjacentPage)
+//                  callback?.onResult(response.articles!!, adjacentPage)
+//                },
+//                {
+//                  Timber.e(it)
+//                  networkState.postValue(NetworkState.FAILED)
+//                }
+//            ))
   }
 
 }
