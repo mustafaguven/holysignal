@@ -23,6 +23,25 @@ interface AyahSampleDataDao {
   @Query("DELETE from AyahSample")
   fun deleteAll()
 
+//  @Query("SELECT Surah.number as surahNumber,  " +
+//      " Surah.name as surahName, " +
+//      " Surah.englishName as surahEnglishName, " +
+//      " Surah.englishNameTranslation as surahEnglishNameTranslation, " +
+//      " Surah.revelationType as surahRevelationType, " +
+//      " Surah.StartingAyahNumber as startingAyahNumber, " +
+//      " Surah.EndingAyahNumber as endingAyahNumber, " +
+//      " Edition.language as language, " +
+//      " AyahSample.Id as ayahId, " +
+//      " AyahSample.number as ayahNumber, " +
+//      " AyahSample.text as ayahText, " +
+//      " AyahSample.numberInSurah as numberInSurah, " +
+//      " AyahSample.juz as juz, " +
+//      " AyahSample.noteId as noteId " +
+//      " from AyahSample inner join Surah on Surah.number = AyahSample.surahNumber " +
+//      " inner join Edition on Edition.Id = AyahSample.editionId " +
+//      " WHERE AyahSample.editionId = :editionId AND AyahSample.number = :randomAyahNumber")
+//  suspend fun getRandomAyah(editionId: Int, randomAyahNumber: Int): List<SurahAyahSampleData>
+
   @Query("SELECT Surah.number as surahNumber,  " +
       " Surah.name as surahName, " +
       " Surah.englishName as surahEnglishName, " +
