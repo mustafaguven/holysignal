@@ -55,12 +55,13 @@ class MainActivity : AbstractBaseActivity() {
       tvProgressText.visibility = View.VISIBLE
       it?.let {
         progress.progress = it
-        tvProgressText.text = if (it == ConstantVariables.MAX_SURAH_NUMBER) getString(R.string.download_finished) else "$it / ${ConstantVariables.MAX_SURAH_NUMBER}"
+        tvProgressText.text = if (it == ConstantVariables.MAX_SURAH_NUMBER) getString(R.string.download_finished) else calculatePercentage(it)
         btnDownload.isEnabled = it == ConstantVariables.MAX_SURAH_NUMBER
       }
     })
   }
 
+  private fun calculatePercentage(it: Int): String = "${((it * 100) / ConstantVariables.MAX_SURAH_NUMBER)}%"
 
   private fun initDownloadBookSpinner() {
     lifecycleScope.launch {

@@ -31,13 +31,10 @@ class EditionAdapter(context: Context,
     currRowVal = null
     currRowVal = list[position]
     val label = row.findViewById<TextView>(R.id.spinnerItem)
-    if(currRowVal!!.max != ConstantVariables.MAX_AYAH_NUMBER){
-      label.text = label.context.getString(R.string.limited_version, currRowVal!!.key)
+    if (currRowVal!!.max != ConstantVariables.MAX_AYAH_NUMBER) {
       label.setTextColor(Color.GRAY)
-    } else {
-      label.text = currRowVal!!.key
     }
-
+    label.text = currRowVal!!.key
     return row
   }
 }
