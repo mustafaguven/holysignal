@@ -1,8 +1,8 @@
 package com.mguven.holysignal.di.module
 
-import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
-import com.mguven.holysignal.TheApplication
+import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import com.mguven.holysignal.BuildConfig
+import com.mguven.holysignal.TheApplication
 import com.mguven.holysignal.di.interceptor.CacheInterceptor
 import com.mguven.holysignal.di.interceptor.HeaderInterceptor
 import com.mguven.holysignal.di.interceptor.LoggingInterceptor
@@ -39,7 +39,8 @@ class NetworkModule {
     return Retrofit.Builder()
         .baseUrl(BASE_API)
         .client(okHttpClient)
-        .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+        //.addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+        .addCallAdapterFactory(CoroutineCallAdapterFactory())
         .addConverterFactory(MoshiConverterFactory.create())
         .build()
   }

@@ -27,6 +27,9 @@
     <string name="favourites_are_getting_randomly">(*) Favourites are getting randomly</string>
     <string name="download">Download</string>
     <string name="download_book">Download Book</string>
+    <string name="download_finished">download is finished</string>
+    <string name="ayah_not_found_on_this_book">This ayah is not available on this book. Please download it.</string>
+    <string name="limited_version">%1$s (First 50 ayahs)</string>
 
     <string-array name="playmodes">
         <item>Shuffle all ayahs</item>

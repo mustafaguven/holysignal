@@ -1,6 +1,7 @@
 package com.mguven.holysignal.cache
 
 import android.content.SharedPreferences
+import androidx.lifecycle.MutableLiveData
 import com.google.gson.Gson
 import com.mguven.holysignal.db.entity.SurahAyahSampleData
 import com.mguven.holysignal.inline.whenNotNull
@@ -10,6 +11,8 @@ import com.mguven.holysignal.model.FavouriteAyahList
 
 class ApplicationCache(private val applicationSharedPreferences: SharedPreferences,
                        private val gson: Gson) {
+
+  val downloadedSurah = MutableLiveData<Int>()
 
   private fun <T> getObjectWithGenericDeserializer(key: String, clz: Class<T>): T {
     return gson.fromJson(applicationSharedPreferences.getString(key, null), clz)
@@ -99,6 +102,10 @@ class ApplicationCache(private val applicationSharedPreferences: SharedPreferenc
       lastShownFavouriteIndex = this.applicationSharedPreferences.getInt(CacheKey.LAST_SHOWN_FAVOURITE_INDEX, 0)
     }
     return lastShownFavouriteIndex
+  }
+
+  fun updateDownloadCount(surahNumber: Int?) {
+    downloadedSurah.postValue(surahNumber)
   }
 
 /*  fun updateUserInfo(userInformation: UserInformation?) {

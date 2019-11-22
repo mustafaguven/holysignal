@@ -28,6 +28,10 @@
     <string name="favourites_are_getting_randomly">(*) Favoriler karışık olarak getirilir</string>
     <string name="download">İndir</string>
     <string name="download_book">İndirilecek Kitap</string>
+    <string name="download_finished">indirme tamamlandı</string>
+    <string name="ayah_not_found_on_this_book">(Seçtiğiniz alternatif versiyonda bu ayet bulunamadı. Seçenekler ekranından ilgili kitabı indirerek tekrar deneyin.)</string>
+    <string name="limited_version">%1$s (İlk 50 ayet)</string>
+    <string name="full_version">%1$s (Tümü)</string>
 
     <string-array name="playmodes">
         <item>Ayetler karışık şekilde gösterilsin</item>

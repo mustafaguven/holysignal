@@ -2,12 +2,14 @@ package com.mguven.holysignal.ui.adapter
 
 import android.content.Context
 import android.content.res.Resources
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.TextView
 import com.mguven.holysignal.R
+import com.mguven.holysignal.constant.ConstantVariables
 import com.mguven.holysignal.db.entity.EditionAdapterData
 
 class EditionAdapter(context: Context,
@@ -29,7 +31,13 @@ class EditionAdapter(context: Context,
     currRowVal = null
     currRowVal = list[position]
     val label = row.findViewById<TextView>(R.id.spinnerItem)
-    label.text = currRowVal!!.key
+    if(currRowVal!!.max != ConstantVariables.MAX_AYAH_NUMBER){
+      label.text = label.context.getString(R.string.limited_version, currRowVal!!.key)
+      label.setTextColor(Color.GRAY)
+    } else {
+      label.text = currRowVal!!.key
+    }
+
     return row
   }
 }

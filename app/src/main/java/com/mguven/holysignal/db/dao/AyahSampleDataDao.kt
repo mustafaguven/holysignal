@@ -43,11 +43,14 @@ interface AyahSampleDataDao {
   suspend fun getRandomAyah(editionId: Int, randomAyahNumber: Int): List<SurahAyahSampleData>
 
   @Query(" SELECT max(number) as max from AyahSample WHERE editionId = :editionId ")
-  fun getMaxAyahCountByEditionId(editionId: Int): LiveData<MaxAyahCountData>
+  suspend fun getMaxAyahCountByEditionId(editionId: Int): MaxAyahCountData
 
   @Query("UPDATE AyahSample SET noteId = :noteId WHERE Id = :ayahId")
   suspend fun updateNoteId(ayahId: Int, noteId: Int)
 
   @RawQuery
   suspend fun getAyahsByKeyword(query: SupportSQLiteQuery): List<Int>
+
+  @Query("DELETE FROM AyahSample WHERE editionId = :editionId")
+  suspend fun deleteSurahsByEditionId(editionId: Int)
 }

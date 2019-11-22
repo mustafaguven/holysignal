@@ -3,6 +3,7 @@ package com.mguven.holysignal.ui
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.util.TypedValue
 import android.view.View
 import android.widget.AdapterView
 import androidx.lifecycle.lifecycleScope
@@ -305,8 +306,14 @@ class CardActivity : AbstractBaseActivity(),
   private fun getAyahBottomText() {
     lifecycleScope.launch {
       val list = holyBookViewModel.getAyahBottomText(ayahNumber)
-      list.forEach {
-        tvAyahBottomText.highlighted("<b>${it.language}:</b> ${it.ayahText}")
+      if (list.isNotNullAndNotEmpty()) {
+        tvAyahBottomText.setTextSize(TypedValue.COMPLEX_UNIT_SP,24f)
+        list.forEach {
+          tvAyahBottomText.highlighted("<b>${it.language}:</b> ${it.ayahText}")
+        }
+      } else {
+        tvAyahBottomText.setTextSize(TypedValue.COMPLEX_UNIT_SP,16f)
+        tvAyahBottomText.text = getString(R.string.ayah_not_found_on_this_book)
       }
     }
   }

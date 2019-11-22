@@ -2,14 +2,15 @@ package com.mguven.holysignal.ui
 
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import com.evernote.android.job.JobManager
 import com.evernote.android.job.JobRequest
 import com.mguven.holysignal.R
+import com.mguven.holysignal.constant.ConstantVariables
 import com.mguven.holysignal.db.entity.EditionAdapterData
-import com.mguven.holysignal.db.entity.MaxAyahCountData
 import com.mguven.holysignal.di.module.MainActivityModule
 import com.mguven.holysignal.job.LockScreenJob
 import com.mguven.holysignal.ui.adapter.EditionAdapter
@@ -44,9 +45,22 @@ class MainActivity : AbstractBaseActivity() {
     }
 
     btnDownload.setOnClickListener {
-      preferencesViewModel.startDownload(53)
+      val downloadableSelectedItem = spDownloadableTexts.selectedItem as EditionAdapterData
+      preferencesViewModel.downloadSurah(downloadableSelectedItem.value)
+      btnDownload.isEnabled = false
     }
+
+    cache.downloadedSurah.observe(this, Observer<Int> {
+      progress.visibility = View.VISIBLE
+      tvProgressText.visibility = View.VISIBLE
+      it?.let {
+        progress.progress = it
+        tvProgressText.text = if (it == ConstantVariables.MAX_SURAH_NUMBER) getString(R.string.download_finished) else "$it / ${ConstantVariables.MAX_SURAH_NUMBER}"
+        btnDownload.isEnabled = it == ConstantVariables.MAX_SURAH_NUMBER
+      }
+    })
   }
+
 
   private fun initDownloadBookSpinner() {
     lifecycleScope.launch {
@@ -79,11 +93,12 @@ class MainActivity : AbstractBaseActivity() {
   }
 
   private fun getMaxAyahCount() {
-    preferencesViewModel.getMaxAyahCount().observe(this, Observer<MaxAyahCountData> { item ->
-      Log.e("AAA", "=====> MAX AYAH COUNT ${item.max}")
-      cache.updateMaxAyahCount(item.max)
+    lifecycleScope.launch {
+      val result = preferencesViewModel.getMaxAyahCount()
+      Log.e("AAA", "=====> MAX AYAH COUNT ${result.max}")
+      cache.updateMaxAyahCount(result.max)
       finish()
-    })
+    }
   }
 
   override fun onStop() {
