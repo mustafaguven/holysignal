@@ -51,7 +51,7 @@
             android:id="@+id/tvProgress"
             android:fontFamily="@font/gotham_narrow_book"
             android:gravity="center"
-            android:layout_marginTop="3dp"
+            android:layout_marginTop="1dp"
             android:textColor="@color/white"
             android:textSize="14sp"
             android:visibility="visible"
