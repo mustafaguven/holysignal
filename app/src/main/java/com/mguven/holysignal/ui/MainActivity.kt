@@ -45,9 +45,11 @@ class MainActivity : AbstractBaseActivity() {
     }
 
     btnDownload.setOnClickListener {
-      val downloadableSelectedItem = spDownloadableTexts.selectedItem as EditionAdapterData
-      preferencesViewModel.downloadSurah(downloadableSelectedItem.value)
       btnDownload.isEnabled = false
+      val downloadableSelectedItem = spDownloadableTexts.selectedItem as EditionAdapterData
+      val editionId = downloadableSelectedItem.value
+      preferencesViewModel.downloadSurahTranslatedNames(editionId)
+      preferencesViewModel.downloadSurah(editionId)
     }
 
     cache.downloadedSurah.observe(this, Observer<Int> {
@@ -55,13 +57,23 @@ class MainActivity : AbstractBaseActivity() {
       tvProgressText.visibility = View.VISIBLE
       it?.let {
         progress.progress = it
-        tvProgressText.text = if (it == ConstantVariables.MAX_SURAH_NUMBER) getString(R.string.download_finished) else calculatePercentage(it)
+        tvProgressText.text = if (it == ConstantVariables.MAX_SURAH_NUMBER) getString(R.string.download_finished) else calculatePercentage(R.string.surah_ayahs_is_downloading, it)
+        btnDownload.isEnabled = it == ConstantVariables.MAX_SURAH_NUMBER
+      }
+    })
+
+    cache.downloadedSurahTranslate.observe(this, Observer<Int> {
+      progress.visibility = View.VISIBLE
+      tvProgressText.visibility = View.VISIBLE
+      it?.let {
+        progress.progress = it
+        tvProgressText.text = if (it == ConstantVariables.MAX_SURAH_NUMBER) getString(R.string.download_finished) else calculatePercentage(R.string.surah_translate_is_downloading, it)
         btnDownload.isEnabled = it == ConstantVariables.MAX_SURAH_NUMBER
       }
     })
   }
 
-  private fun calculatePercentage(it: Int): String = "${((it * 100) / ConstantVariables.MAX_SURAH_NUMBER)}%"
+  private fun calculatePercentage(res: Int, it: Int): String = getString(res, "${((it * 100) / ConstantVariables.MAX_SURAH_NUMBER)}%")
 
   private fun initDownloadBookSpinner() {
     lifecycleScope.launch {

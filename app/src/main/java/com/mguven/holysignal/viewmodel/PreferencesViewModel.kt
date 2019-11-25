@@ -5,8 +5,10 @@ import androidx.lifecycle.LiveData
 import com.mguven.holysignal.cache.ApplicationCache
 import com.mguven.holysignal.constant.ConstantVariables
 import com.mguven.holysignal.db.ApplicationDatabase
+import com.mguven.holysignal.db.dao.SurahTranslateDataDao
 import com.mguven.holysignal.db.entity.AyahSampleData
 import com.mguven.holysignal.db.entity.EditionAdapterData
+import com.mguven.holysignal.db.entity.SurahTranslateData
 import com.mguven.holysignal.network.SurahApi
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -49,7 +51,21 @@ constructor(private val surahApi: SurahApi,
         Log.e("AAA", "$editionId -- ${surahResult.data?.surahNumber}")
       }
     }
+  }
 
+  fun downloadSurahTranslatedNames(editionId: Int) {
+    CoroutineScope(Dispatchers.IO).launch {
+      val surahTranslateResult = surahApi.getSurahTranslationByLanguage(editionId)
+      val languageId = surahTranslateResult.data?.languageId
+      if(languageId != null) {
+        database.surahTranslateDataDao().deleteTranslatedNamesByEditionId(languageId)
+        surahTranslateResult.data.translationData.forEach {
+          database.surahTranslateDataDao().insert(SurahTranslateData(0, it.surahNumber, languageId, it.name))
+          Log.e("AAA", "$editionId -- ${it.name}")
+          cache.updateDownloadSurahTranslateCount(it.surahNumber)
+        }
+      }
+    }
   }
 
 
