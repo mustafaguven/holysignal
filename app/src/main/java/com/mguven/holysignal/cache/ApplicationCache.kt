@@ -13,7 +13,7 @@ class ApplicationCache(private val applicationSharedPreferences: SharedPreferenc
                        private val gson: Gson) {
 
   val downloadedSurah = MutableLiveData<Int>()
-  val downloadedSurahTranslate = MutableLiveData<Int>()
+  val downloadedSurahTranslate = MutableLiveData<IntArray>()
 
   private fun <T> getObjectWithGenericDeserializer(key: String, clz: Class<T>): T {
     return gson.fromJson(applicationSharedPreferences.getString(key, null), clz)
@@ -109,8 +109,8 @@ class ApplicationCache(private val applicationSharedPreferences: SharedPreferenc
     downloadedSurah.postValue(surahNumber)
   }
 
-  fun updateDownloadSurahTranslateCount(surahNumber: Int?) {
-    downloadedSurahTranslate.postValue(surahNumber)
+  fun updateDownloadSurahTranslateCount(total: Int, surahNumber: Int) {
+    downloadedSurahTranslate.postValue(intArrayOf(total, surahNumber))
   }
 
 /*  fun updateUserInfo(userInformation: UserInformation?) {

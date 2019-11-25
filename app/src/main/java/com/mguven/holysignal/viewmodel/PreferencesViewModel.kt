@@ -61,8 +61,7 @@ constructor(private val surahApi: SurahApi,
         database.surahTranslateDataDao().deleteTranslatedNamesByEditionId(languageId)
         surahTranslateResult.data.translationData.forEach {
           database.surahTranslateDataDao().insert(SurahTranslateData(0, it.surahNumber, languageId, it.name))
-          Log.e("AAA", "$editionId -- ${it.name}")
-          cache.updateDownloadSurahTranslateCount(it.surahNumber)
+          cache.updateDownloadSurahTranslateCount(surahTranslateResult.data.translationData.size, it.surahNumber)
         }
       }
     }

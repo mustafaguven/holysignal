@@ -56,24 +56,34 @@ class MainActivity : AbstractBaseActivity() {
       progress.visibility = View.VISIBLE
       tvProgressText.visibility = View.VISIBLE
       it?.let {
+        progress.max = ConstantVariables.MAX_SURAH_NUMBER
         progress.progress = it
-        tvProgressText.text = if (it == ConstantVariables.MAX_SURAH_NUMBER) getString(R.string.download_finished) else calculatePercentage(R.string.surah_ayahs_is_downloading, it)
+        tvProgressText.text = if (it == ConstantVariables.MAX_SURAH_NUMBER)
+          getString(R.string.download_finished)
+        else
+          calculatePercentage(R.string.surah_ayahs_is_downloading, it, ConstantVariables.MAX_SURAH_NUMBER)
         btnDownload.isEnabled = it == ConstantVariables.MAX_SURAH_NUMBER
       }
     })
 
-    cache.downloadedSurahTranslate.observe(this, Observer<Int> {
+    cache.downloadedSurahTranslate.observe(this, Observer<IntArray> {
       progress.visibility = View.VISIBLE
       tvProgressText.visibility = View.VISIBLE
       it?.let {
-        progress.progress = it
-        tvProgressText.text = if (it == ConstantVariables.MAX_SURAH_NUMBER) getString(R.string.download_finished) else calculatePercentage(R.string.surah_translate_is_downloading, it)
-        btnDownload.isEnabled = it == ConstantVariables.MAX_SURAH_NUMBER
+        progress.max = it[0]
+        val isDone = (it[0]) == it[1]
+        progress.progress = it[1]
+        tvProgressText.text = if (isDone)
+          getString(R.string.download_finished)
+        else
+          calculatePercentage(R.string.surah_translate_is_downloading, it[1], it[0])
+        btnDownload.isEnabled = isDone
+        Log.e("AAA", "${(it[0])} -- ${it[1]}")
       }
     })
   }
 
-  private fun calculatePercentage(res: Int, it: Int): String = getString(res, "${((it * 100) / ConstantVariables.MAX_SURAH_NUMBER)}%")
+  private fun calculatePercentage(res: Int, number: Int, total: Int): String = getString(res, "${((number * 100) / total)}%")
 
   private fun initDownloadBookSpinner() {
     lifecycleScope.launch {
