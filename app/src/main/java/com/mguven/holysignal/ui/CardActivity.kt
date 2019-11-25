@@ -79,6 +79,7 @@ class CardActivity : AbstractBaseActivity(),
       tvNext.visibility = View.VISIBLE
       getAyahTopText()
       getAyahBottomText()
+      getViewingCount()
       showFavouriteStatus()
     }
   }
@@ -315,6 +316,13 @@ class CardActivity : AbstractBaseActivity(),
         tvAyahBottomText.setTextSize(TypedValue.COMPLEX_UNIT_SP,16f)
         tvAyahBottomText.text = getString(R.string.ayah_not_found_on_this_book)
       }
+    }
+  }
+
+  private fun getViewingCount() {
+    lifecycleScope.launch {
+      val count = holyBookViewModel.getViewingCount(ayahNumber)
+      tvViewingCount.text = getString(R.string.total_viewing_count, count)
     }
   }
 

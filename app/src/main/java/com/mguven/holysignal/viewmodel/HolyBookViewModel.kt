@@ -5,6 +5,7 @@ import com.mguven.holysignal.cache.ApplicationCache
 import com.mguven.holysignal.db.ApplicationDatabase
 import com.mguven.holysignal.db.entity.FavouritesData
 import com.mguven.holysignal.db.entity.NotesData
+import com.mguven.holysignal.db.entity.ViewingCountsData
 import com.mguven.holysignal.extension.isNotNullAndNotEmpty
 import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
@@ -84,6 +85,18 @@ constructor(private val database: ApplicationDatabase,
   fun clearFavouriteCache() {
     favouriteIdList = null
     cache.updateFavouriteAyahs(null)
+  }
+
+  suspend fun getViewingCount(ayahNumber: Int): Int {
+    val list = database.viewingCountsDataDao().getByAyahNumber(ayahNumber)
+    var count = 1
+    if (list.isNotNullAndNotEmpty()) {
+      count = list[0].count + 1
+      database.viewingCountsDataDao().update(count, ayahNumber)
+    } else {
+      database.viewingCountsDataDao().insert(ViewingCountsData(0, ayahNumber, count))
+    }
+    return count
   }
 
 
