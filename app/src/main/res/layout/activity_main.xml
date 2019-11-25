@@ -21,16 +21,63 @@
         app:layout_constraintTop_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <Button
+        android:id="@+id/btnDownloadTop"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:background="@color/white"
+        android:gravity="center"
+        android:text="@string/download"
+        android:textColor="@color/black"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginEnd="10dp"
+        app:layout_constraintTop_toTopOf="@id/spTopTextEdition"
+        android:visibility="visible"/>
+
+
+    <ProgressBar
+        android:id="@+id/progressTop"
+        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+        android:indeterminate="false"
+        android:max="114"
+        android:progress="114"
+        app:layout_constraintTop_toTopOf="@id/spTopTextEdition"
+        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        app:layout_constraintLeft_toLeftOf="@id/btnDownloadTop"
+        app:layout_constraintRight_toRightOf="@id/btnDownloadTop"
+        android:visibility="gone"
+        android:scaleY="2"
+        tools:visibility="visible"
+        android:progressTint="@color/green"
+        />
+
+    <TextView
+        android:id="@+id/tvProgressTextTop"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:text="1 / 114"
+        android:textSize="16sp"
+        android:textColor="@color/white"
+        app:layout_constraintTop_toBottomOf="@id/progressTop"
+        app:layout_constraintLeft_toLeftOf="@id/btnDownloadTop"
+        app:layout_constraintRight_toRightOf="@id/btnDownloadTop"
+        android:visibility="visible"
+        tools:visibility="visible"/>
+
     <Spinner
         android:id="@+id/spTopTextEdition"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="30dp"
         android:layout_marginStart="10dp"
         android:layout_marginEnd="10dp"
         android:background="@color/white"
         android:spinnerMode="dropdown"
-        app:layout_constraintTop_toBottomOf="@id/tvTopTextEdition" />
-
+        app:layout_constraintTop_toBottomOf="@id/tvTopTextEdition"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/btnDownloadTop"/>
 
     <TextView
         android:id="@+id/tvBottomTextEdition"
@@ -42,106 +89,115 @@
         android:text="@string/main_alternative_text"
         android:textSize="16sp"
         android:textColor="@color/white"
-        app:layout_constraintTop_toBottomOf="@id/spTopTextEdition"
+        app:layout_constraintTop_toBottomOf="@id/btnDownloadTop"
         app:layout_constraintLeft_toLeftOf="parent" />
 
-    <Spinner
-        android:id="@+id/spBottomTextEdition"
-        android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="10dp"
-        android:background="@color/white"
-        android:spinnerMode="dropdown"
-        app:layout_constraintTop_toBottomOf="@id/tvBottomTextEdition" />
+
 
     <Button
-        android:id="@+id/btnOk"
+        android:id="@+id/btnDownloadBottom"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:background="@color/white"
-        android:gravity="center"
-        android:text="@string/main_save_and_close"
-        android:textColor="@color/black"
-        app:layout_constraintRight_toRightOf="parent"
-        android:layout_marginEnd="10dp"
-        app:layout_constraintTop_toBottomOf="@id/spBottomTextEdition" />
-
-
-
-
-    <TextView
-        android:id="@+id/tvDownloadableTexts"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="10dp"
-        android:text="@string/download_book"
-        android:textSize="16sp"
-        android:textColor="@color/white"
-        app:layout_constraintTop_toBottomOf="@id/btnOk"
-        app:layout_constraintLeft_toLeftOf="parent" />
-
-    <Spinner
-        android:id="@+id/spDownloadableTexts"
-        android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="10dp"
-        android:background="@color/white"
-        android:spinnerMode="dropdown"
-        app:layout_constraintTop_toBottomOf="@id/tvDownloadableTexts" />
-
-
-    <ProgressBar
-        android:id="@+id/progress"
-        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-        android:indeterminate="false"
-        android:layout_marginTop="3dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="10dp"
-        android:max="114"
-        android:progress="114"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        android:layout_height="wrap_content"
-        android:layout_width="match_parent"
-        android:visibility="gone"
-        app:layout_constraintTop_toBottomOf="@id/spDownloadableTexts"
-        android:scaleY="2"
-        tools:visibility="visible"
-        android:progressTint="@color/green"
-         />
-
-    <TextView
-        android:id="@+id/tvProgressText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="10dp"
-        android:text="1 / 114"
-        android:textSize="16sp"
-        android:textColor="@color/white"
-        app:layout_constraintTop_toBottomOf="@id/progress"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        android:visibility="gone"
-        tools:visibility="visible"/>
-
-    <Button
-        android:id="@+id/btnDownload"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
         android:background="@color/white"
         android:gravity="center"
         android:text="@string/download"
         android:textColor="@color/black"
         app:layout_constraintRight_toRightOf="parent"
         android:layout_marginEnd="10dp"
-        app:layout_constraintTop_toBottomOf="@id/tvProgressText" />
+        android:visibility="visible"
+        app:layout_constraintTop_toTopOf="@id/spBottomTextEdition" />
+
+
+    <ProgressBar
+        android:id="@+id/progressBottom"
+        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+        android:indeterminate="false"
+        android:max="114"
+        android:progress="114"
+        app:layout_constraintTop_toTopOf="@id/spBottomTextEdition"
+        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        app:layout_constraintLeft_toLeftOf="@id/btnDownloadBottom"
+        app:layout_constraintRight_toRightOf="@id/btnDownloadBottom"
+        android:visibility="gone"
+        android:scaleY="2"
+        tools:visibility="visible"
+        android:progressTint="@color/green"
+        />
+
+    <Spinner
+        android:id="@+id/spBottomTextEdition"
+        android:layout_width="0dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:background="@color/white"
+        android:spinnerMode="dropdown"
+        app:layout_constraintTop_toBottomOf="@id/tvBottomTextEdition"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/btnDownloadBottom" />
+
+
+
+    <Button
+        android:id="@+id/btnOk"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:layout_marginTop="10dp"
+        android:padding="10dp"
+        android:gravity="center"
+        android:text="@string/main_save_and_close"
+        android:textColor="@color/black"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginEnd="10dp"
+        app:layout_constraintTop_toBottomOf="@id/btnDownloadBottom" />
+
+
+
+
+
+
+
+<!--    <TextView-->
+<!--        android:id="@+id/tvDownloadableTexts"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginTop="40dp"-->
+<!--        android:layout_marginStart="10dp"-->
+<!--        android:layout_marginEnd="10dp"-->
+<!--        android:text="@string/download_book"-->
+<!--        android:textSize="16sp"-->
+<!--        android:textColor="@color/white"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/btnOk"-->
+<!--        app:layout_constraintLeft_toLeftOf="parent" />-->
+
+<!--    <Spinner-->
+<!--        android:id="@+id/spDownloadableTexts"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="30dp"-->
+<!--        android:layout_marginStart="10dp"-->
+<!--        android:layout_marginEnd="10dp"-->
+<!--        android:background="@color/white"-->
+<!--        android:spinnerMode="dropdown"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/tvDownloadableTexts" />-->
+
+
+
+
+<!--    <Button-->
+<!--        android:id="@+id/btnDownload"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginTop="10dp"-->
+<!--        android:background="@color/white"-->
+<!--        android:gravity="center"-->
+<!--        android:text="@string/download"-->
+<!--        android:textColor="@color/black"-->
+<!--        app:layout_constraintRight_toRightOf="parent"-->
+<!--        android:layout_marginEnd="10dp"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/tvProgressText" />-->
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -19,7 +19,7 @@ interface EditionDataDao {
       "group by editionId) A\n" +
       "on E.Id = A.editionId\n" +
       " WHERE type in ('translation', 'quran', 'transliteration') order by max desc, type ")
-  fun getNameIdList(): LiveData<List<EditionAdapterData>>
+  suspend fun getNameIdList(): List<EditionAdapterData>
 
   @Query("SELECT A.max as max, E.Id || ' ' || name || ' ' || '(' || language || ')' as 'key', E.Id as value \n" +
       "from Edition E left join (SELECT distinct editionId, max(number) as max From AyahSample\n" +

@@ -24,9 +24,7 @@ constructor(private val surahApi: SurahApi,
   suspend fun getMaxAyahCount() =
       database.ayahSampleDataDao().getMaxAyahCountByEditionId(cache.getTopTextEditionId())
 
-  fun getEditionNameIdList(): LiveData<List<EditionAdapterData>> {
-    return database.editionDataDao().getNameIdList()
-  }
+  suspend fun getEditionNameIdList() = database.editionDataDao().getNameIdList()
 
   suspend fun getDownloadableEditions() =
       database.editionDataDao().getDownloadableEditions()

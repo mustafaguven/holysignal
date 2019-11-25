@@ -33,8 +33,6 @@ class MainActivity : AbstractBaseActivity() {
 
     initEditionSpinners()
 
-    initDownloadBookSpinner()
-
     btnOk.setOnClickListener {
       val topTextEditionSpinnerSelectedItem = spTopTextEdition.selectedItem as EditionAdapterData
       val bottomTextEditionSpinnerSelectedItem = spBottomTextEdition.selectedItem as EditionAdapterData
@@ -44,59 +42,52 @@ class MainActivity : AbstractBaseActivity() {
       Toast.makeText(this, getString(R.string.preferences_saved), Toast.LENGTH_SHORT).show()
     }
 
-    btnDownload.setOnClickListener {
-      btnDownload.isEnabled = false
-      val downloadableSelectedItem = spDownloadableTexts.selectedItem as EditionAdapterData
+    btnDownloadTop.setOnClickListener {
+      val downloadableSelectedItem = spTopTextEdition.selectedItem as EditionAdapterData
       val editionId = downloadableSelectedItem.value
       preferencesViewModel.downloadSurahTranslatedNames(editionId)
       preferencesViewModel.downloadSurah(editionId)
     }
 
     cache.downloadedSurah.observe(this, Observer<Int> {
-      progress.visibility = View.VISIBLE
-      tvProgressText.visibility = View.VISIBLE
       it?.let {
-        progress.max = ConstantVariables.MAX_SURAH_NUMBER
-        progress.progress = it
-        tvProgressText.text = if (it == ConstantVariables.MAX_SURAH_NUMBER)
+        progressTop.max = ConstantVariables.MAX_SURAH_NUMBER
+        progressTop.progress = it
+        tvProgressTextTop.text = if (it == ConstantVariables.MAX_SURAH_NUMBER)
           getString(R.string.download_finished)
         else
           calculatePercentage(R.string.surah_ayahs_is_downloading, it, ConstantVariables.MAX_SURAH_NUMBER)
-        btnDownload.isEnabled = it == ConstantVariables.MAX_SURAH_NUMBER
+        val isDone = it == ConstantVariables.MAX_SURAH_NUMBER
+        btnDownloadTop.visibility = if (isDone) View.VISIBLE else View.INVISIBLE
+        progressTop.visibility = if (isDone) View.GONE else View.VISIBLE
+        tvProgressTextTop.visibility = if (isDone) View.GONE else View.VISIBLE
       }
     })
 
     cache.downloadedSurahTranslate.observe(this, Observer<IntArray> {
-      progress.visibility = View.VISIBLE
-      tvProgressText.visibility = View.VISIBLE
+      btnDownloadTop.visibility = View.INVISIBLE
       it?.let {
-        progress.max = it[0]
+        progressTop.max = it[0]
         val isDone = (it[0]) == it[1]
-        progress.progress = it[1]
-        tvProgressText.text = if (isDone)
+        progressTop.progress = it[1]
+        tvProgressTextTop.text = if (isDone)
           getString(R.string.download_finished)
         else
           calculatePercentage(R.string.surah_translate_is_downloading, it[1], it[0])
-        btnDownload.isEnabled = isDone
-        Log.e("AAA", "${(it[0])} -- ${it[1]}")
+        progressTop.visibility = if (isDone) View.GONE else View.VISIBLE
+        tvProgressTextTop.visibility = if (isDone) View.GONE else View.VISIBLE
+        Log.e("BBB", "${(it[0])} -- ${it[1]}")
       }
     })
   }
 
-  private fun calculatePercentage(res: Int, number: Int, total: Int): String = getString(res, "${((number * 100) / total)}%")
-
-  private fun initDownloadBookSpinner() {
-    lifecycleScope.launch {
-      val downloadableBooks: List<EditionAdapterData> = preferencesViewModel.getDownloadableEditions()
-      val adapter = EditionAdapter(this@MainActivity, R.layout.status_item, downloadableBooks, resources)
-      spDownloadableTexts.adapter = adapter
-    }
-  }
+  private fun calculatePercentage(res: Int, number: Int, total: Int): String = "${((number * 100) / total)}%"
 
   private fun initEditionSpinners() {
-    preferencesViewModel.getEditionNameIdList().observe(this, Observer<List<EditionAdapterData>> { list ->
+    lifecycleScope.launch {
+      val list = preferencesViewModel.getEditionNameIdList()
       val res = resources
-      val adapter = EditionAdapter(this, R.layout.status_item, list, res)
+      val adapter = EditionAdapter(this@MainActivity, R.layout.status_item, list, res)
       spTopTextEdition.adapter = adapter
       list.forEachIndexed { index, it ->
         if (it.value == cache.getTopTextEditionId()) {
@@ -112,7 +103,7 @@ class MainActivity : AbstractBaseActivity() {
           return@forEachIndexed
         }
       }
-    })
+    }
   }
 
   private fun getMaxAyahCount() {
