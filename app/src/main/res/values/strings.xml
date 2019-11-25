@@ -32,7 +32,8 @@
     <string name="limited_version">%1$s (First 50 ayahs)</string>
     <string name="surah_ayahs_is_downloading">Ayahs are downloading (%1$s)</string>
     <string name="surah_translate_is_downloading">Translated surah names are downloading (%1$s)</string>
-    <string name="total_viewing_count">viewing count: %1$d</string>
+    <string name="total_viewing_count">%1$d time(s) viewed</string>
+    <string name="x_ayah_displayed">%1$d%% displayed</string>
 
     <string-array name="playmodes">
         <item>Shuffle all ayahs</item>

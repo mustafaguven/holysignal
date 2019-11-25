@@ -12,8 +12,11 @@ import com.mguven.holysignal.model.FavouriteAyahList
 class ApplicationCache(private val applicationSharedPreferences: SharedPreferences,
                        private val gson: Gson) {
 
-  val downloadedSurah = MutableLiveData<Int>()
-  val downloadedSurahTranslate = MutableLiveData<IntArray>()
+  val downloadedTopSurah = MutableLiveData<Int>()
+  val downloadedTopSurahTranslate = MutableLiveData<IntArray>()
+
+  val downloadedBottomSurah = MutableLiveData<Int>()
+  val downloadedBottomSurahTranslate = MutableLiveData<IntArray>()
 
   private fun <T> getObjectWithGenericDeserializer(key: String, clz: Class<T>): T {
     return gson.fromJson(applicationSharedPreferences.getString(key, null), clz)
@@ -105,12 +108,20 @@ class ApplicationCache(private val applicationSharedPreferences: SharedPreferenc
     return lastShownFavouriteIndex
   }
 
-  fun updateDownloadCount(surahNumber: Int?) {
-    downloadedSurah.postValue(surahNumber)
+  fun updateTopDownloadCount(surahNumber: Int?) {
+    downloadedTopSurah.postValue(surahNumber)
   }
 
-  fun updateDownloadSurahTranslateCount(total: Int, surahNumber: Int) {
-    downloadedSurahTranslate.postValue(intArrayOf(total, surahNumber))
+  fun updateTopDownloadSurahTranslateCount(total: Int, surahNumber: Int) {
+    downloadedTopSurahTranslate.postValue(intArrayOf(total, surahNumber))
+  }
+
+  fun updateBottomDownloadCount(surahNumber: Int?) {
+    downloadedBottomSurah.postValue(surahNumber)
+  }
+
+  fun updateBottomDownloadSurahTranslateCount(total: Int, surahNumber: Int) {
+    downloadedBottomSurahTranslate.postValue(intArrayOf(total, surahNumber))
   }
 
 /*  fun updateUserInfo(userInformation: UserInformation?) {

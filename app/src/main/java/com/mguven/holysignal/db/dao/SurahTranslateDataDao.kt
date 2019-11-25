@@ -19,4 +19,7 @@ interface SurahTranslateDataDao {
   @Insert(onConflict = OnConflictStrategy.REPLACE)
   suspend fun insert(surahTranslateData: SurahTranslateData) : Long
 
+  @Query("DELETE from SurahTranslate WHERE surahNumber = :surahNumber AND languageId = :languageId")
+  suspend fun deleteTranslatedNamesByLanguageIdAndSurahNumber(languageId: Int, surahNumber: Int)
+
 }

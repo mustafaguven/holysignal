@@ -3,6 +3,9 @@ package com.mguven.holysignal.ui
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.Button
+import android.widget.ProgressBar
+import android.widget.TextView
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
@@ -44,41 +47,68 @@ class MainActivity : AbstractBaseActivity() {
 
     btnDownloadTop.setOnClickListener {
       val downloadableSelectedItem = spTopTextEdition.selectedItem as EditionAdapterData
-      val editionId = downloadableSelectedItem.value
-      preferencesViewModel.downloadSurahTranslatedNames(editionId)
-      preferencesViewModel.downloadSurah(editionId)
+      preferencesViewModel.download(downloadableSelectedItem.value, ConstantVariables.TOP_TEXT)
     }
 
-    cache.downloadedSurah.observe(this, Observer<Int> {
-      it?.let {
-        progressTop.max = ConstantVariables.MAX_SURAH_NUMBER
-        progressTop.progress = it
-        tvProgressTextTop.text = if (it == ConstantVariables.MAX_SURAH_NUMBER)
-          getString(R.string.download_finished)
-        else
-          calculatePercentage(R.string.surah_ayahs_is_downloading, it, ConstantVariables.MAX_SURAH_NUMBER)
-        val isDone = it == ConstantVariables.MAX_SURAH_NUMBER
-        btnDownloadTop.visibility = if (isDone) View.VISIBLE else View.INVISIBLE
-        progressTop.visibility = if (isDone) View.GONE else View.VISIBLE
-        tvProgressTextTop.visibility = if (isDone) View.GONE else View.VISIBLE
-      }
+    btnDownloadBottom.setOnClickListener {
+      val downloadableSelectedItem = spBottomTextEdition.selectedItem as EditionAdapterData
+      preferencesViewModel.download(downloadableSelectedItem.value, ConstantVariables.BOTTOM_TEXT)
+    }
+
+    cache.downloadedTopSurahTranslate.observe(this, Observer<IntArray> {
+      percentageSurahTranslate(it, progressTop, tvProgressTextTop, btnDownloadTop)
     })
 
-    cache.downloadedSurahTranslate.observe(this, Observer<IntArray> {
-      btnDownloadTop.visibility = View.INVISIBLE
-      it?.let {
-        progressTop.max = it[0]
-        val isDone = (it[0]) == it[1]
-        progressTop.progress = it[1]
-        tvProgressTextTop.text = if (isDone)
-          getString(R.string.download_finished)
-        else
-          calculatePercentage(R.string.surah_translate_is_downloading, it[1], it[0])
-        progressTop.visibility = if (isDone) View.GONE else View.VISIBLE
-        tvProgressTextTop.visibility = if (isDone) View.GONE else View.VISIBLE
-        Log.e("BBB", "${(it[0])} -- ${it[1]}")
-      }
+    cache.downloadedBottomSurahTranslate.observe(this, Observer<IntArray> {
+      percentageSurahTranslate(it, progressBottom, tvProgressTextBottom, btnDownloadBottom)
     })
+
+    cache.downloadedTopSurah.observe(this, Observer<Int> {
+      percentageDownload(it, progressTop, tvProgressTextTop, btnDownloadTop)
+    })
+
+    cache.downloadedBottomSurah.observe(this, Observer<Int> {
+      percentageDownload(it, progressBottom, tvProgressTextBottom, btnDownloadBottom)
+    })
+
+  }
+
+  private fun percentageSurahTranslate(it: IntArray?,
+                                       progress: ProgressBar,
+                                       tvProgressText: TextView,
+                                       btnDownload: Button) {
+    btnDownload.visibility = View.INVISIBLE
+    it?.let {
+      progress.max = it[0]
+      val isDone = (it[0]) == it[1]
+      progress.progress = it[1]
+      tvProgressText.text = if (isDone)
+        getString(R.string.download_finished)
+      else
+        calculatePercentage(R.string.surah_translate_is_downloading, it[1], it[0])
+      //btnDownload.visibility = if (isDone) View.VISIBLE else View.INVISIBLE
+      progress.visibility = if (isDone) View.GONE else View.VISIBLE
+      tvProgressText.visibility = if (isDone) View.GONE else View.VISIBLE
+      Log.e("BBB", "${(it[0])} -- ${it[1]}")
+    }
+  }
+
+  private fun percentageDownload(it: Int?,
+                                 progress: ProgressBar,
+                                 tvProgressText: TextView,
+                                 btnDownload: Button) {
+    it?.let {
+      progress.max = ConstantVariables.MAX_SURAH_NUMBER
+      progress.progress = it
+      tvProgressText.text = if (it == ConstantVariables.MAX_SURAH_NUMBER)
+        getString(R.string.download_finished)
+      else
+        calculatePercentage(R.string.surah_ayahs_is_downloading, it, ConstantVariables.MAX_SURAH_NUMBER)
+      val isDone = it == ConstantVariables.MAX_SURAH_NUMBER
+      btnDownload.visibility = if (isDone) View.VISIBLE else View.INVISIBLE
+      progress.visibility = if (isDone) View.GONE else View.VISIBLE
+      tvProgressText.visibility = if (isDone) View.GONE else View.VISIBLE
+    }
   }
 
   private fun calculatePercentage(res: Int, number: Int, total: Int): String = "${((number * 100) / total)}%"

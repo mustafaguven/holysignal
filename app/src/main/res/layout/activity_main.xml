@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_centerInParent="true"
-    android:background="#000"
+    android:background="@drawable/bg_1"
     tools:context=".ui.MainActivity">
 
     <TextView
@@ -16,7 +16,7 @@
         android:layout_marginEnd="10dp"
         android:text="@string/main_primary_text"
         android:textSize="16sp"
-        android:textColor="@color/white"
+        android:textColor="@color/black"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -60,7 +60,7 @@
         android:layout_marginEnd="10dp"
         android:text="1 / 114"
         android:textSize="16sp"
-        android:textColor="@color/white"
+        android:textColor="@color/black"
         app:layout_constraintTop_toBottomOf="@id/progressTop"
         app:layout_constraintLeft_toLeftOf="@id/btnDownloadTop"
         app:layout_constraintRight_toRightOf="@id/btnDownloadTop"
@@ -88,7 +88,7 @@
         android:layout_marginEnd="10dp"
         android:text="@string/main_alternative_text"
         android:textSize="16sp"
-        android:textColor="@color/white"
+        android:textColor="@color/black"
         app:layout_constraintTop_toBottomOf="@id/btnDownloadTop"
         app:layout_constraintLeft_toLeftOf="parent" />
 
@@ -124,6 +124,21 @@
         tools:visibility="visible"
         android:progressTint="@color/green"
         />
+
+    <TextView
+        android:id="@+id/tvProgressTextBottom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:text="1 / 114"
+        android:textSize="16sp"
+        android:textColor="@color/black"
+        app:layout_constraintTop_toBottomOf="@id/progressBottom"
+        app:layout_constraintLeft_toLeftOf="@id/btnDownloadBottom"
+        app:layout_constraintRight_toRightOf="@id/btnDownloadBottom"
+        android:visibility="visible"
+        tools:visibility="visible"/>
 
     <Spinner
         android:id="@+id/spBottomTextEdition"

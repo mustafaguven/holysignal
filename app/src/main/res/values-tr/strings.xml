@@ -33,7 +33,8 @@
     <string name="limited_version">%1$s (İlk 50 ayet)</string>
     <string name="surah_ayahs_is_downloading">Ayetler indiriliyor (%1$s)</string>
     <string name="surah_translate_is_downloading">Sure isimleri indiriliyor (%1$s)</string>
-    <string name="total_viewing_count">görüntülenme sayısı: %1$d</string>
+    <string name="total_viewing_count">%1$d kez görüntülendi</string>
+    <string name="x_ayah_displayed">%1$d%% tamamlandı</string>
 
     <string-array name="playmodes">
         <item>Ayetler karışık şekilde gösterilsin</item>

@@ -99,5 +99,5 @@ constructor(private val database: ApplicationDatabase,
     return count
   }
 
-
+  suspend fun getTotalViewingCount() = database.viewingCountsDataDao().getTotalCount()
 }

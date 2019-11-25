@@ -10,6 +10,7 @@ import androidx.lifecycle.lifecycleScope
 import com.mguven.holysignal.FlowController
 import com.mguven.holysignal.R
 import com.mguven.holysignal.TheApplication
+import com.mguven.holysignal.constant.ConstantVariables
 import com.mguven.holysignal.constant.Playmode
 import com.mguven.holysignal.db.entity.AvailableSurahItem
 import com.mguven.holysignal.di.module.CardActivityModule
@@ -80,6 +81,7 @@ class CardActivity : AbstractBaseActivity(),
       getAyahTopText()
       getAyahBottomText()
       getViewingCount()
+      getViewingPercentage()
       showFavouriteStatus()
     }
   }
@@ -323,6 +325,14 @@ class CardActivity : AbstractBaseActivity(),
     lifecycleScope.launch {
       val count = holyBookViewModel.getViewingCount(ayahNumber)
       tvViewingCount.text = getString(R.string.total_viewing_count, count)
+    }
+  }
+
+  private fun getViewingPercentage() {
+    lifecycleScope.launch {
+      val count = holyBookViewModel.getTotalViewingCount()
+      progress.progress = count
+      tvProgress.text = getString(R.string.x_ayah_displayed,(count * 100) / ConstantVariables.MAX_AYAH_NUMBER)
     }
   }
 

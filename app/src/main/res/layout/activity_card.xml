@@ -25,6 +25,45 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@id/ivAddNote" />
 
+        <ProgressBar
+            android:id="@+id/progress"
+            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+            android:indeterminate="false"
+            android:max="6236"
+            android:layout_marginTop="3dp"
+            android:progress="0"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:visibility="visible"
+            android:scaleY="2"
+            tools:visibility="visible"
+            android:progressTint="@color/colorAccent"
+            />
+
+        <TextView
+            android:paddingTop="2dp"
+            android:paddingLeft="3dp"
+            android:paddingRight="3dp"
+            android:paddingBottom="2dp"
+            android:id="@+id/tvProgress"
+            android:fontFamily="@font/gotham_narrow_book"
+            android:gravity="center"
+            android:layout_marginTop="3dp"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            android:visibility="visible"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:background="@color/colorAccent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            tools:text="%0 okundu"
+            tools:visibility="visible" />
+
         <ImageView
             android:id="@+id/ivPreferences"
             android:layout_width="30dp"

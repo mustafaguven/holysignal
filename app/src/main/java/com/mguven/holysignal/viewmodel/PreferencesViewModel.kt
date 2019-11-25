@@ -1,13 +1,10 @@
 package com.mguven.holysignal.viewmodel
 
 import android.util.Log
-import androidx.lifecycle.LiveData
 import com.mguven.holysignal.cache.ApplicationCache
 import com.mguven.holysignal.constant.ConstantVariables
 import com.mguven.holysignal.db.ApplicationDatabase
-import com.mguven.holysignal.db.dao.SurahTranslateDataDao
 import com.mguven.holysignal.db.entity.AyahSampleData
-import com.mguven.holysignal.db.entity.EditionAdapterData
 import com.mguven.holysignal.db.entity.SurahTranslateData
 import com.mguven.holysignal.network.SurahApi
 import kotlinx.coroutines.CoroutineScope
@@ -29,7 +26,7 @@ constructor(private val surahApi: SurahApi,
   suspend fun getDownloadableEditions() =
       database.editionDataDao().getDownloadableEditions()
 
-  fun downloadSurah(editionId: Int) {
+  private fun downloadSurah(editionId: Int, textType: Int) {
     CoroutineScope(Dispatchers.IO).launch {
       database.ayahSampleDataDao().deleteSurahsByEditionId(editionId)
       for (surahNumber in ConstantVariables.MIN_SURAH_NUMBER..ConstantVariables.MAX_SURAH_NUMBER) {
@@ -45,24 +42,37 @@ constructor(private val surahApi: SurahApi,
               null
           ))
         }
-        cache.updateDownloadCount(surahResult.data?.surahNumber?.toInt())
+        if(textType == ConstantVariables.TOP_TEXT) {
+          cache.updateTopDownloadCount(surahResult.data?.surahNumber?.toInt())
+        } else {
+          cache.updateBottomDownloadCount(surahResult.data?.surahNumber?.toInt())
+        }
         Log.e("AAA", "$editionId -- ${surahResult.data?.surahNumber}")
       }
     }
   }
 
-  fun downloadSurahTranslatedNames(editionId: Int) {
+  private fun downloadSurahTranslatedNames(editionId: Int, textType: Int) {
     CoroutineScope(Dispatchers.IO).launch {
       val surahTranslateResult = surahApi.getSurahTranslationByLanguage(editionId)
       val languageId = surahTranslateResult.data?.languageId
       if(languageId != null) {
-        database.surahTranslateDataDao().deleteTranslatedNamesByEditionId(languageId)
         surahTranslateResult.data.translationData.forEach {
+          database.surahTranslateDataDao().deleteTranslatedNamesByLanguageIdAndSurahNumber(languageId, it.surahNumber)
           database.surahTranslateDataDao().insert(SurahTranslateData(0, it.surahNumber, languageId, it.name))
-          cache.updateDownloadSurahTranslateCount(surahTranslateResult.data.translationData.size, it.surahNumber)
+          if(textType == ConstantVariables.TOP_TEXT) {
+            cache.updateTopDownloadSurahTranslateCount(surahTranslateResult.data.translationData.size, it.surahNumber)
+          } else {
+            cache.updateBottomDownloadSurahTranslateCount(surahTranslateResult.data.translationData.size, it.surahNumber)
+          }
         }
       }
     }
+  }
+
+  fun download(editionId: Int, textType: Int) {
+    downloadSurahTranslatedNames(editionId, textType)
+    downloadSurah(editionId, textType)
   }
 
 

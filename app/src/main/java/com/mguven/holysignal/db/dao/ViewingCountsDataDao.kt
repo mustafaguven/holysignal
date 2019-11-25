@@ -31,4 +31,7 @@ interface ViewingCountsDataDao {
   @Query("UPDATE ViewingCounts SET count = :count WHERE ayahNumber = :ayahNumber")
   suspend fun update(count: Int, ayahNumber: Int)
 
+  @Query("SELECT count(1) from ViewingCounts")
+  suspend fun getTotalCount(): Int
+
 }
