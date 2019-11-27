@@ -124,6 +124,10 @@ class ApplicationCache(private val applicationSharedPreferences: SharedPreferenc
     downloadedBottomSurahTranslate.postValue(intArrayOf(total, surahNumber))
   }
 
+  fun getToken() = this.applicationSharedPreferences.getString(CacheKey.TOKEN, "token")
+
+  fun updateToken(token: String) = this.applicationSharedPreferences.edit().putString(CacheKey.TOKEN, token).apply()
+
 /*  fun updateUserInfo(userInformation: UserInformation?) {
     setObjectWithGenericSerializer(CacheKey.USER_INFO, userInformation)
   }

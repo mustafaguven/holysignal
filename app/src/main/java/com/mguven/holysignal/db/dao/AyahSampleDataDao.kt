@@ -57,10 +57,12 @@ interface AyahSampleDataDao {
       " A.numberInSurah as numberInSurah, " +
       " A.juz as juz, " +
       " A.noteId as noteId, " +
-      " Case WHEN T.name IS NULL THEN S.englishName else T.name end as surahNameByLanguage From AyahSample A inner join Surah S on A.surahNumber = S.number " +
+      " Case WHEN T.name IS NULL THEN S.englishName else T.name end as surahNameByLanguage, " +
+      " Case WHEN T.meaning IS NULL THEN S.englishNameTranslation else T.meaning end as meaning " +
+      " From AyahSample A inner join Surah S on A.surahNumber = S.number " +
       " Inner Join Edition E on E.Id = A.editionId " +
       " inner join Language L on E.language = L.abbreviation " +
-      " left join (SELECT languageId, name FROM SurahTranslate Where surahNumber = (Select A.surahNumber From AyahSample A WHERE A.number = :randomAyahNumber) ) T on L.Id = T.languageId " +
+      " left join (SELECT languageId, name, meaning FROM SurahTranslate Where surahNumber = (Select A.surahNumber From AyahSample A WHERE A.number = :randomAyahNumber) ) T on L.Id = T.languageId " +
       " where editionId = :editionId " +
       " and A.number = :randomAyahNumber")
   suspend fun getRandomAyah(editionId: Int, randomAyahNumber: Int): List<SurahAyahSampleData>

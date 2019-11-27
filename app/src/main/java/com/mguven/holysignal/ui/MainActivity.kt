@@ -11,6 +11,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import com.evernote.android.job.JobManager
 import com.evernote.android.job.JobRequest
+import com.mguven.holysignal.FlowController
 import com.mguven.holysignal.R
 import com.mguven.holysignal.constant.ConstantVariables
 import com.mguven.holysignal.db.entity.EditionAdapterData
@@ -19,18 +20,22 @@ import com.mguven.holysignal.job.LockScreenJob
 import com.mguven.holysignal.ui.adapter.EditionAdapter
 import com.mguven.holysignal.viewmodel.PreferencesViewModel
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.loadingprogress.*
 import kotlinx.coroutines.launch
 
 
 class MainActivity : AbstractBaseActivity() {
 
   private lateinit var preferencesViewModel: PreferencesViewModel
+  var isMember = false
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_main)
     inject(MainActivityModule(this))
     preferencesViewModel = getViewModel(PreferencesViewModel::class.java)
+
+
 
     runJobScheduler()
 
@@ -46,11 +51,19 @@ class MainActivity : AbstractBaseActivity() {
     }
 
     btnDownloadTop.setOnClickListener {
+      if(!isMember){
+        Toast.makeText(this, "Login ol", Toast.LENGTH_SHORT).show()
+        return@setOnClickListener
+      }
       val downloadableSelectedItem = spTopTextEdition.selectedItem as EditionAdapterData
       preferencesViewModel.download(downloadableSelectedItem.value, ConstantVariables.TOP_TEXT)
     }
 
     btnDownloadBottom.setOnClickListener {
+      if(!isMember){
+        Toast.makeText(this, "Login ol", Toast.LENGTH_SHORT).show()
+        return@setOnClickListener
+      }
       val downloadableSelectedItem = spBottomTextEdition.selectedItem as EditionAdapterData
       preferencesViewModel.download(downloadableSelectedItem.value, ConstantVariables.BOTTOM_TEXT)
     }
@@ -71,6 +84,31 @@ class MainActivity : AbstractBaseActivity() {
       percentageDownload(it, progressBottom, tvProgressTextBottom, btnDownloadBottom)
     })
 
+    preferencesViewModel.isMember.observe(this, Observer<Boolean>{
+      prepareScreenByMembership(it)
+    })
+
+    tvLoginMessage.setOnClickListener{
+      loading.visibility = View.VISIBLE
+      preferencesViewModel.loginCheck()
+    }
+
+  }
+
+  private fun prepareScreenByMembership(value: Boolean) {
+    loading.visibility = View.GONE
+    this.isMember = value
+    if(isMember){
+      lifecycleScope.launch {
+        val memberInfo = preferencesViewModel.getMemberInfo()
+        tvLoginMessage.text = getString(R.string.welcome_message_for_member,  memberInfo[0].username)
+        btnDownloadTop.text = getString(R.string.download)
+        btnDownloadBottom.text = getString(R.string.download)
+      }
+    } else {
+      btnDownloadTop.text = getString(R.string.order)
+      btnDownloadBottom.text = getString(R.string.order)
+    }
   }
 
   private fun percentageSurahTranslate(it: IntArray?,

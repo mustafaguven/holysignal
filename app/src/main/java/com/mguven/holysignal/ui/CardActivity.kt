@@ -300,7 +300,7 @@ class CardActivity : AbstractBaseActivity(),
       val list = holyBookViewModel.getAyahTopText(ayahNumber)
       list.forEach {
         cache.updateLastShownAyah(it)
-        tvAyahNumber.text = "${it.surahNameByLanguage} : ${it.numberInSurah}"
+        tvAyahNumber.text = "(${it.meaning})\n${it.surahNameByLanguage} : ${it.numberInSurah}"
         tvAyahTopText.highlighted("<b>${it.language}:</b> ${it.ayahText}", cache.getAyahSearchResult()?.keywords)
       }
     }

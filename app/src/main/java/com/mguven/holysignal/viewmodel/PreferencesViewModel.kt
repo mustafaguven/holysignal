@@ -1,11 +1,14 @@
 package com.mguven.holysignal.viewmodel
 
 import android.util.Log
+import androidx.lifecycle.MutableLiveData
 import com.mguven.holysignal.cache.ApplicationCache
 import com.mguven.holysignal.constant.ConstantVariables
 import com.mguven.holysignal.db.ApplicationDatabase
 import com.mguven.holysignal.db.entity.AyahSampleData
 import com.mguven.holysignal.db.entity.SurahTranslateData
+import com.mguven.holysignal.model.request.RequestMemberSession
+import com.mguven.holysignal.network.MemberApi
 import com.mguven.holysignal.network.SurahApi
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -15,8 +18,12 @@ import javax.inject.Inject
 
 class PreferencesViewModel @Inject
 constructor(private val surahApi: SurahApi,
+            private val memberApi: MemberApi,
             private val database: ApplicationDatabase,
             private val cache: ApplicationCache) : BaseViewModel() {
+
+
+  val isMember = MutableLiveData<Boolean>()
 
   suspend fun getMaxAyahCount() =
       database.ayahSampleDataDao().getMaxAyahCountByEditionId(cache.getTopTextEditionId())
@@ -42,7 +49,7 @@ constructor(private val surahApi: SurahApi,
               null
           ))
         }
-        if(textType == ConstantVariables.TOP_TEXT) {
+        if (textType == ConstantVariables.TOP_TEXT) {
           cache.updateTopDownloadCount(surahResult.data?.surahNumber?.toInt())
         } else {
           cache.updateBottomDownloadCount(surahResult.data?.surahNumber?.toInt())
@@ -56,11 +63,11 @@ constructor(private val surahApi: SurahApi,
     CoroutineScope(Dispatchers.IO).launch {
       val surahTranslateResult = surahApi.getSurahTranslationByLanguage(editionId)
       val languageId = surahTranslateResult.data?.languageId
-      if(languageId != null) {
+      if (languageId != null) {
         surahTranslateResult.data.translationData.forEach {
           database.surahTranslateDataDao().deleteTranslatedNamesByLanguageIdAndSurahNumber(languageId, it.surahNumber)
-          database.surahTranslateDataDao().insert(SurahTranslateData(0, it.surahNumber, languageId, it.name))
-          if(textType == ConstantVariables.TOP_TEXT) {
+          database.surahTranslateDataDao().insert(SurahTranslateData(0, it.surahNumber, languageId, it.name, it.meaning, it.specification))
+          if (textType == ConstantVariables.TOP_TEXT) {
             cache.updateTopDownloadSurahTranslateCount(surahTranslateResult.data.translationData.size, it.surahNumber)
           } else {
             cache.updateBottomDownloadSurahTranslateCount(surahTranslateResult.data.translationData.size, it.surahNumber)
@@ -74,6 +81,16 @@ constructor(private val surahApi: SurahApi,
     downloadSurahTranslatedNames(editionId, textType)
     downloadSurah(editionId, textType)
   }
+
+  fun loginCheck() {
+    CoroutineScope(Dispatchers.IO).launch {
+      val token = cache.getToken()
+      val response = memberApi.getMemberSessionNo(RequestMemberSession(token))
+      isMember.postValue(response.status == 0)
+    }
+  }
+
+  suspend fun getMemberInfo() = database.preferencesDataDao().getAll()
 
 
 }

@@ -1,7 +1,7 @@
 package com.mguven.holysignal.network
 
 
-import com.mguven.holysignal.model.SurahEntity
+import com.mguven.holysignal.model.response.SurahEntity
 
 import io.reactivex.Observable
 import retrofit2.http.GET

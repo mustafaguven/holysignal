@@ -2,7 +2,7 @@
     <string name="app_name">Holy Signal</string>
     <string name="preferences_saved">Tercihler başarıyla kaydedildi</string>
     <string name="edition_select_text">Lütfen bir versiyon seçin</string>
-    <string name="main_save_and_close">Kaydet ve Kapat</string>
+    <string name="main_save_and_close">Kaydet</string>
     <string name="main_save">Kaydet</string>
     <string name="main_primary_text">Üst Metin Kaynağı</string>
     <string name="main_alternative_text">Alt Metin Kaynağı</string>
@@ -36,6 +36,9 @@
     <string name="total_viewing_count">%1$d kez görüntülendi</string>
     <string name="x_ayah_displayed">%1$d%% tamamlandı</string>
     <string name="preferences">Tercihler</string>
+    <string name="signup_warning">Uygulamanın tam versiyonunu kullanmak için sisteme giriş yapmanız gerekmektedir. Lütfen bu yazıya tıklayarak sisteme giriş yapın.</string>
+    <string name="welcome_message_for_member">Hoş geldiniz %1$s</string>
+    <string name="order">Satın Al</string>
 
     <string-array name="playmodes">
         <item>Ayetler karışık şekilde gösterilsin</item>

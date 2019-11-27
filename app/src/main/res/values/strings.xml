@@ -2,7 +2,7 @@
     <string name="app_name">Holy Signal</string>
     <string name="preferences_saved">Preferences are saved successfully</string>
     <string name="edition_select_text">Please select an edition</string>
-    <string name="main_save_and_close">Save and Close</string>
+    <string name="main_save_and_close">Save</string>
     <string name="main_save">Save</string>
     <string name="main_primary_text">Top Text Source</string>
     <string name="main_alternative_text">Bottom Text Source</string>
@@ -35,6 +35,9 @@
     <string name="total_viewing_count">%1$d time(s) viewed</string>
     <string name="x_ayah_displayed">%1$d%% displayed</string>
     <string name="preferences">Preferences</string>
+    <string name="signup_warning">You should be logged in to use full version of the application. Please do login first via click this text.</string>
+    <string name="welcome_message_for_member">Welcome %1$s</string>
+    <string name="order">Order</string>
 
     <string-array name="playmodes">
         <item>Shuffle all ayahs</item>

@@ -1,6 +1,5 @@
 package com.mguven.holysignal.db.dao
 
-import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy.REPLACE
@@ -11,7 +10,7 @@ import com.mguven.holysignal.db.entity.PreferencesData
 interface PreferencesDataDao {
 
   @Query("SELECT * from Preferences")
-  fun getAll(): LiveData<List<PreferencesData>>
+  suspend fun getAll(): List<PreferencesData>
 
   @Insert(onConflict = REPLACE)
   fun upsert(preferencesData: PreferencesData)
