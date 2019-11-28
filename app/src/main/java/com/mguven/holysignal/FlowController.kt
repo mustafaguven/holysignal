@@ -7,6 +7,7 @@ import com.mguven.holysignal.model.Article
 import com.mguven.holysignal.ui.ArticleDetailActivity
 import com.mguven.holysignal.ui.LoginActivity
 import com.mguven.holysignal.ui.MainActivity
+import com.mguven.holysignal.ui.SignupActivity
 
 class FlowController {
 
@@ -27,6 +28,12 @@ class FlowController {
     fun launchLoginActivity(context: Context) {
       context.startActivity(
           Intent(context, LoginActivity::class.java)
+      )
+    }
+
+    fun launchSignUpActivity(context: Context) {
+      context.startActivity(
+          Intent(context, SignupActivity::class.java)
       )
     }
 

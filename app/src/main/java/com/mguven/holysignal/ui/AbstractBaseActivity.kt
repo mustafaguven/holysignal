@@ -35,10 +35,12 @@ abstract class AbstractBaseActivity : AppCompatActivity(), LifecycleObserver, Co
 
   private var component: AbstractBaseComponent? = null
 
+  val receiver = ConnectivityReceiver()
+
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
 
-    registerReceiver(ConnectivityReceiver(), IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION))
+    registerReceiver(receiver, IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION))
 
     component = (application as TheApplication)
         .applicationComponent
@@ -59,6 +61,7 @@ abstract class AbstractBaseActivity : AppCompatActivity(), LifecycleObserver, Co
 
   override fun onStop() {
     super.onStop()
+    unregisterReceiver(receiver)
     if (!compositeDisposable.isDisposed) {
       compositeDisposable.dispose()
     }
@@ -88,7 +91,6 @@ abstract class AbstractBaseActivity : AppCompatActivity(), LifecycleObserver, Co
         .setPositiveButton(getString(R.string.yes), positiveCallback)
         .setNegativeButton(getString(R.string.no), negativeCallback).show()
   }
-
 
   override fun onNetworkConnectionChanged(isConnected: Boolean) {
     Log.e("AAA", "network changed")

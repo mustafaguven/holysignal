@@ -30,4 +30,8 @@ interface ApplicationComponent {
   operator fun plus(cardActivityModule: CardActivityModule): CardActivityComponent
 
   operator fun plus(searchWordInAyahsFragmentModule: SearchWordInAyahsFragmentModule): SearchWordInAyahsFragmentComponent
+
+  operator fun plus(signupActivityModule: SignupActivityModule): SignupActivityComponent
+
+  operator fun plus(loginActivityModule: LoginActivityModule): LoginActivityComponent
 }

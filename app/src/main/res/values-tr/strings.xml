@@ -4,8 +4,8 @@
     <string name="edition_select_text">Lütfen bir versiyon seçin</string>
     <string name="main_save_and_close">Kaydet</string>
     <string name="main_save">Kaydet</string>
-    <string name="main_primary_text">Üst Metin Kaynağı</string>
-    <string name="main_alternative_text">Alt Metin Kaynağı</string>
+    <string name="main_primary_text">Üst Metin</string>
+    <string name="main_alternative_text">Alt Metin</string>
 
     <string name="added_to_favourites">Favorilere eklendi</string>
     <string name="removed_from_favourites">Favorilerden çıkarıldı</string>
@@ -39,7 +39,7 @@
     <string name="signup_warning">Uygulamanın tam versiyonunu kullanmak için sisteme giriş yapmanız gerekmektedir. Lütfen bu yazıya tıklayarak sisteme giriş yapın.</string>
     <string name="welcome_message_for_member">Hoş geldiniz %1$s</string>
     <string name="order">Satın Al</string>
-    <string name="login_title">Sign In</string>
+    <string name="login_title">Giriş Yap</string>
     <string name="username">Kullanıcı Adı</string>
     <string name="password">Şifre</string>
     <string name="email">EPosta</string>
@@ -51,6 +51,13 @@
     <string name="phone_invalid">1 yıl içinde 2\'den fazla farklı telefonla oturum açmak istediniz ve güvenlik nedeniyle oturumunuz kilitlendi. Tekrar aktif hale getirmek için lütfen iletişim bölümünden bize başvurun.</string>
     <string name="session_no_is_different">Uygulama bilgilerinizde değişiklik var, yeni ayarlar kaydedilerek devam edilsin mi?</string>
     <string name="local_mode_warning">Kitap indirmek için internet bağlantınızın olması gerekmektedir</string>
+    <string name="sign_up">Kaydol</string>
+    <string name="ok">Tamam</string>
+    <string name="surname">Surname</string>
+    <string name="offline">Çevrimdışı</string>
+    <string name="name">İsim</string>
+    <string name="signup_empty_fields">Lütfen tüm kutuları doldurun</string>
+    <string name="signup_already_email">Bu eposta adresi zaten kullanılıyor</string>
 
     <string-array name="playmodes">
         <item>Ayetler karışık şekilde gösterilsin</item>

@@ -116,7 +116,7 @@ class MainActivity : AbstractBaseActivity(){
     when (membershipState) {
       ConstantVariables.MEMBER_IS_FOUND -> lifecycleScope.launch {
         val memberInfo = preferencesViewModel.getMemberInfo()
-        tvLoginMessage.text = getString(R.string.welcome_message_for_member, memberInfo[0].username)
+        tvLoginMessage.text = getString(R.string.welcome_message_for_member, "${memberInfo[0].name} ${memberInfo[0].surname}")
         btnDownloadTop.text = getString(R.string.download)
         btnDownloadBottom.text = getString(R.string.download)
       }

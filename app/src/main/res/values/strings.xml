@@ -51,6 +51,12 @@
     <string name="session_no_is_different">Session seems different, please choose yes to change with the new one to use full version again</string>
     <string name="offline">Offline</string>
     <string name="local_mode_warning">To download any book you must connect to the internet</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="ok">Ok</string>
+    <string name="surname">Surname</string>
+    <string name="name">Name</string>
+    <string name="signup_empty_fields">Please fill all the empty boxes</string>
+    <string name="signup_already_email">This email already in use</string>
 
     <string-array name="playmodes">
         <item>Shuffle all ayahs</item>

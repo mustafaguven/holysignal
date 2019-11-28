@@ -3,6 +3,7 @@ package com.mguven.holysignal.network
 
 import com.mguven.holysignal.model.request.RequestMemberSession
 import com.mguven.holysignal.model.request.RequestSignIn
+import com.mguven.holysignal.model.request.RequestSignUp
 import com.mguven.holysignal.model.response.MemberEntity
 import com.mguven.holysignal.model.response.SignInEntity
 import retrofit2.http.Body
@@ -18,5 +19,8 @@ interface MemberApi {
 
   @POST("member/updatesessionno")
   suspend fun updateSessionNo(@Body body: RequestSignIn): SignInEntity
+
+  @POST("member/signup")
+  suspend fun save(@Body body: RequestSignUp): SignInEntity
 
 }

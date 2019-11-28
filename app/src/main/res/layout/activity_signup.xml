@@ -21,14 +21,54 @@
             android:layout_marginEnd="10dp"
             android:fontFamily="@font/gotham_narrow_bold"
             android:gravity="center"
-            android:text="@string/login_title"
+            android:text="@string/sign_up"
             android:textColor="@color/black"
             android:textSize="22sp"
-            app:layout_constraintBottom_toTopOf="@+id/tvEmail"
+            app:layout_constraintBottom_toTopOf="@+id/tvName"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_chainStyle="packed" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tvName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/tvSurname"
+            app:layout_constraintLeft_toLeftOf="@id/tvTitle"
+            app:layout_constraintRight_toRightOf="@id/tvTitle"
+            app:layout_constraintTop_toBottomOf="@id/tvTitle">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/name"
+                android:inputType="text"
+                android:text="mustafa" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tvSurname"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/tvEmail"
+            app:layout_constraintLeft_toLeftOf="@id/tvName"
+            app:layout_constraintRight_toRightOf="@id/tvName"
+            app:layout_constraintTop_toBottomOf="@id/tvName">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etSurname"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/surname"
+                android:inputType="text"
+                android:text="guven" />
+
+        </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/tvEmail"
@@ -36,9 +76,9 @@
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintBottom_toTopOf="@+id/tvPassword"
-            app:layout_constraintLeft_toLeftOf="@id/tvTitle"
-            app:layout_constraintRight_toRightOf="@id/tvTitle"
-            app:layout_constraintTop_toBottomOf="@id/tvTitle">
+            app:layout_constraintLeft_toLeftOf="@id/tvSurname"
+            app:layout_constraintRight_toRightOf="@id/tvSurname"
+            app:layout_constraintTop_toBottomOf="@id/tvSurname">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/etEmail"
@@ -56,7 +96,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintBottom_toTopOf="@+id/btnSignIn"
+            app:layout_constraintBottom_toTopOf="@+id/btnSignUp"
             app:layout_constraintLeft_toLeftOf="@id/tvEmail"
             app:layout_constraintRight_toRightOf="@id/tvEmail"
             app:layout_constraintTop_toBottomOf="@id/tvEmail">
@@ -72,7 +112,7 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btnSignIn"
+            android:id="@+id/btnSignUp"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
@@ -84,17 +124,6 @@
             app:layout_constraintRight_toRightOf="@id/tvPassword"
             app:layout_constraintTop_toBottomOf="@id/tvPassword" />
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btnSignUp"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:background="@color/gray"
-            android:fontFamily="@font/gotham_narrow_book"
-            android:text="@string/sign_up"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <include layout="@layout/loadingprogress" />

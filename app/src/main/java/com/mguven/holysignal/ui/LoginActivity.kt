@@ -3,14 +3,17 @@ package com.mguven.holysignal.ui
 import android.content.DialogInterface
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import com.mguven.holysignal.FlowController
 import com.mguven.holysignal.R
+import com.mguven.holysignal.di.module.LoginActivityModule
 import com.mguven.holysignal.di.module.MainActivityModule
 import com.mguven.holysignal.model.response.SignInEntity
 import com.mguven.holysignal.viewmodel.PreferencesViewModel
 import kotlinx.android.synthetic.main.activity_login.*
+import kotlinx.android.synthetic.main.loadingprogress.*
 
 
 class LoginActivity : AbstractBaseActivity() {
@@ -20,17 +23,21 @@ class LoginActivity : AbstractBaseActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_login)
-    inject(MainActivityModule(this))
+    inject(LoginActivityModule(this))
     preferencesViewModel = getViewModel(PreferencesViewModel::class.java)
 
     btnSignIn.setOnClickListener {
+      loading.visibility = View.VISIBLE
       preferencesViewModel.signIn(tvEmail.editText?.text.toString(),
           tvPassword.editText?.text.toString())
     }
 
-    Log.e("AAA", cache.getUUID())
+    btnSignUp.setOnClickListener{
+      FlowController.launchSignUpActivity(this)
+    }
 
     preferencesViewModel.memberShipData.observe(this, Observer<SignInEntity> { response ->
+      loading.visibility = View.GONE
       if (response.status == 1) {
         FlowController.launchMainActivity(this)
         finish()

@@ -30,9 +30,13 @@
             android:name="com.mguven.holysignal.ui.LoginActivity"
             android:theme="@style/NoActionBarTheme" />
 
+        <activity
+            android:name="com.mguven.holysignal.ui.SignupActivity"
+            android:theme="@style/NoActionBarTheme" />
+
         <!-- The below code is for android OS version below N -->
         <receiver
-            android:name=".utils.ConnectivityReceiver"
+            android:name=".util.ConnectivityReceiver"
             android:enabled="true">
             <intent-filter>
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />

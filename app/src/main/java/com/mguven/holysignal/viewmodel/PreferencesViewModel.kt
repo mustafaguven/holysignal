@@ -9,6 +9,7 @@ import com.mguven.holysignal.db.entity.AyahSampleData
 import com.mguven.holysignal.db.entity.SurahTranslateData
 import com.mguven.holysignal.model.request.RequestMemberSession
 import com.mguven.holysignal.model.request.RequestSignIn
+import com.mguven.holysignal.model.request.RequestSignUp
 import com.mguven.holysignal.model.response.SignInEntity
 import com.mguven.holysignal.network.MemberApi
 import com.mguven.holysignal.network.SurahApi
@@ -125,6 +126,18 @@ constructor(private val surahApi: SurahApi,
     if (deviceUtil.isConnected()) {
       CoroutineScope(Dispatchers.IO).launch {
         val response = memberApi.updateSessionNo(RequestSignIn(email, password, cache.getUUID()))
+        if (response.status == 1) {
+          cache.updateToken(response.data!!.token)
+        }
+        memberShipData.postValue(response)
+      }
+    }
+  }
+
+  fun signUp(name: String, surname: String, email: String, password: String) {
+    if (deviceUtil.isConnected()) {
+      CoroutineScope(Dispatchers.IO).launch {
+        val response = memberApi.save(RequestSignUp(name, surname, email, password, cache.getUUID()))
         if (response.status == 1) {
           cache.updateToken(response.data!!.token)
         }
