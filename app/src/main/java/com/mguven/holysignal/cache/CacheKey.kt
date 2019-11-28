@@ -3,6 +3,7 @@ package com.mguven.holysignal.cache
 object CacheKey {
 
   const val TOKEN = "TOKEN"
+  const val UUID = "UUID"
   const val SEARCH_KEYWORD = "SEARCH_KEYWORD"
   const val MAX_AYAH_COUNT = "MAX_AYAH_COUNT"
   const val LAST_SHOWN_AYAH_NUMBER = "LAST_SHOWN_AYAH_NUMBER"

@@ -1,6 +1,11 @@
 package com.mguven.holysignal.ui
 
+import android.app.AlertDialog
+import android.content.DialogInterface
+import android.content.IntentFilter
+import android.net.ConnectivityManager
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleObserver
@@ -13,10 +18,11 @@ import com.mguven.holysignal.cache.ApplicationCache
 import com.mguven.holysignal.di.ViewModelFactory
 import com.mguven.holysignal.di.component.AbstractBaseComponent
 import com.mguven.holysignal.di.module.ActivityModule
+import com.mguven.holysignal.util.ConnectivityReceiver
 import io.reactivex.disposables.CompositeDisposable
 import javax.inject.Inject
 
-abstract class AbstractBaseActivity : AppCompatActivity(), LifecycleObserver {
+abstract class AbstractBaseActivity : AppCompatActivity(), LifecycleObserver, ConnectivityReceiver.ConnectivityReceiverListener  {
 
   @Inject
   lateinit var viewModelFactory: ViewModelFactory
@@ -31,6 +37,8 @@ abstract class AbstractBaseActivity : AppCompatActivity(), LifecycleObserver {
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
+
+    registerReceiver(ConnectivityReceiver(), IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION))
 
     component = (application as TheApplication)
         .applicationComponent
@@ -47,7 +55,7 @@ abstract class AbstractBaseActivity : AppCompatActivity(), LifecycleObserver {
   }
 
   fun <T : ViewModel> getViewModel(viewModelClz: Class<T>): T =
-      ViewModelProviders.of(this,  viewModelFactory).get(viewModelClz)
+      ViewModelProviders.of(this, viewModelFactory).get(viewModelClz)
 
   override fun onStop() {
     super.onStop()
@@ -71,4 +79,24 @@ abstract class AbstractBaseActivity : AppCompatActivity(), LifecycleObserver {
   fun showErrorSnackBar(errorMessage: String) {
     showSnackbar(errorMessage, true)
   }
+
+  fun showYesNoDialog(question: String,
+                      positiveCallback: DialogInterface.OnClickListener,
+                      negativeCallback: DialogInterface.OnClickListener) {
+    val builder = AlertDialog.Builder(this)
+    builder.setMessage(question)
+        .setPositiveButton(getString(R.string.yes), positiveCallback)
+        .setNegativeButton(getString(R.string.no), negativeCallback).show()
+  }
+
+
+  override fun onNetworkConnectionChanged(isConnected: Boolean) {
+    Log.e("AAA", "network changed")
+  }
+
+  override fun onResume() {
+    super.onResume()
+    ConnectivityReceiver.connectivityReceiverListener = this
+  }
+
 }

@@ -2,6 +2,7 @@ package com.mguven.holysignal
 
 import android.app.Application
 import com.evernote.android.job.JobManager
+import com.mguven.holysignal.cache.ApplicationCache
 import com.mguven.holysignal.di.component.ApplicationComponent
 import com.mguven.holysignal.di.component.DaggerApplicationComponent
 import com.mguven.holysignal.di.module.ApplicationModule
@@ -15,12 +16,16 @@ class TheApplication : Application() {
   lateinit var applicationComponent: ApplicationComponent
 
   @Inject
+  lateinit var cache: ApplicationCache
+
+  @Inject
   lateinit var picasso: Picasso
 
   override fun onCreate() {
     super.onCreate()
     JobManager.create(this).addJobCreator(LockScreenJobCreator())
     inject()
+    cache.updateUUIDIfNeeded()
   }
 
   private fun inject() {

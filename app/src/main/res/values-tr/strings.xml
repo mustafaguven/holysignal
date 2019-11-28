@@ -39,6 +39,18 @@
     <string name="signup_warning">Uygulamanın tam versiyonunu kullanmak için sisteme giriş yapmanız gerekmektedir. Lütfen bu yazıya tıklayarak sisteme giriş yapın.</string>
     <string name="welcome_message_for_member">Hoş geldiniz %1$s</string>
     <string name="order">Satın Al</string>
+    <string name="login_title">Sign In</string>
+    <string name="username">Kullanıcı Adı</string>
+    <string name="password">Şifre</string>
+    <string name="email">EPosta</string>
+    <string name="sign_in">Giriş</string>
+    <string name="phone_changed_warning">Kayıtlı telefonunuzundan farklı bir telefonla oturum açıyorsunuz, güvenlik sebepleriyle yıl içinde bunu bir kez yapabilirsiniz. Devam etmek istiyor musunuz?</string>
+    <string name="yes">Evet</string>
+    <string name="no">Hayır</string>
+    <string name="sign_in_error">Hatalı eposta ya da şifre girdiniz</string>
+    <string name="phone_invalid">1 yıl içinde 2\'den fazla farklı telefonla oturum açmak istediniz ve güvenlik nedeniyle oturumunuz kilitlendi. Tekrar aktif hale getirmek için lütfen iletişim bölümünden bize başvurun.</string>
+    <string name="session_no_is_different">Uygulama bilgilerinizde değişiklik var, yeni ayarlar kaydedilerek devam edilsin mi?</string>
+    <string name="local_mode_warning">Kitap indirmek için internet bağlantınızın olması gerekmektedir</string>
 
     <string-array name="playmodes">
         <item>Ayetler karışık şekilde gösterilsin</item>

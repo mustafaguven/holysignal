@@ -6,6 +6,9 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.mguven.holysignal.db.dao.*
 import com.mguven.holysignal.db.entity.*
+import android.icu.lang.UCharacter.GraphemeClusterBreak.V
+import java.io.IOException
+
 
 @Database(entities = [EditionData::class, SurahData::class, AyahSampleData::class,
   FavouritesData::class, PreferencesData::class, DisplayModeData::class, NotesData::class,
@@ -42,6 +45,5 @@ abstract class ApplicationDatabase : RoomDatabase() {
       INSTANCE = null
     }
   }
-
 
 }

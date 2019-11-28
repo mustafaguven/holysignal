@@ -8,4 +8,12 @@ object ConstantVariables {
 
   const val TOP_TEXT = 1
   const val BOTTOM_TEXT = 2
+
+  const val NETWORK_DISCONNECTED = 0
+  const val RESULT_FAIL = 1
+  const val RESULT_OK = 2
+
+  const val MEMBER_IS_NOT_FOUND = 0
+  const val MEMBER_IS_FOUND = 1
+  const val LOCAL_MODE_DUE_TO_CONNECTION = 2
 }

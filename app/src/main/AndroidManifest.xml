@@ -10,7 +10,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="com.mguven.holysignal.ui.MainActivity"
+        <activity
+            android:name="com.mguven.holysignal.ui.MainActivity"
             android:theme="@style/NoActionBarTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -23,13 +24,24 @@
             android:name="com.mguven.holysignal.ui.CardActivity"
             android:theme="@style/NoActionBarTheme" />
 
+        <activity android:name="com.mguven.holysignal.ui.DownloadActivity" />
+
         <activity
-            android:name="com.mguven.holysignal.ui.DownloadActivity" />
+            android:name="com.mguven.holysignal.ui.LoginActivity"
+            android:theme="@style/NoActionBarTheme" />
+
+        <!-- The below code is for android OS version below N -->
+        <receiver
+            android:name=".utils.ConnectivityReceiver"
+            android:enabled="true">
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+            </intent-filter>
+        </receiver>
 
     </application>
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-
     <uses-permission android:name="android.permission.INTERNET" />
 
 </manifest>

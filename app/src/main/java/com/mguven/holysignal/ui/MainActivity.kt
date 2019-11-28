@@ -1,12 +1,11 @@
 package com.mguven.holysignal.ui
 
+import android.content.IntentFilter
+import android.net.ConnectivityManager
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.Button
-import android.widget.ProgressBar
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import com.evernote.android.job.JobManager
@@ -18,24 +17,23 @@ import com.mguven.holysignal.db.entity.EditionAdapterData
 import com.mguven.holysignal.di.module.MainActivityModule
 import com.mguven.holysignal.job.LockScreenJob
 import com.mguven.holysignal.ui.adapter.EditionAdapter
+import com.mguven.holysignal.util.ConnectivityReceiver
 import com.mguven.holysignal.viewmodel.PreferencesViewModel
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.loadingprogress.*
 import kotlinx.coroutines.launch
 
 
-class MainActivity : AbstractBaseActivity() {
+class MainActivity : AbstractBaseActivity(){
 
   private lateinit var preferencesViewModel: PreferencesViewModel
-  var isMember = false
+  var membershipState = ConstantVariables.MEMBER_IS_NOT_FOUND
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_main)
     inject(MainActivityModule(this))
     preferencesViewModel = getViewModel(PreferencesViewModel::class.java)
-
-
 
     runJobScheduler()
 
@@ -51,21 +49,11 @@ class MainActivity : AbstractBaseActivity() {
     }
 
     btnDownloadTop.setOnClickListener {
-      if(!isMember){
-        Toast.makeText(this, "Login ol", Toast.LENGTH_SHORT).show()
-        return@setOnClickListener
-      }
-      val downloadableSelectedItem = spTopTextEdition.selectedItem as EditionAdapterData
-      preferencesViewModel.download(downloadableSelectedItem.value, ConstantVariables.TOP_TEXT)
+      onClickDownloadButton(spTopTextEdition, ConstantVariables.TOP_TEXT)
     }
 
     btnDownloadBottom.setOnClickListener {
-      if(!isMember){
-        Toast.makeText(this, "Login ol", Toast.LENGTH_SHORT).show()
-        return@setOnClickListener
-      }
-      val downloadableSelectedItem = spBottomTextEdition.selectedItem as EditionAdapterData
-      preferencesViewModel.download(downloadableSelectedItem.value, ConstantVariables.BOTTOM_TEXT)
+      onClickDownloadButton(spBottomTextEdition, ConstantVariables.BOTTOM_TEXT)
     }
 
     cache.downloadedTopSurahTranslate.observe(this, Observer<IntArray> {
@@ -84,30 +72,66 @@ class MainActivity : AbstractBaseActivity() {
       percentageDownload(it, progressBottom, tvProgressTextBottom, btnDownloadBottom)
     })
 
-    preferencesViewModel.isMember.observe(this, Observer<Boolean>{
+    preferencesViewModel.isMember.observe(this, Observer<Int> {
       prepareScreenByMembership(it)
     })
 
-    tvLoginMessage.setOnClickListener{
-      loading.visibility = View.VISIBLE
-      preferencesViewModel.loginCheck()
+    tvLoginMessage.setOnClickListener {
+      openLoginActivity()
     }
 
   }
 
-  private fun prepareScreenByMembership(value: Boolean) {
+  private fun checkLogin() {
+    loading.visibility = View.VISIBLE
+    preferencesViewModel.loginCheck()
+  }
+
+  private fun onClickDownloadButton(spinner: Spinner, direction: Int) {
+    if (membershipState != ConstantVariables.MEMBER_IS_FOUND) {
+      openLoginActivity()
+      return
+    }
+    val downloadableSelectedItem = spinner.selectedItem as EditionAdapterData
+    preferencesViewModel.download(downloadableSelectedItem.value, direction)
+  }
+
+  private fun openLoginActivity() {
+    FlowController.launchLoginActivity(this)
+    finish()
+  }
+
+  private fun prepareScreenByMembership(value: Int) {
     loading.visibility = View.GONE
-    this.isMember = value
-    if(isMember){
-      lifecycleScope.launch {
+    this.membershipState = value
+
+    btnDownloadTop.isEnabled = membershipState != ConstantVariables.LOCAL_MODE_DUE_TO_CONNECTION
+    btnDownloadBottom.isEnabled = membershipState != ConstantVariables.LOCAL_MODE_DUE_TO_CONNECTION
+    progressTop.visibility = if (membershipState != ConstantVariables.LOCAL_MODE_DUE_TO_CONNECTION) View.VISIBLE else View.GONE
+    progressBottom.visibility = if (membershipState != ConstantVariables.LOCAL_MODE_DUE_TO_CONNECTION) View.VISIBLE else View.GONE
+    btnDownloadTop.visibility = View.VISIBLE
+    btnDownloadBottom.visibility = View.VISIBLE
+
+    tvLoginMessage.isEnabled = false
+    when (membershipState) {
+      ConstantVariables.MEMBER_IS_FOUND -> lifecycleScope.launch {
         val memberInfo = preferencesViewModel.getMemberInfo()
-        tvLoginMessage.text = getString(R.string.welcome_message_for_member,  memberInfo[0].username)
+        tvLoginMessage.text = getString(R.string.welcome_message_for_member, memberInfo[0].username)
         btnDownloadTop.text = getString(R.string.download)
         btnDownloadBottom.text = getString(R.string.download)
       }
-    } else {
-      btnDownloadTop.text = getString(R.string.order)
-      btnDownloadBottom.text = getString(R.string.order)
+      ConstantVariables.MEMBER_IS_NOT_FOUND -> {
+        btnDownloadTop.text = getString(R.string.order)
+        btnDownloadBottom.text = getString(R.string.order)
+        tvLoginMessage.isEnabled = true
+      }
+      else -> {
+        tvLoginMessage.text = getString(R.string.local_mode_warning)
+        tvProgressTextTop.text = ""
+        tvProgressTextBottom.text = ""
+        btnDownloadTop.text = getString(R.string.offline)
+        btnDownloadBottom.text = getString(R.string.offline)
+      }
     }
   }
 
@@ -124,7 +148,7 @@ class MainActivity : AbstractBaseActivity() {
         getString(R.string.download_finished)
       else
         calculatePercentage(R.string.surah_translate_is_downloading, it[1], it[0])
-      //btnDownload.visibility = if (isDone) View.VISIBLE else View.INVISIBLE
+      btnDownload.visibility = if (isDone) View.VISIBLE else View.INVISIBLE
       progress.visibility = if (isDone) View.GONE else View.VISIBLE
       tvProgressText.visibility = if (isDone) View.GONE else View.VISIBLE
       Log.e("BBB", "${(it[0])} -- ${it[1]}")
@@ -222,6 +246,15 @@ class MainActivity : AbstractBaseActivity() {
    */
   private fun cancelImmediateJobScheduler() {
     JobManager.instance().cancelAllForTag(LockScreenJob.TAG_I)
+  }
+
+  override fun onNetworkConnectionChanged(isConnected: Boolean) {
+    super.onNetworkConnectionChanged(isConnected)
+    if(isConnected){
+      checkLogin()
+    } else {
+      prepareScreenByMembership(ConstantVariables.LOCAL_MODE_DUE_TO_CONNECTION)
+    }
   }
 
 

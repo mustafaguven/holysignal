@@ -5,6 +5,7 @@ import android.content.Intent
 import com.mguven.holysignal.constant.BundleKey
 import com.mguven.holysignal.model.Article
 import com.mguven.holysignal.ui.ArticleDetailActivity
+import com.mguven.holysignal.ui.LoginActivity
 import com.mguven.holysignal.ui.MainActivity
 
 class FlowController {
@@ -20,6 +21,12 @@ class FlowController {
     fun launchMainActivity(context: Context) {
       context.startActivity(
           Intent(context, MainActivity::class.java)
+      )
+    }
+
+    fun launchLoginActivity(context: Context) {
+      context.startActivity(
+          Intent(context, LoginActivity::class.java)
       )
     }
 

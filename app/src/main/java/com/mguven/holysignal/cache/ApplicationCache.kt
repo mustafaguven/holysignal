@@ -7,6 +7,7 @@ import com.mguven.holysignal.db.entity.SurahAyahSampleData
 import com.mguven.holysignal.inline.whenNotNull
 import com.mguven.holysignal.model.AyahSearchResult
 import com.mguven.holysignal.model.FavouriteAyahList
+import java.util.*
 
 
 class ApplicationCache(private val applicationSharedPreferences: SharedPreferences,
@@ -127,6 +128,16 @@ class ApplicationCache(private val applicationSharedPreferences: SharedPreferenc
   fun getToken() = this.applicationSharedPreferences.getString(CacheKey.TOKEN, "token")
 
   fun updateToken(token: String) = this.applicationSharedPreferences.edit().putString(CacheKey.TOKEN, token).apply()
+
+  fun getUUID() = this.applicationSharedPreferences.getString(CacheKey.UUID, "")
+
+  fun setUUID(uuid: String) = this.applicationSharedPreferences.edit().putString(CacheKey.UUID, uuid).apply()
+
+  fun updateUUIDIfNeeded() {
+    if (getUUID().isNullOrEmpty()) {
+      setUUID(UUID.randomUUID().toString())
+    }
+  }
 
 /*  fun updateUserInfo(userInformation: UserInformation?) {
     setObjectWithGenericSerializer(CacheKey.USER_INFO, userInformation)

@@ -38,6 +38,19 @@
     <string name="signup_warning">You should be logged in to use full version of the application. Please do login first via click this text.</string>
     <string name="welcome_message_for_member">Welcome %1$s</string>
     <string name="order">Order</string>
+    <string name="login_title">Sign In</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="email">Email</string>
+    <string name="sign_in">Sign In</string>
+    <string name="phone_changed_warning">You are changing your stored phone, this can be only 1 time in a year for security reasons. Do you want to change your stored phone?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="sign_in_error">Mistake email or password</string>
+    <string name="phone_invalid">You have changed your stored phone more than 2 times in a year, this is invalid for security reasons. To make valid your phone please contact us via communication screen</string>
+    <string name="session_no_is_different">Session seems different, please choose yes to change with the new one to use full version again</string>
+    <string name="offline">Offline</string>
+    <string name="local_mode_warning">To download any book you must connect to the internet</string>
 
     <string-array name="playmodes">
         <item>Shuffle all ayahs</item>

@@ -57,7 +57,7 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvLoginMessage" />
 
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btnDownloadTop"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
@@ -97,7 +97,7 @@
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
             android:fontFamily="@font/gotham_narrow_book"
-            android:text="1 / 114"
+            tools:text="1 / 114"
             android:textColor="@color/black"
             android:textSize="16sp"
             android:visibility="visible"
@@ -135,7 +135,7 @@
             app:layout_constraintTop_toBottomOf="@id/btnDownloadTop" />
 
 
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btnDownloadBottom"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -174,7 +174,7 @@
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
             android:fontFamily="@font/gotham_narrow_book"
-            android:text="1 / 114"
+            tools:text="1 / 114"
             android:textColor="@color/black"
             android:textSize="16sp"
             android:visibility="visible"
@@ -198,7 +198,7 @@
             app:layout_constraintTop_toBottomOf="@id/tvBottomTextEdition" />
 
 
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btnOk"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

@@ -1,5 +1,6 @@
 package com.mguven.holysignal.di.module
 
+import android.os.Build
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import com.mguven.holysignal.BuildConfig
 import com.mguven.holysignal.TheApplication
@@ -109,6 +110,8 @@ class NetworkModule {
           .addHeader("User-Agent", System.getProperty(HTTP_AGENT) ?: "Unknown Android Agent")
           .addHeader("Accept", APPLICATION_JSON)
           .addHeader("x-api-key", BuildConfig.API_KEY)
+          .addHeader("phonebrand", Build.BRAND)
+          .addHeader("phonemodel", Build.MODEL)
       newRequest = builder.build()
       chain.proceed(newRequest)
     }
