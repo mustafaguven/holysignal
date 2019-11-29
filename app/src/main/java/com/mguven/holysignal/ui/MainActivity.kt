@@ -31,6 +31,8 @@ class MainActivity : AbstractBaseActivity() {
     setContentView(R.layout.activity_main)
     inject(MainActivityModule(this))
     preferencesViewModel = getViewModel(PreferencesViewModel::class.java)
+    cbActivePassive.isChecked = cache.isActive()
+    cbActivePassive.text = if(cbActivePassive.isChecked){ getString(R.string.active) } else { getString(R.string.passive)}
 
     runJobScheduler()
 
@@ -42,6 +44,7 @@ class MainActivity : AbstractBaseActivity() {
       cache.updateTopTextEditionId(topTextEditionSpinnerSelectedItem.value)
       cache.updateBottomTextEditionId(bottomTextEditionSpinnerSelectedItem.value)
       updateMaxAyahCount()
+      FlowController.launchCardActivity(this, true)
       Toast.makeText(this, getString(R.string.preferences_saved), Toast.LENGTH_SHORT).show()
     }
 
@@ -75,6 +78,12 @@ class MainActivity : AbstractBaseActivity() {
 
     tvLoginMessage.setOnClickListener {
       openLoginActivity()
+    }
+
+    cbActivePassive.setOnClickListener{
+      cache.updateActivePassive(cbActivePassive.isChecked)
+      Log.e("AAA", cache.isActive().toString())
+      cbActivePassive.text = if(cbActivePassive.isChecked){ getString(R.string.active) } else { getString(R.string.passive)}
     }
 
   }

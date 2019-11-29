@@ -51,7 +51,7 @@
     <string name="phone_invalid">1 yıl içinde 2\'den fazla farklı telefonla oturum açmak istediniz ve güvenlik nedeniyle oturumunuz kilitlendi. Tekrar aktif hale getirmek için lütfen iletişim bölümünden bize başvurun.</string>
     <string name="session_no_is_different">Uygulama bilgilerinizde değişiklik var, yeni ayarlar kaydedilerek devam edilsin mi?</string>
     <string name="local_mode_warning">Kitap indirmek için internet bağlantınızın olması gerekmektedir</string>
-    <string name="sign_up">Kaydol</string>
+    <string name="sign_up">Yeni Kullanıcı</string>
     <string name="ok">Tamam</string>
     <string name="surname">Surname</string>
     <string name="offline">Çevrimdışı</string>
@@ -61,6 +61,8 @@
     <string name="error">Hata</string>
     <string name="warning">Uyarı</string>
     <string name="logout_due_to_session_number_is_different">Bu cihazdaki oturumunuz başka bir cihazda açılan oturum dolayısıyla sonlandırıldı.</string>
+    <string name="passive">Gösterim modu kapalı</string>
+    <string name="active">Gösterim modu açık</string>
 
     <string-array name="playmodes">
         <item>Ayetler karışık şekilde gösterilsin</item>

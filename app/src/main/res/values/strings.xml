@@ -60,6 +60,8 @@
     <string name="error">Error</string>
     <string name="warning">Warning</string>
     <string name="logout_due_to_session_number_is_different">Session is closed due to your active session number is different</string>
+    <string name="passive">Passive mode on</string>
+    <string name="active">Active mode on</string>
 
     <string-array name="playmodes">
         <item>Shuffle all ayahs</item>
