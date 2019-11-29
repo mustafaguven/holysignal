@@ -142,10 +142,14 @@ class CardActivity : AbstractBaseActivity(),
 
   private fun onSelectSurah(): Int {
     ivSelectSurah.setImageResource(R.drawable.ic_select_surah)
+    var ayahNumber = cache.getLastShownAyahNumber() + 1
+    if(ayahNumber > cache.getLastShownAyah()!!.endingAyahNumber){
+      ayahNumber = cache.getLastShownAyah()!!.startingAyahNumber
+    }
     return if (cache.getLastShownAyah()!!.endingAyahNumber <= cache.getMaxAyahCount()) {
-      (cache.getLastShownAyah()!!.startingAyahNumber..cache.getLastShownAyah()!!.endingAyahNumber).random()
+      ayahNumber
     } else {
-      (cache.getLastShownAyah()!!.startingAyahNumber..cache.getMaxAyahCount()).random()
+      ayahNumber
     }
   }
 
@@ -268,7 +272,8 @@ class CardActivity : AbstractBaseActivity(),
         if (!spSurahOpeningClick) {
           Log.e("AAA", "position ==> $position ---- min ==> ${availableSurahList!![position].min} ----- max ==> ${availableSurahList!![position].max}")
           val maxAyah = if (availableSurahList!![position].max >= cache.getMaxAyahCount()) cache.getMaxAyahCount() else availableSurahList!![position].max
-          ayahNumber = (availableSurahList!![position].min..maxAyah).random()
+          //ayahNumber = (availableSurahList!![position].min..maxAyah).random()
+          ayahNumber = availableSurahList!![position].min
           initData()
         }
         spSurahOpeningClick = false

@@ -139,7 +139,7 @@ class ApplicationCache(private val applicationSharedPreferences: SharedPreferenc
     }
   }
 
-  fun isActive() = this.applicationSharedPreferences.getBoolean(CacheKey.ACTIVE_PASSIVE, false)
+  fun isActive() = this.applicationSharedPreferences.getBoolean(CacheKey.ACTIVE_PASSIVE, true)
 
   fun updateActivePassive(activePassive: Boolean) =
       this.applicationSharedPreferences.edit().putBoolean(CacheKey.ACTIVE_PASSIVE, activePassive).apply()
