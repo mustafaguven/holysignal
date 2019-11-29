@@ -36,7 +36,7 @@
             android:fontFamily="@font/gotham_narrow_medium"
             android:gravity="center"
             android:padding="10dp"
-            android:text="@string/signup_warning"
+            tools:text="@string/signup_warning"
             android:textColor="@color/black"
             android:textSize="22sp"
             app:layout_constraintLeft_toLeftOf="parent"

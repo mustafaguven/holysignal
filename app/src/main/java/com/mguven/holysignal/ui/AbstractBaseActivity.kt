@@ -40,8 +40,6 @@ abstract class AbstractBaseActivity : AppCompatActivity(), LifecycleObserver, Co
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
 
-    registerReceiver(receiver, IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION))
-
     component = (application as TheApplication)
         .applicationComponent
         .plus(ActivityModule(this))
@@ -58,6 +56,11 @@ abstract class AbstractBaseActivity : AppCompatActivity(), LifecycleObserver, Co
 
   fun <T : ViewModel> getViewModel(viewModelClz: Class<T>): T =
       ViewModelProviders.of(this, viewModelFactory).get(viewModelClz)
+
+  override fun onStart() {
+    super.onStart()
+    registerReceiver(receiver, IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION))
+  }
 
   override fun onStop() {
     super.onStop()
@@ -88,8 +91,19 @@ abstract class AbstractBaseActivity : AppCompatActivity(), LifecycleObserver, Co
                       negativeCallback: DialogInterface.OnClickListener) {
     val builder = AlertDialog.Builder(this)
     builder.setMessage(question)
+        .setTitle(R.string.warning)
         .setPositiveButton(getString(R.string.yes), positiveCallback)
         .setNegativeButton(getString(R.string.no), negativeCallback).show()
+  }
+
+  fun showErrorDialog(error: String) {
+    val dialog = DialogInterface.OnClickListener { dialog, neutral ->
+      dialog.dismiss()
+    }
+    val builder = AlertDialog.Builder(this)
+    builder.setMessage(error)
+        .setTitle(R.string.error)
+        .setNeutralButton(getString(R.string.ok), dialog).show()
   }
 
   override fun onNetworkConnectionChanged(isConnected: Boolean) {

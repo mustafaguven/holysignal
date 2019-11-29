@@ -19,10 +19,12 @@ class FlowController {
       )
     }
 
-    fun launchMainActivity(context: Context) {
-      context.startActivity(
-          Intent(context, MainActivity::class.java)
-      )
+    fun launchMainActivity(context: Context, clearTask: Boolean = false) {
+      val i = Intent(context, MainActivity::class.java)
+      if (clearTask) {
+        i.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+      }
+      context.startActivity(i)
     }
 
     fun launchLoginActivity(context: Context) {

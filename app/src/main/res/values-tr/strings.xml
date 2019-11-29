@@ -37,14 +37,14 @@
     <string name="x_ayah_displayed">%1$d%% tamamlandı</string>
     <string name="preferences">Tercihler</string>
     <string name="signup_warning">Uygulamanın tam versiyonunu kullanmak için sisteme giriş yapmanız gerekmektedir. Lütfen bu yazıya tıklayarak sisteme giriş yapın.</string>
-    <string name="welcome_message_for_member">Hoş geldiniz %1$s</string>
+    <string name="welcome_message_for_member">Hoş geldiniz\n%1$s</string>
     <string name="order">Satın Al</string>
     <string name="login_title">Giriş Yap</string>
     <string name="username">Kullanıcı Adı</string>
     <string name="password">Şifre</string>
     <string name="email">EPosta</string>
     <string name="sign_in">Giriş</string>
-    <string name="phone_changed_warning">Kayıtlı telefonunuzundan farklı bir telefonla oturum açıyorsunuz, güvenlik sebepleriyle yıl içinde bunu bir kez yapabilirsiniz. Devam etmek istiyor musunuz?</string>
+    <string name="phone_changed_warning">Kayıtlı telefonunuzundan farklı bir telefonla oturum açıyorsunuz, güvenlik sebepleriyle yıl içinde bunu 2 kez yapabilirsiniz. Devam etmek istiyor musunuz?</string>
     <string name="yes">Evet</string>
     <string name="no">Hayır</string>
     <string name="sign_in_error">Hatalı eposta ya da şifre girdiniz</string>
@@ -58,6 +58,9 @@
     <string name="name">İsim</string>
     <string name="signup_empty_fields">Lütfen tüm kutuları doldurun</string>
     <string name="signup_already_email">Bu eposta adresi zaten kullanılıyor</string>
+    <string name="error">Hata</string>
+    <string name="warning">Uyarı</string>
+    <string name="logout_due_to_session_number_is_different">Bu cihazdaki oturumunuz başka bir cihazda açılan oturum dolayısıyla sonlandırıldı.</string>
 
     <string-array name="playmodes">
         <item>Ayetler karışık şekilde gösterilsin</item>

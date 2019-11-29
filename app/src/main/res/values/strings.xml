@@ -36,14 +36,14 @@
     <string name="x_ayah_displayed">%1$d%% displayed</string>
     <string name="preferences">Preferences</string>
     <string name="signup_warning">You should be logged in to use full version of the application. Please do login first via click this text.</string>
-    <string name="welcome_message_for_member">Welcome %1$s</string>
+    <string name="welcome_message_for_member">Welcome\n%1$s</string>
     <string name="order">Order</string>
     <string name="login_title">Sign In</string>
     <string name="username">Username</string>
     <string name="password">Password</string>
     <string name="email">Email</string>
     <string name="sign_in">Sign In</string>
-    <string name="phone_changed_warning">You are changing your stored phone, this can be only 1 time in a year for security reasons. Do you want to change your stored phone?</string>
+    <string name="phone_changed_warning">You are changing your stored phone, this can be only 2 times in a year for security reasons. Do you want to change your stored phone?</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="sign_in_error">Mistake email or password</string>
@@ -57,6 +57,9 @@
     <string name="name">Name</string>
     <string name="signup_empty_fields">Please fill all the empty boxes</string>
     <string name="signup_already_email">This email already in use</string>
+    <string name="error">Error</string>
+    <string name="warning">Warning</string>
+    <string name="logout_due_to_session_number_is_different">Session is closed due to your active session number is different</string>
 
     <string-array name="playmodes">
         <item>Shuffle all ayahs</item>

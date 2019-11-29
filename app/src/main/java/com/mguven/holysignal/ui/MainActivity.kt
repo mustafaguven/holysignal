@@ -1,7 +1,5 @@
 package com.mguven.holysignal.ui
 
-import android.content.IntentFilter
-import android.net.ConnectivityManager
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -17,14 +15,13 @@ import com.mguven.holysignal.db.entity.EditionAdapterData
 import com.mguven.holysignal.di.module.MainActivityModule
 import com.mguven.holysignal.job.LockScreenJob
 import com.mguven.holysignal.ui.adapter.EditionAdapter
-import com.mguven.holysignal.util.ConnectivityReceiver
 import com.mguven.holysignal.viewmodel.PreferencesViewModel
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.loadingprogress.*
 import kotlinx.coroutines.launch
 
 
-class MainActivity : AbstractBaseActivity(){
+class MainActivity : AbstractBaseActivity() {
 
   private lateinit var preferencesViewModel: PreferencesViewModel
   var membershipState = ConstantVariables.MEMBER_IS_NOT_FOUND
@@ -44,7 +41,7 @@ class MainActivity : AbstractBaseActivity(){
       val bottomTextEditionSpinnerSelectedItem = spBottomTextEdition.selectedItem as EditionAdapterData
       cache.updateTopTextEditionId(topTextEditionSpinnerSelectedItem.value)
       cache.updateBottomTextEditionId(bottomTextEditionSpinnerSelectedItem.value)
-      getMaxAyahCount()
+      updateMaxAyahCount()
       Toast.makeText(this, getString(R.string.preferences_saved), Toast.LENGTH_SHORT).show()
     }
 
@@ -124,6 +121,15 @@ class MainActivity : AbstractBaseActivity(){
         btnDownloadTop.text = getString(R.string.order)
         btnDownloadBottom.text = getString(R.string.order)
         tvLoginMessage.isEnabled = true
+        tvLoginMessage.text = getString(R.string.signup_warning)
+      }
+      ConstantVariables.SESSION_IS_DIFFERENT -> {
+        showErrorDialog(getString(R.string.logout_due_to_session_number_is_different))
+        updateMaxAyahCount()
+        btnDownloadTop.text = getString(R.string.order)
+        btnDownloadBottom.text = getString(R.string.order)
+        tvLoginMessage.isEnabled = true
+        tvLoginMessage.text = getString(R.string.signup_warning)
       }
       else -> {
         tvLoginMessage.text = getString(R.string.local_mode_warning)
@@ -198,11 +204,15 @@ class MainActivity : AbstractBaseActivity(){
     }
   }
 
-  private fun getMaxAyahCount() {
+  private fun updateMaxAyahCount() {
     lifecycleScope.launch {
-      val result = preferencesViewModel.getMaxAyahCount()
-      Log.e("AAA", "=====> MAX AYAH COUNT ${result.max}")
-      cache.updateMaxAyahCount(result.max)
+      var maxAyahCount = ConstantVariables.MAX_FREE_AYAH_NUMBER
+      if (membershipState == ConstantVariables.MEMBER_IS_FOUND) {
+        val result = preferencesViewModel.getMaxAyahCount()
+        maxAyahCount = result.max
+      }
+      Log.e("AAA", "=====> MAX AYAH COUNT $maxAyahCount")
+      cache.updateMaxAyahCount(maxAyahCount)
       finish()
     }
   }
@@ -250,7 +260,7 @@ class MainActivity : AbstractBaseActivity(){
 
   override fun onNetworkConnectionChanged(isConnected: Boolean) {
     super.onNetworkConnectionChanged(isConnected)
-    if(isConnected){
+    if (isConnected) {
       checkLogin()
     } else {
       prepareScreenByMembership(ConstantVariables.LOCAL_MODE_DUE_TO_CONNECTION)

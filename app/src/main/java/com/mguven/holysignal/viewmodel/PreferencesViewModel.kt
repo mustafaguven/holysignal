@@ -101,7 +101,7 @@ constructor(private val surahApi: SurahApi,
       CoroutineScope(Dispatchers.IO).launch {
         val token = cache.getToken()
         val response = memberApi.getMemberSessionNo(RequestMemberSession(token))
-        isMember.postValue(if (response.status == 1) ConstantVariables.MEMBER_IS_FOUND else ConstantVariables.MEMBER_IS_NOT_FOUND)
+        isMember.postValue(response.status)
       }
     } else {
       isMember.postValue(ConstantVariables.LOCAL_MODE_DUE_TO_CONNECTION)
@@ -114,8 +114,9 @@ constructor(private val surahApi: SurahApi,
     if (deviceUtil.isConnected()) {
       CoroutineScope(Dispatchers.IO).launch {
         val response = memberApi.signIn(RequestSignIn(email, password, cache.getUUID()))
-        if (response.status == 1) {
-          cache.updateToken(response.data!!.token)
+        if (response.status == ConstantVariables.RESPONSE_OK && response.data != null) {
+          database.preferencesDataDao().updateUserInfo(response.data.name, response.data.surname)
+          cache.updateToken(response.data.token)
         }
         memberShipData.postValue(response)
       }
@@ -126,8 +127,9 @@ constructor(private val surahApi: SurahApi,
     if (deviceUtil.isConnected()) {
       CoroutineScope(Dispatchers.IO).launch {
         val response = memberApi.updateSessionNo(RequestSignIn(email, password, cache.getUUID()))
-        if (response.status == 1) {
-          cache.updateToken(response.data!!.token)
+        if (response.status == ConstantVariables.RESPONSE_OK && response.data != null) {
+          database.preferencesDataDao().updateUserInfo(response.data.name, response.data.surname)
+          cache.updateToken(response.data.token)
         }
         memberShipData.postValue(response)
       }
@@ -138,7 +140,8 @@ constructor(private val surahApi: SurahApi,
     if (deviceUtil.isConnected()) {
       CoroutineScope(Dispatchers.IO).launch {
         val response = memberApi.save(RequestSignUp(name, surname, email, password, cache.getUUID()))
-        if (response.status == 1) {
+        if (response.status == ConstantVariables.RESPONSE_OK) {
+          database.preferencesDataDao().updateUserInfo(name, surname)
           cache.updateToken(response.data!!.token)
         }
         memberShipData.postValue(response)

@@ -129,7 +129,7 @@ class ApplicationCache(private val applicationSharedPreferences: SharedPreferenc
 
   fun updateToken(token: String) = this.applicationSharedPreferences.edit().putString(CacheKey.TOKEN, token).apply()
 
-  fun getUUID() = this.applicationSharedPreferences.getString(CacheKey.UUID, "")
+  fun getUUID() = this.applicationSharedPreferences.getString(CacheKey.UUID, UUID.randomUUID().toString())
 
   fun setUUID(uuid: String) = this.applicationSharedPreferences.edit().putString(CacheKey.UUID, uuid).apply()
 
@@ -138,12 +138,5 @@ class ApplicationCache(private val applicationSharedPreferences: SharedPreferenc
       setUUID(UUID.randomUUID().toString())
     }
   }
-
-/*  fun updateUserInfo(userInformation: UserInformation?) {
-    setObjectWithGenericSerializer(CacheKey.USER_INFO, userInformation)
-  }
-
-  fun getUserInfo(): UserInformation? = getObjectWithGenericDeserializer(CacheKey.USER_INFO,
-      UserInformation::class.java)*/
 
 }
