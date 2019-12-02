@@ -4,8 +4,8 @@
     <string name="edition_select_text">Please select an edition</string>
     <string name="main_save_and_close">Save</string>
     <string name="main_save">Save</string>
-    <string name="main_primary_text">Top Text Source</string>
-    <string name="main_alternative_text">Bottom Text Source</string>
+    <string name="main_primary_text">First Book</string>
+    <string name="main_alternative_text">Second Book</string>
 
     <string name="added_to_favourites">Added to favourites</string>
     <string name="removed_from_favourites">Removed from favourites</string>
@@ -62,6 +62,13 @@
     <string name="logout_due_to_session_number_is_different">Session is closed due to your active session number is different</string>
     <string name="passive">Passive mode on</string>
     <string name="active">Active mode on</string>
+    <string name="show_alternate_text">Show ayah within second language I choose</string>
+    <string name="remember_password">Remember Password</string>
+    <string name="forgot_password">Forgot password</string>
+    <string name="new_bookmark_set_warning_message">Do you want to bookmark on this ayah?</string>
+    <string name="remove_bookmark_warning_message">Do you want to remove the bookmark on ayah?</string>
+    <string name="bookmark_change_warning_message">Another ayah was bookmarked, do you want to change with this?</string>
+    <string name="go_to_bookmark_warning_message">Do you want to go to your bookmarked ayah? (%1$s)</string>
 
     <string-array name="playmodes">
         <item>Shuffle all ayahs</item>

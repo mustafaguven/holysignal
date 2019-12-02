@@ -1,5 +1,6 @@
 package com.mguven.holysignal.ui
 
+import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -77,6 +78,8 @@ class CardActivity : AbstractBaseActivity(),
   private fun initData() {
     if (!isFavourite()) {
       ivFavourite.visibility = View.VISIBLE
+      ivBookMarkAyah.setImageResource(if (cache.getBookmark() == ayahNumber) R.drawable.ic_bookmark_filled_24px else R.drawable.ic_bookmark_empty_24px)
+      ivAllBookmarks.visibility = if (cache.getBookmark() == ConstantVariables.EMPTY_BOOKMARK) View.GONE else View.VISIBLE
       getAyahTopText()
       getAyahBottomText()
       getViewingCount()
@@ -153,6 +156,45 @@ class CardActivity : AbstractBaseActivity(),
   private fun initListeners() {
     ivPreferences.setOnClickListener {
       FlowController.launchMainActivity(this)
+    }
+
+    ivAllBookmarks.setOnClickListener {
+      lifecycleScope.launch {
+        val list = holyBookViewModel.getAyahBottomText(cache.getBookmark())
+        if(list.isNotNullAndNotEmpty()){
+          showYesNoDialog(getString(R.string.go_to_bookmark_warning_message, "${list[0].surahNumber}:${list[0].numberInSurah}"), DialogInterface.OnClickListener { dialog, yes ->
+            ayahNumber = cache.getBookmark()
+            initData()
+            dialog.dismiss()
+          }, DialogInterface.OnClickListener { dialog, no ->
+            dialog.dismiss()
+          })
+        }
+      }
+    }
+
+    ivBookMarkAyah.setOnClickListener {
+      val bookmarkedAyah = cache.getBookmark()
+      if (ayahNumber != bookmarkedAyah) {
+        showYesNoDialog(getString(if (bookmarkedAyah == ConstantVariables.EMPTY_BOOKMARK) R.string.new_bookmark_set_warning_message
+        else R.string.bookmark_change_warning_message), DialogInterface.OnClickListener { dialog, yes ->
+          cache.updateBookmark(ayahNumber)
+          ivBookMarkAyah.setImageResource(R.drawable.ic_bookmark_filled_24px)
+          ivAllBookmarks.visibility = if (cache.getBookmark() == ConstantVariables.EMPTY_BOOKMARK) View.GONE else View.VISIBLE
+          dialog.dismiss()
+        }, DialogInterface.OnClickListener { dialog, no ->
+          dialog.dismiss()
+        })
+      } else {
+        showYesNoDialog(getString(R.string.remove_bookmark_warning_message), DialogInterface.OnClickListener { dialog, yes ->
+          cache.updateBookmark(ConstantVariables.EMPTY_BOOKMARK)
+          ivBookMarkAyah.setImageResource(R.drawable.ic_bookmark_empty_24px)
+          ivAllBookmarks.visibility = if (cache.getBookmark() == ConstantVariables.EMPTY_BOOKMARK) View.GONE else View.VISIBLE
+          dialog.dismiss()
+        }, DialogInterface.OnClickListener { dialog, no ->
+          dialog.dismiss()
+        })
+      }
     }
 
     ivFavourite.setOnClickListener {
@@ -309,17 +351,22 @@ class CardActivity : AbstractBaseActivity(),
   }
 
   private fun getAyahBottomText() {
-    lifecycleScope.launch {
-      val list = holyBookViewModel.getAyahBottomText(ayahNumber)
-      if (list.isNotNullAndNotEmpty()) {
-        tvAyahBottomText.setTextSize(TypedValue.COMPLEX_UNIT_SP, 24f)
-        list.forEach {
-          tvAyahBottomText.highlighted("<b>${it.language}:</b> ${it.ayahText}")
+    if (cache.hasSecondLanguageSupport()) {
+      tvAyahBottomText.visibility = View.VISIBLE
+      lifecycleScope.launch {
+        val list = holyBookViewModel.getAyahBottomText(ayahNumber)
+        if (list.isNotNullAndNotEmpty()) {
+          tvAyahBottomText.setTextSize(TypedValue.COMPLEX_UNIT_SP, 24f)
+          list.forEach {
+            tvAyahBottomText.highlighted("<b>${it.language}:</b> ${it.ayahText}")
+          }
+        } else {
+          tvAyahBottomText.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16f)
+          tvAyahBottomText.text = getString(R.string.ayah_not_found_on_this_book)
         }
-      } else {
-        tvAyahBottomText.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16f)
-        tvAyahBottomText.text = getString(R.string.ayah_not_found_on_this_book)
       }
+    } else {
+      tvAyahBottomText.visibility = View.GONE
     }
   }
 

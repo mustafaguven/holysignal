@@ -32,7 +32,13 @@ class MainActivity : AbstractBaseActivity() {
     inject(MainActivityModule(this))
     preferencesViewModel = getViewModel(PreferencesViewModel::class.java)
     cbActivePassive.isChecked = cache.isActive()
-    cbActivePassive.text = if(cbActivePassive.isChecked){ getString(R.string.active) } else { getString(R.string.passive)}
+    cbActivePassive.text = if (cbActivePassive.isChecked) {
+      getString(R.string.active)
+    } else {
+      getString(R.string.passive)
+    }
+    cbAltTextActivePassive.isChecked = cache.hasSecondLanguageSupport()
+    clAlternateText.visibility = if (cbAltTextActivePassive.isChecked) View.VISIBLE else View.GONE
 
     runJobScheduler()
 
@@ -80,11 +86,21 @@ class MainActivity : AbstractBaseActivity() {
       openLoginActivity()
     }
 
-    cbActivePassive.setOnClickListener{
+    cbActivePassive.setOnClickListener {
       cache.updateActivePassive(cbActivePassive.isChecked)
       Log.e("AAA", cache.isActive().toString())
-      cbActivePassive.text = if(cbActivePassive.isChecked){ getString(R.string.active) } else { getString(R.string.passive)}
+      cbActivePassive.text = if (cbActivePassive.isChecked) {
+        getString(R.string.active)
+      } else {
+        getString(R.string.passive)
+      }
     }
+
+    cbAltTextActivePassive.setOnClickListener {
+      cache.updateSecondLanguageSupport(cbAltTextActivePassive.isChecked)
+      clAlternateText.visibility = if (cbAltTextActivePassive.isChecked) View.VISIBLE else View.GONE
+    }
+
 
   }
 

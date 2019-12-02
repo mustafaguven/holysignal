@@ -36,7 +36,7 @@ class ApplicationCache(private val applicationSharedPreferences: SharedPreferenc
   }
 
   fun getTopTextEditionId() =
-      this.applicationSharedPreferences.getInt(CacheKey.TOP_TEXT_EDITION_ID, 11)
+      this.applicationSharedPreferences.getInt(CacheKey.TOP_TEXT_EDITION_ID, 77)
 
   fun updateBottomTextEditionId(editionId: Int) {
     this.applicationSharedPreferences.edit().putInt(CacheKey.BOTTOM_TEXT_EDITION_ID, editionId).apply()
@@ -143,5 +143,15 @@ class ApplicationCache(private val applicationSharedPreferences: SharedPreferenc
 
   fun updateActivePassive(activePassive: Boolean) =
       this.applicationSharedPreferences.edit().putBoolean(CacheKey.ACTIVE_PASSIVE, activePassive).apply()
+
+  fun hasSecondLanguageSupport() = this.applicationSharedPreferences.getBoolean(CacheKey.SECOND_LANGUAGE_SUPPORT, true)
+
+  fun updateSecondLanguageSupport(hasSupport: Boolean) =
+      this.applicationSharedPreferences.edit().putBoolean(CacheKey.SECOND_LANGUAGE_SUPPORT, hasSupport).apply()
+
+  fun getBookmark() = this.applicationSharedPreferences.getInt(CacheKey.BOOKMARK, -1)
+
+  fun updateBookmark(ayahNumber: Int) =
+      this.applicationSharedPreferences.edit().putInt(CacheKey.BOOKMARK, ayahNumber).apply()
 
 }

@@ -9,4 +9,6 @@
     <color name="green">#155818</color>
     <color name="gray">#40000000</color>
     <color name="error">#FF0000</color>
+    <color name="blue">#95C4F1</color>
+    <color name="orange">#FF9800</color>
 </resources>

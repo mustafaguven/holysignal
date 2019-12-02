@@ -3,6 +3,8 @@ package com.mguven.holysignal.cache
 object CacheKey {
 
   const val ACTIVE_PASSIVE = "ACTIVE_PASSIVE"
+  const val SECOND_LANGUAGE_SUPPORT = "SECOND_LANGUAGE_SUPPORT"
+  const val BOOKMARK = "BOOKMARK"
   const val TOKEN = "TOKEN"
   const val UUID = "UUID"
   const val SEARCH_KEYWORD = "SEARCH_KEYWORD"

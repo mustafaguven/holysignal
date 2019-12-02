@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_centerInParent="true"
-    android:background="@drawable/bg_1"
+    android:background="@drawable/bg_vector_6"
     tools:context=".ui.MainActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -14,11 +14,15 @@
 
         <TextView
             android:id="@+id/tvTitle"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="10dp"
+            android:gravity="center"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:background="@color/gray"
             android:fontFamily="@font/gotham_narrow_bold"
             android:text="@string/preferences"
             android:textColor="@color/black"
@@ -37,11 +41,26 @@
             android:gravity="center"
             android:padding="10dp"
             android:textColor="@color/black"
-            android:textSize="22sp"
+            android:textSize="20sp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvTitle"
             tools:text="@string/signup_warning" />
+
+        <androidx.appcompat.widget.AppCompatCheckBox
+            android:id="@+id/cbActivePassive"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:fontFamily="@font/gotham_narrow_book"
+            android:gravity="center"
+            android:textSize="20sp"
+            android:checked="true"
+            android:text="@string/active"
+            android:textColor="@color/black"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvLoginMessage"  />
 
 
         <TextView
@@ -50,12 +69,13 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
+            android:layout_marginTop="20dp"
             android:fontFamily="@font/gotham_narrow_bold"
             android:text="@string/main_primary_text"
             android:textColor="@color/black"
-            android:textSize="18sp"
+            android:textSize="20sp"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvLoginMessage" />
+            app:layout_constraintTop_toBottomOf="@id/cbActivePassive" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btnDownloadTop"
@@ -121,20 +141,43 @@
             app:layout_constraintRight_toLeftOf="@id/btnDownloadTop"
             app:layout_constraintTop_toBottomOf="@id/tvTopTextEdition" />
 
+
+
+        <androidx.appcompat.widget.AppCompatCheckBox
+            android:id="@+id/cbAltTextActivePassive"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginEnd="10dp"
+            android:fontFamily="@font/gotham_narrow_book"
+            android:gravity="left"
+            android:textSize="20sp"
+            android:checked="true"
+            android:text="@string/show_alternate_text"
+            android:textColor="@color/black"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/btnDownloadTop" />
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/clAlternateText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cbAltTextActivePassive" >
         <TextView
             android:id="@+id/tvBottomTextEdition"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:layout_marginTop="10dp"
             android:layout_marginEnd="10dp"
             android:fontFamily="@font/gotham_narrow_bold"
             android:text="@string/main_alternative_text"
             android:textColor="@color/black"
-            android:textSize="18sp"
+            android:textSize="20sp"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/btnDownloadTop" />
-
+            app:layout_constraintTop_toTopOf="@id/clAlternateText"/>
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btnDownloadBottom"
@@ -149,7 +192,6 @@
             android:visibility="visible"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="@id/spBottomTextEdition" />
-
 
         <ProgressBar
             android:id="@+id/progressBottom"
@@ -198,23 +240,9 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toLeftOf="@id/btnDownloadBottom"
             app:layout_constraintTop_toBottomOf="@id/tvBottomTextEdition" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-        <androidx.appcompat.widget.AppCompatCheckBox
-            android:id="@+id/cbActivePassive"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="10dp"
-            android:fontFamily="@font/gotham_narrow_book"
-            android:gravity="center"
-            android:textSize="18sp"
-            android:checked="true"
-            android:text="@string/active"
-            android:textColor="@color/black"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/btnDownloadBottom" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btnOk"
@@ -230,7 +258,7 @@
             android:textColor="@color/black"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/cbActivePassive" />
+            app:layout_constraintTop_toBottomOf="@id/clAlternateText" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

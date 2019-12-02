@@ -4,8 +4,8 @@
     <string name="edition_select_text">Lütfen bir versiyon seçin</string>
     <string name="main_save_and_close">Kaydet</string>
     <string name="main_save">Kaydet</string>
-    <string name="main_primary_text">Üst Metin</string>
-    <string name="main_alternative_text">Alt Metin</string>
+    <string name="main_primary_text">Birinci Kitap</string>
+    <string name="main_alternative_text">İkinci Kitap</string>
 
     <string name="added_to_favourites">Favorilere eklendi</string>
     <string name="removed_from_favourites">Favorilerden çıkarıldı</string>
@@ -61,8 +61,15 @@
     <string name="error">Hata</string>
     <string name="warning">Uyarı</string>
     <string name="logout_due_to_session_number_is_different">Bu cihazdaki oturumunuz başka bir cihazda açılan oturum dolayısıyla sonlandırıldı.</string>
-    <string name="passive">Gösterim modu kapalı</string>
-    <string name="active">Gösterim modu açık</string>
+    <string name="passive">Ayetler gösterilmesin</string>
+    <string name="active">Ayetler gösterilsin</string>
+    <string name="show_alternate_text">Ayetler seçtiğim 2. dil ile birlikte gösterilsin</string>
+    <string name="remember_password">Şifremi hatırlat</string>
+    <string name="forgot_password">Şifremi unuttum</string>
+    <string name="new_bookmark_set_warning_message">Bu ayet ayraç olarak kaydedilecek, devam edilsin mi?</string>
+    <string name="remove_bookmark_warning_message">Bu ayetle ilişkilendirilmiş ayraç kaldırılacak, devam edilsin mi?</string>
+    <string name="bookmark_change_warning_message">Başka bir ayet ayraçlanmış, ayracı bu ayete atamak istiyor musunuz?</string>
+    <string name="go_to_bookmark_warning_message">Ayraç olarak işaretlediğiniz ayete (%1$s) gidilecek, devam edilsin mi?</string>
 
     <string-array name="playmodes">
         <item>Ayetler karışık şekilde gösterilsin</item>

@@ -16,4 +16,6 @@ object ConstantVariables {
   const val SESSION_IS_DIFFERENT = 101
 
   const val RESPONSE_OK = 1
+
+  const val EMPTY_BOOKMARK = -1
 }
