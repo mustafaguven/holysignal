@@ -7,6 +7,7 @@ import com.mguven.holysignal.TheApplication
 import com.mguven.holysignal.di.interceptor.CacheInterceptor
 import com.mguven.holysignal.di.interceptor.HeaderInterceptor
 import com.mguven.holysignal.di.interceptor.LoggingInterceptor
+import com.mguven.holysignal.network.FavouritesApi
 import com.mguven.holysignal.network.MemberApi
 import com.mguven.holysignal.network.NewsApi
 import com.mguven.holysignal.network.SurahApi
@@ -61,6 +62,10 @@ class NetworkModule {
 
   @Provides
   @Singleton
+  fun provideFavouritesApi(retrofit: Retrofit): FavouritesApi = retrofit.create(FavouritesApi::class.java)
+
+  @Provides
+  @Singleton
   fun provideOkHttpClient(@HeaderInterceptor headerInterceptor: Interceptor,
                           @LoggingInterceptor loggingInterceptor: Interceptor,
                           @CacheInterceptor cacheInterceptor: Interceptor,
@@ -82,7 +87,7 @@ class NetworkModule {
   fun provideCacheInterceptor(): Interceptor {
     return Interceptor { chain ->
       val originalResponse = chain.proceed(chain.request())
-       originalResponse.newBuilder()
+      originalResponse.newBuilder()
           .removeHeader("Pragma")
           .header("Cache-Control", "public, if-only-cached, max-age=3600")
           .build()

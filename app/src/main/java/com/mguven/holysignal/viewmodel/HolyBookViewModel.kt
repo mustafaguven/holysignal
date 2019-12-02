@@ -1,20 +1,32 @@
 package com.mguven.holysignal.viewmodel
 
+import androidx.lifecycle.MutableLiveData
 import androidx.sqlite.db.SimpleSQLiteQuery
 import com.mguven.holysignal.cache.ApplicationCache
+import com.mguven.holysignal.constant.ConstantVariables
 import com.mguven.holysignal.db.ApplicationDatabase
 import com.mguven.holysignal.db.entity.FavouritesData
 import com.mguven.holysignal.db.entity.NotesData
 import com.mguven.holysignal.db.entity.ViewingCountsData
 import com.mguven.holysignal.extension.isNotNullAndNotEmpty
+import com.mguven.holysignal.model.request.RequestAddFavourites
+import com.mguven.holysignal.model.request.RequestSignUp
+import com.mguven.holysignal.network.FavouritesApi
+import com.mguven.holysignal.util.DeviceUtil
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
 
 class HolyBookViewModel @Inject
 constructor(private val database: ApplicationDatabase,
-            private val cache: ApplicationCache) : BaseViewModel() {
+            private val cache: ApplicationCache,
+            private val favouritesApi: FavouritesApi,
+            private val deviceUtil: DeviceUtil) : BaseViewModel() {
 
+  val totalFavouriteCount = MutableLiveData<Int>()
   private var favouriteIdList: List<Long>? = null
   fun getFavouriteIdList(): List<Long>? {
     if (!favouriteIdList.isNotNullAndNotEmpty()) {
@@ -100,4 +112,21 @@ constructor(private val database: ApplicationDatabase,
   }
 
   suspend fun getTotalViewingCount() = database.viewingCountsDataDao().getTotalCount()
+
+  fun addFavouriteToCloud(ayahNumber: Int, isAdd: Int = 1) {
+    if (deviceUtil.isConnected()) {
+      CoroutineScope(Dispatchers.IO).launch {
+        favouritesApi.addFavourite(RequestAddFavourites(cache.getToken(), ayahNumber, isAdd))
+      }
+    }
+  }
+
+  fun getFavouriteCountByAyahNumber(ayahNumber: Int) {
+    if (deviceUtil.isConnected()) {
+      CoroutineScope(Dispatchers.IO).launch {
+        val response = favouritesApi.getFavouriteCountByAyahNumber(ayahNumber)
+        totalFavouriteCount.postValue(response.data)
+      }
+    }
+  }
 }

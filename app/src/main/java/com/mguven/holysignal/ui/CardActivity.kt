@@ -7,6 +7,7 @@ import android.util.Log
 import android.util.TypedValue
 import android.view.View
 import android.widget.AdapterView
+import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import com.mguven.holysignal.FlowController
 import com.mguven.holysignal.R
@@ -24,6 +25,7 @@ import com.mguven.holysignal.ui.fragment.BaseDialogFragment
 import com.mguven.holysignal.ui.fragment.SearchWordInAyahsFragment
 import com.mguven.holysignal.viewmodel.HolyBookViewModel
 import kotlinx.android.synthetic.main.activity_card.*
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
@@ -77,6 +79,7 @@ class CardActivity : AbstractBaseActivity(),
 
   private fun initData() {
     if (!isFavourite()) {
+      holyBookViewModel.getFavouriteCountByAyahNumber(ayahNumber)
       ivFavourite.visibility = View.VISIBLE
       ivBookMarkAyah.setImageResource(if (cache.getBookmark() == ayahNumber) R.drawable.ic_bookmark_filled_24px else R.drawable.ic_bookmark_empty_24px)
       ivAllBookmarks.visibility = if (cache.getBookmark() == ConstantVariables.EMPTY_BOOKMARK) View.GONE else View.VISIBLE
@@ -274,6 +277,10 @@ class CardActivity : AbstractBaseActivity(),
       ayahNumber = getAyahNumberByPlaymode()
       initData()
     }
+
+    holyBookViewModel.totalFavouriteCount.observe(this, Observer<Int> {
+      tvCloudFavouriteCount.text = getString(R.string.total_cloud_favourite_count, it)
+    })
   }
 
   private fun initPlaymode(mode: Int) {
@@ -322,10 +329,13 @@ class CardActivity : AbstractBaseActivity(),
   }
 
   private fun upsertFavourite() = runBlocking {
+    var isAdd = 0
     holyBookViewModel.deleteFavourite(ayahNumber)
     if (isFavourite) {
       holyBookViewModel.insertFavourite(ayahNumber)
+      isAdd = 1
     }
+    holyBookViewModel.addFavouriteToCloud(ayahNumber, isAdd)
     holyBookViewModel.clearFavouriteCache()
     showFavouriteStatus()
   }

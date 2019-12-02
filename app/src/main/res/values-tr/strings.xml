@@ -34,7 +34,7 @@
     <string name="surah_ayahs_is_downloading">Ayetler indiriliyor (%1$s)</string>
     <string name="surah_translate_is_downloading">Sure isimleri indiriliyor (%1$s)</string>
     <string name="total_viewing_count">%1$d kez görüntülendi</string>
-    <string name="x_ayah_displayed">%1$d%% görüntülendi</string>
+    <string name="x_ayah_displayed">%1$d%% görüntülediniz</string>
     <string name="preferences">Tercihler</string>
     <string name="signup_warning">Uygulamanın tam versiyonunu kullanmak için sisteme giriş yapmanız gerekmektedir. Lütfen bu yazıya tıklayarak sisteme giriş yapın.</string>
     <string name="welcome_message_for_member">Hoş geldiniz\n%1$s</string>
@@ -68,8 +68,9 @@
     <string name="forgot_password">Şifremi unuttum</string>
     <string name="new_bookmark_set_warning_message">Bu ayet ayraç olarak kaydedilecek, devam edilsin mi?</string>
     <string name="remove_bookmark_warning_message">Bu ayetle ilişkilendirilmiş ayraç kaldırılacak, devam edilsin mi?</string>
-    <string name="bookmark_change_warning_message">Başka bir ayet ayraçlanmış, ayracı bu ayete atamak istiyor musunuz?</string>
+    <string name="bookmark_change_warning_message">Başka bir ayet ayraçlanmış, ayracı bu ayete atarsanız önceki ayete ait kayıt silinecek, devam edilsin mi?</string>
     <string name="go_to_bookmark_warning_message">Ayraç olarak işaretlediğiniz ayete (%1$s) gidilecek, devam edilsin mi?</string>
+    <string name="total_cloud_favourite_count">%1$d kişi favoriledi</string>
 
     <string-array name="playmodes">
         <item>Ayetler karışık şekilde gösterilsin</item>
