@@ -77,7 +77,6 @@ class CardActivity : AbstractBaseActivity(),
   private fun initData() {
     if (!isFavourite()) {
       ivFavourite.visibility = View.VISIBLE
-      tvNext.visibility = View.VISIBLE
       getAyahTopText()
       getAyahBottomText()
       getViewingCount()
@@ -106,7 +105,7 @@ class CardActivity : AbstractBaseActivity(),
         Playmode.REPEAT_AYAH -> cache.getLastShownAyahNumber()
         Playmode.AYAH_BY_AYAH -> cache.getLastShownAyahNumber() + increment
         Playmode.FAVOURITES -> byFavourites()
-        else -> onSelectSurah()
+        else -> onSelectSurah(increment)
       }
     } catch (ex: Exception) {
       return (1..cache.getMaxAyahCount()).random()
@@ -140,17 +139,15 @@ class CardActivity : AbstractBaseActivity(),
     return index
   }
 
-  private fun onSelectSurah(): Int {
+  private fun onSelectSurah(increment: Int): Int {
     ivSelectSurah.setImageResource(R.drawable.ic_select_surah)
-    var ayahNumber = cache.getLastShownAyahNumber() + 1
-    if(ayahNumber > cache.getLastShownAyah()!!.endingAyahNumber){
+    var ayahNumber = cache.getLastShownAyahNumber() + increment
+    if (ayahNumber > cache.getLastShownAyah()!!.endingAyahNumber) {
       ayahNumber = cache.getLastShownAyah()!!.startingAyahNumber
+    } else if (ayahNumber < cache.getLastShownAyah()!!.startingAyahNumber) {
+      ayahNumber = cache.getLastShownAyah()!!.endingAyahNumber
     }
-    return if (cache.getLastShownAyah()!!.endingAyahNumber <= cache.getMaxAyahCount()) {
-      ayahNumber
-    } else {
-      ayahNumber
-    }
+    return ayahNumber
   }
 
   private fun initListeners() {
@@ -249,7 +246,7 @@ class CardActivity : AbstractBaseActivity(),
     )
     ivSelectSurah.setImageResource(if (mode == Playmode.REPEAT_SURAH) R.drawable.ic_select_surah else R.drawable.ic_select_surah_disabled)
     tvNext.visibility = if (mode == Playmode.REPEAT_AYAH) View.GONE else View.VISIBLE
-    tvPrevious.visibility = if (mode == Playmode.AYAH_BY_AYAH) View.VISIBLE else View.GONE
+    tvPrevious.visibility = if (mode == Playmode.AYAH_BY_AYAH || mode == Playmode.REPEAT_SURAH) View.VISIBLE else View.GONE
   }
 
   private fun updateAvailableSurahListAdapter(list: List<AvailableSurahItem>) {
@@ -315,12 +312,12 @@ class CardActivity : AbstractBaseActivity(),
     lifecycleScope.launch {
       val list = holyBookViewModel.getAyahBottomText(ayahNumber)
       if (list.isNotNullAndNotEmpty()) {
-        tvAyahBottomText.setTextSize(TypedValue.COMPLEX_UNIT_SP,24f)
+        tvAyahBottomText.setTextSize(TypedValue.COMPLEX_UNIT_SP, 24f)
         list.forEach {
           tvAyahBottomText.highlighted("<b>${it.language}:</b> ${it.ayahText}")
         }
       } else {
-        tvAyahBottomText.setTextSize(TypedValue.COMPLEX_UNIT_SP,16f)
+        tvAyahBottomText.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16f)
         tvAyahBottomText.text = getString(R.string.ayah_not_found_on_this_book)
       }
     }
@@ -337,7 +334,7 @@ class CardActivity : AbstractBaseActivity(),
     lifecycleScope.launch {
       val count = holyBookViewModel.getTotalViewingCount()
       progress.progress = count
-      tvProgress.text = getString(R.string.x_ayah_displayed,(count * 100) / ConstantVariables.MAX_AYAH_NUMBER)
+      tvProgress.text = getString(R.string.x_ayah_displayed, (count * 100) / ConstantVariables.MAX_AYAH_NUMBER)
     }
   }
 
