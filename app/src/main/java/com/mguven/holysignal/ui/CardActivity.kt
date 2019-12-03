@@ -165,14 +165,14 @@ class CardActivity : AbstractBaseActivity(),
       lifecycleScope.launch {
         val list = holyBookViewModel.getAyahBottomText(cache.getBookmark())
         if(list.isNotNullAndNotEmpty()){
-          showYesNoDialog(getString(R.string.go_to_bookmark_warning_message, "${list[0].surahNumber}:${list[0].numberInSurah}"), DialogInterface.OnClickListener { dialog, yes ->
-            ayahNumber = cache.getBookmark()
-            initData()
-            dialog.dismiss()
-          }, DialogInterface.OnClickListener { dialog, no ->
-            dialog.dismiss()
-          })
         }
+        showYesNoDialog(getString(R.string.go_to_bookmark_warning_message, "${list[0].surahNumber}:${list[0].numberInSurah}"), DialogInterface.OnClickListener { dialog, yes ->
+          ayahNumber = cache.getBookmark()
+          initData()
+          dialog.dismiss()
+        }, DialogInterface.OnClickListener { dialog, no ->
+          dialog.dismiss()
+        })
       }
     }
 
@@ -279,7 +279,7 @@ class CardActivity : AbstractBaseActivity(),
     }
 
     holyBookViewModel.totalFavouriteCount.observe(this, Observer<Int> {
-      tvCloudFavouriteCount.text = getString(R.string.total_cloud_favourite_count, it)
+      //tvCloudFavouriteCount.text = getString(R.string.total_cloud_favourite_count, it)
     })
   }
 

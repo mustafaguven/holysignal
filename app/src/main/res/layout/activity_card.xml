@@ -300,22 +300,9 @@
             tools:text="goruntulenme sayisi: 3"
             app:layout_constraintHorizontal_chainStyle="packed"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toLeftOf="@id/tvCloudFavouriteCount"
+            app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintBottom_toBottomOf="@id/bottom" />
 
-        <TextView
-            android:id="@+id/tvCloudFavouriteCount"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/gotham_narrow_book"
-            android:gravity="center"
-            android:textColor="@color/black"
-            android:textSize="18sp"
-            app:layout_constraintHorizontal_chainStyle="packed"
-            tools:text="toplam begeni: 3"
-            app:layout_constraintLeft_toRightOf="@id/tvPrevious"
-            app:layout_constraintBottom_toBottomOf="@id/tvViewingCount"
-            app:layout_constraintRight_toRightOf="parent"/>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/bottom"

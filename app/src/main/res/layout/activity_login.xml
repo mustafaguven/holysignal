@@ -102,6 +102,7 @@
             android:background="@drawable/rounded"
             android:fontFamily="@font/gotham_narrow_book"
             android:textAllCaps="false"
+            android:padding="10dp"
             android:text="@string/sign_up"
             android:textSize="20sp"
             app:layout_constraintLeft_toLeftOf="@id/btnSignIn"

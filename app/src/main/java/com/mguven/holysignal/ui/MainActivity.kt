@@ -238,7 +238,6 @@ class MainActivity : AbstractBaseActivity() {
       }
       Log.e("AAA", "=====> MAX AYAH COUNT $maxAyahCount")
       cache.updateMaxAyahCount(maxAyahCount)
-      finish()
     }
   }
 
