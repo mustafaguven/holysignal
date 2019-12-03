@@ -71,6 +71,7 @@
     <string name="bookmark_change_warning_message">Başka bir ayet ayraçlanmış, ayracı bu ayete atarsanız önceki ayete ait kayıt silinecek, devam edilsin mi?</string>
     <string name="go_to_bookmark_warning_message">Ayraç olarak işaretlediğiniz ayete (%1$s) gidilecek, devam edilsin mi?</string>
     <string name="total_cloud_favourite_count">%1$d kişi favoriledi</string>
+    <string name="no_notes_found">Bu ayetle ilgili not bulunamadı</string>
 
     <string-array name="playmodes">
         <item>Ayetler karışık şekilde gösterilsin</item>

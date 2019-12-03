@@ -46,8 +46,8 @@ class NotesAdapter(val ayahNumber: Int, private val items: List<NoteResponseEnti
     if (cache.getMemberId() != item.memberId) {
       val voteCount = holder.tvVoteCount.text.toString().toInt()
       var newVoteCount = voteCount + value
-      if(newVoteCount > 1) newVoteCount = 1
-      if(newVoteCount < -1) newVoteCount = -1
+      if(newVoteCount > 1) return
+      if(newVoteCount < -1) return
       holder.tvVoteCount.text = (newVoteCount).toString()
       voteObservable.postValue(intArrayOf(item.Id, newVoteCount))
     }

@@ -41,6 +41,15 @@ class NotesFragment : BaseDialogFragment() {
     addAdapter()
     holyBookViewModel.allNotesFromCloud.observe(this, Observer<GetNotesByAyahNumberEntity> { list ->
       if(list.data != null) {
+        if(list.data.isEmpty()){
+          tvEmpty.visibility = View.VISIBLE
+          rvNotes.visibility = View.GONE
+          return@Observer
+        } else {
+          tvEmpty.visibility = View.GONE
+          rvNotes.visibility = View.VISIBLE
+        }
+
         adapter = NotesAdapter(ayahNumber, list.data, activity!!)
         rvNotes.adapter = adapter
 

@@ -30,7 +30,8 @@
         android:textSize="20sp"
         app:layout_constraintRight_toLeftOf="@id/ivUpVote"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="vote count" />
+        android:gravity="center"
+        tools:text="0" />
 
     <ImageView
         android:id="@+id/ivDownVote"

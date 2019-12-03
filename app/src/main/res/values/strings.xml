@@ -70,6 +70,7 @@
     <string name="bookmark_change_warning_message">Another ayah was bookmarked, do you want to change with this?</string>
     <string name="go_to_bookmark_warning_message">Do you want to go to your bookmarked ayah? (%1$s)</string>
     <string name="total_cloud_favourite_count">liked by %1$d people</string>
+    <string name="no_notes_found">No notes found</string>
 
     <string-array name="playmodes">
         <item>Shuffle all ayahs</item>
