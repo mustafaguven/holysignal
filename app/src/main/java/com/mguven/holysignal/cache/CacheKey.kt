@@ -2,6 +2,7 @@ package com.mguven.holysignal.cache
 
 object CacheKey {
 
+  const val MEMBER_ID = "MEMBER_ID"
   const val ACTIVE_PASSIVE = "ACTIVE_PASSIVE"
   const val SECOND_LANGUAGE_SUPPORT = "SECOND_LANGUAGE_SUPPORT"
   const val BOOKMARK = "BOOKMARK"

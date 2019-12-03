@@ -154,4 +154,8 @@ class ApplicationCache(private val applicationSharedPreferences: SharedPreferenc
   fun updateBookmark(ayahNumber: Int) =
       this.applicationSharedPreferences.edit().putInt(CacheKey.BOOKMARK, ayahNumber).apply()
 
+  fun getMemberId() = this.applicationSharedPreferences.getInt(CacheKey.MEMBER_ID, -1)
+
+  fun updateMemberId(memberId: Int) = this.applicationSharedPreferences.edit().putInt(CacheKey.MEMBER_ID, memberId).apply()
+
 }

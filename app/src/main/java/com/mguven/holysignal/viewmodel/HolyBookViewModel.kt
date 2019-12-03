@@ -3,15 +3,17 @@ package com.mguven.holysignal.viewmodel
 import androidx.lifecycle.MutableLiveData
 import androidx.sqlite.db.SimpleSQLiteQuery
 import com.mguven.holysignal.cache.ApplicationCache
-import com.mguven.holysignal.constant.ConstantVariables
 import com.mguven.holysignal.db.ApplicationDatabase
 import com.mguven.holysignal.db.entity.FavouritesData
 import com.mguven.holysignal.db.entity.NotesData
 import com.mguven.holysignal.db.entity.ViewingCountsData
 import com.mguven.holysignal.extension.isNotNullAndNotEmpty
 import com.mguven.holysignal.model.request.RequestAddFavourites
-import com.mguven.holysignal.model.request.RequestSignUp
+import com.mguven.holysignal.model.request.RequestInsertVoter
+import com.mguven.holysignal.model.response.InsertVoterEntity
+import com.mguven.holysignal.model.response.GetNotesByAyahNumberEntity
 import com.mguven.holysignal.network.FavouritesApi
+import com.mguven.holysignal.network.NotesApi
 import com.mguven.holysignal.util.DeviceUtil
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -24,9 +26,13 @@ class HolyBookViewModel @Inject
 constructor(private val database: ApplicationDatabase,
             private val cache: ApplicationCache,
             private val favouritesApi: FavouritesApi,
+            private val notesApi: NotesApi,
             private val deviceUtil: DeviceUtil) : BaseViewModel() {
 
   val totalFavouriteCount = MutableLiveData<Int>()
+  val allNotesFromCloud = MutableLiveData<GetNotesByAyahNumberEntity>()
+  val changeAyahNoteVoteCountObserver = MutableLiveData<InsertVoterEntity>()
+
   private var favouriteIdList: List<Long>? = null
   fun getFavouriteIdList(): List<Long>? {
     if (!favouriteIdList.isNotNullAndNotEmpty()) {
@@ -126,6 +132,24 @@ constructor(private val database: ApplicationDatabase,
       CoroutineScope(Dispatchers.IO).launch {
         val response = favouritesApi.getFavouriteCountByAyahNumber(ayahNumber)
         totalFavouriteCount.postValue(response.data)
+      }
+    }
+  }
+
+  fun getNotesByAyahNumber(ayahNumber: Int) {
+    if (deviceUtil.isConnected()) {
+      CoroutineScope(Dispatchers.IO).launch {
+        val response = notesApi.getNotesByAyahNumber(ayahNumber)
+        allNotesFromCloud.postValue(response)
+      }
+    }
+  }
+
+  fun insertVoter(ayahNoteId: Int, vote: Int) {
+    if (deviceUtil.isConnected()) {
+      CoroutineScope(Dispatchers.IO).launch {
+        val result = notesApi.insertVoter(RequestInsertVoter(cache.getMemberId(), ayahNoteId, vote))
+        changeAyahNoteVoteCountObserver.postValue(result)
       }
     }
   }

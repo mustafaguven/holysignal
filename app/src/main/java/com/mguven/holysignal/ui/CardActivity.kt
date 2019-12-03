@@ -22,6 +22,7 @@ import com.mguven.holysignal.model.AyahSearchResult
 import com.mguven.holysignal.ui.adapter.AvailableSurahAdapter
 import com.mguven.holysignal.ui.fragment.AddNoteFragment
 import com.mguven.holysignal.ui.fragment.BaseDialogFragment
+import com.mguven.holysignal.ui.fragment.NotesFragment
 import com.mguven.holysignal.ui.fragment.SearchWordInAyahsFragment
 import com.mguven.holysignal.viewmodel.HolyBookViewModel
 import kotlinx.android.synthetic.main.activity_card.*
@@ -31,7 +32,6 @@ import kotlinx.coroutines.runBlocking
 
 
 class CardActivity : AbstractBaseActivity(),
-    AddNoteFragment.OnFragmentInteractionListener,
     SearchWordInAyahsFragment.OnFragmentInteractionListener {
 
   companion object {
@@ -51,7 +51,7 @@ class CardActivity : AbstractBaseActivity(),
     return@lazy resources.getStringArray(R.array.playmodes)
   }
 
-  private lateinit var addNoteFragment: BaseDialogFragment
+  private lateinit var notesFragment: BaseDialogFragment
   private lateinit var searchWordInAyahsFragment: BaseDialogFragment
   private var isFavourite = false
   private var ayahNumber = 0
@@ -231,8 +231,8 @@ class CardActivity : AbstractBaseActivity(),
     }
 
     ivAddNote.setOnClickListener {
-      addNoteFragment = AddNoteFragment.newInstance(cache.getLastShownAyah()?.noteId)
-      addNoteFragment.show(supportFragmentManager, addNoteFragment.javaClass.simpleName)
+      notesFragment = NotesFragment.newInstance(ayahNumber)
+      notesFragment.show(supportFragmentManager, notesFragment.javaClass.simpleName)
     }
 
     ivSelectSurah.setOnClickListener {
@@ -392,14 +392,6 @@ class CardActivity : AbstractBaseActivity(),
       val count = holyBookViewModel.getTotalViewingCount()
       progress.progress = count
       tvProgress.text = getString(R.string.x_ayah_displayed, (count * 100) / ConstantVariables.MAX_AYAH_NUMBER)
-    }
-  }
-
-  override fun onNoteInserted(insertNo: Long) {
-    lifecycleScope.launch {
-      holyBookViewModel.updateNoteOfAyah(insertNo.toInt())
-      addNoteFragment.dismiss()
-      showSnackbar(getString(R.string.note_saved_successfully))
     }
   }
 

@@ -7,10 +7,7 @@ import com.mguven.holysignal.TheApplication
 import com.mguven.holysignal.di.interceptor.CacheInterceptor
 import com.mguven.holysignal.di.interceptor.HeaderInterceptor
 import com.mguven.holysignal.di.interceptor.LoggingInterceptor
-import com.mguven.holysignal.network.FavouritesApi
-import com.mguven.holysignal.network.MemberApi
-import com.mguven.holysignal.network.NewsApi
-import com.mguven.holysignal.network.SurahApi
+import com.mguven.holysignal.network.*
 import dagger.Module
 import dagger.Provides
 import okhttp3.Cache
@@ -59,6 +56,11 @@ class NetworkModule {
   @Provides
   @Singleton
   fun provideMemberApi(retrofit: Retrofit): MemberApi = retrofit.create(MemberApi::class.java)
+
+  @Provides
+  @Singleton
+  fun provideNotesApi(retrofit: Retrofit): NotesApi = retrofit.create(NotesApi::class.java)
+
 
   @Provides
   @Singleton

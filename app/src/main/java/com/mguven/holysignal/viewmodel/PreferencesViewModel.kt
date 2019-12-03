@@ -115,8 +115,9 @@ constructor(private val surahApi: SurahApi,
       CoroutineScope(Dispatchers.IO).launch {
         val response = memberApi.signIn(RequestSignIn(email, password, cache.getUUID()))
         if (response.status == ConstantVariables.RESPONSE_OK && response.data != null) {
-          database.preferencesDataDao().updateUserInfo(response.data.name, response.data.surname)
+          database.preferencesDataDao().updateUserInfo(response.data.memberId, response.data.name, response.data.surname)
           cache.updateToken(response.data.token)
+          cache.updateMemberId(response.data.memberId)
         }
         memberShipData.postValue(response)
       }
@@ -128,8 +129,9 @@ constructor(private val surahApi: SurahApi,
       CoroutineScope(Dispatchers.IO).launch {
         val response = memberApi.updateSessionNo(RequestSignIn(email, password, cache.getUUID()))
         if (response.status == ConstantVariables.RESPONSE_OK && response.data != null) {
-          database.preferencesDataDao().updateUserInfo(response.data.name, response.data.surname)
+          database.preferencesDataDao().updateUserInfo(response.data.memberId, response.data.name, response.data.surname)
           cache.updateToken(response.data.token)
+          cache.updateMemberId(response.data.memberId)
         }
         memberShipData.postValue(response)
       }
@@ -141,8 +143,9 @@ constructor(private val surahApi: SurahApi,
       CoroutineScope(Dispatchers.IO).launch {
         val response = memberApi.save(RequestSignUp(name, surname, email, password, cache.getUUID()))
         if (response.status == ConstantVariables.RESPONSE_OK) {
-          database.preferencesDataDao().updateUserInfo(name, surname)
-          cache.updateToken(response.data!!.token)
+          database.preferencesDataDao().updateUserInfo(response.data!!.memberId, name, surname)
+          cache.updateToken(response.data.token)
+          cache.updateMemberId(response.data.memberId)
         }
         memberShipData.postValue(response)
       }

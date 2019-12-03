@@ -18,7 +18,7 @@ interface PreferencesDataDao {
   @Query("UPDATE Preferences SET topTextEditionId = :topEditionId, bottomTextEditionId = :bottomEditionId")
   fun upsertEditionId(topEditionId: Int, bottomEditionId: Int)
 
-  @Query("UPDATE Preferences SET name = :name, surname = :surname")
-  suspend fun updateUserInfo(name: String, surname: String)
+  @Query("UPDATE Preferences SET memberId = :memberId, name = :name, surname = :surname")
+  suspend fun updateUserInfo(memberId: Int, name: String, surname: String)
 
 }
