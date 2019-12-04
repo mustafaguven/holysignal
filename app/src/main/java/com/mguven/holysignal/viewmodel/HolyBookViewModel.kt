@@ -145,7 +145,7 @@ constructor(private val database: ApplicationDatabase,
   fun getNotesByAyahNumber(ayahNumber: Int) {
     if (deviceUtil.isConnected()) {
       CoroutineScope(Dispatchers.IO).launch {
-        val response = notesApi.getNotesByAyahNumber(ayahNumber)
+        val response = notesApi.getNotesByAyahNumber(cache.getMemberId(), ayahNumber)
         allNotesFromCloud.postValue(response)
       }
     }

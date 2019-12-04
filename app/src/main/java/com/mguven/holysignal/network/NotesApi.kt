@@ -16,7 +16,7 @@ import retrofit2.http.Query
 interface NotesApi {
 
   @GET("notes")
-  suspend fun getNotesByAyahNumber(@Query("ayahNumber") ayahNumber: Int): GetNotesByAyahNumberEntity
+  suspend fun getNotesByAyahNumber(@Query("memberId") memberId: Int, @Query("ayahNumber") ayahNumber: Int): GetNotesByAyahNumberEntity
 
   @POST("notes/insertvoter")
   suspend fun insertVoter(@Body request: RequestInsertVoter): InsertVoterEntity

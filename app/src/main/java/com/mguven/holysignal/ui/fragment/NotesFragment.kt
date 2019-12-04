@@ -1,15 +1,16 @@
 package com.mguven.holysignal.ui.fragment
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
-import android.widget.Toast
 import androidx.lifecycle.Observer
+import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mguven.holysignal.R
 import com.mguven.holysignal.constant.ConstantVariables
 import com.mguven.holysignal.model.response.AddNoteEntity
-import com.mguven.holysignal.model.response.InsertVoterEntity
 import com.mguven.holysignal.model.response.GetNotesByAyahNumberEntity
+import com.mguven.holysignal.model.response.InsertVoterEntity
 import com.mguven.holysignal.model.response.RemoveNoteEntity
 import com.mguven.holysignal.ui.AbstractBaseActivity
 import com.mguven.holysignal.ui.adapter.NotesAdapter
@@ -36,21 +37,29 @@ class NotesFragment : BaseDialogFragment() {
     super.onViewCreated(view, savedInstanceState)
     rvNotes.layoutManager = LinearLayoutManager(activity)
 
-    activity?.let {
-      holyBookViewModel = (activity as AbstractBaseActivity).getViewModel(HolyBookViewModel::class.java)
-      btnAddVote.visibility = if(holyBookViewModel.cache.getMemberId() == ConstantVariables.GUEST_USER) View.GONE else View.VISIBLE
-      etNote.visibility = if(holyBookViewModel.cache.getMemberId() == ConstantVariables.GUEST_USER) View.GONE else View.VISIBLE
-    }
+
 
     arguments?.let {
       ayahNumber = it.getInt(AYAH_NUMBER)
     }
 
+  }
+
+  override fun onActivityCreated(savedInstanceState: Bundle?) {
+    super.onActivityCreated(savedInstanceState)
+
+    activity?.let {
+      holyBookViewModel = (activity as AbstractBaseActivity).getViewModel(HolyBookViewModel::class.java)
+      btnAddVote.visibility = if (holyBookViewModel.cache.getMemberId() == ConstantVariables.GUEST_USER) View.GONE else View.VISIBLE
+      etNote.visibility = if (holyBookViewModel.cache.getMemberId() == ConstantVariables.GUEST_USER) View.GONE else View.VISIBLE
+    }
+
+    adapter = NotesAdapter(ayahNumber, activity!!)
     retrieveAllNotes()
 
-    holyBookViewModel.allNotesFromCloud.observe(this, Observer<GetNotesByAyahNumberEntity> { list ->
-      if(list.data != null) {
-        if(list.data.isEmpty()){
+    holyBookViewModel.allNotesFromCloud.observe(viewLifecycleOwner, Observer<GetNotesByAyahNumberEntity> { list ->
+      if (list.data != null) {
+        if (list.data.notes.isEmpty()) {
           tvEmpty.text = getString(R.string.no_notes_found)
           tvEmpty.visibility = View.VISIBLE
           rvNotes.visibility = View.GONE
@@ -58,46 +67,46 @@ class NotesFragment : BaseDialogFragment() {
         } else {
           tvEmpty.visibility = View.GONE
           rvNotes.visibility = View.VISIBLE
+          adapter.updateNoteResponse(list.data)
         }
-
-        adapter = NotesAdapter(ayahNumber, list.data, activity!!)
         rvNotes.adapter = adapter
-
-        adapter.voteObservable.observe(this, Observer<IntArray>{
-          val ayahNoteId = it[0]
-          val vote = it[1]
-          holyBookViewModel.changeAyahNoteVoteCountObserver.observe(this, Observer<InsertVoterEntity>{
-            //do nothing
-          })
-          holyBookViewModel.insertVoter(ayahNoteId, vote)
-
-        })
-
-        adapter.removeObservable.observe(this, Observer<Int> {
-          holyBookViewModel.removeNoteObserver.observe(this, Observer<RemoveNoteEntity>{
-            retrieveAllNotes()
-          })
-          holyBookViewModel.removeAyah(it)
-        })
       }
     })
 
+    holyBookViewModel.changeAyahNoteVoteCountObserver.observe(this, Observer<InsertVoterEntity> {
+      retrieveAllNotes()
+    })
+
+    adapter.voteObservable.observe(this, Observer<IntArray> {
+      val ayahNoteId = it[0]
+      val vote = it[1]
+      holyBookViewModel.insertVoter(ayahNoteId, vote)
+    })
+
+    adapter.removeObservable.observe(this, Observer<Int> {
+      holyBookViewModel.removeAyah(it)
+    })
+
+    holyBookViewModel.removeNoteObserver.observe(this, Observer<RemoveNoteEntity> {
+      retrieveAllNotes()
+    })
+
     btnAddVote.setOnClickListener {
-      btnAddVote.isEnabled = false
-      if(etNote.text.toString().isNotEmpty()) {
-        holyBookViewModel.addNoteObserver.observe(this, Observer<AddNoteEntity> {
-          retrieveAllNotes()
-          btnAddVote.isEnabled = true
-        })
+      if (etNote.text.toString().isNotEmpty()) {
+        btnAddVote.isEnabled = false
         holyBookViewModel.addNote(ayahNumber, etNote.text.toString())
       }
     }
 
-
-
+    holyBookViewModel.addNoteObserver.observe(viewLifecycleOwner, Observer<AddNoteEntity> {
+      etNote.setText("")
+      retrieveAllNotes()
+      btnAddVote.isEnabled = true
+    })
   }
 
   private fun retrieveAllNotes() {
+    Log.e("AAA", "GIRDI")
     holyBookViewModel.getNotesByAyahNumber(ayahNumber)
   }
 
