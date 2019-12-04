@@ -9,9 +9,13 @@ import com.mguven.holysignal.db.entity.NotesData
 import com.mguven.holysignal.db.entity.ViewingCountsData
 import com.mguven.holysignal.extension.isNotNullAndNotEmpty
 import com.mguven.holysignal.model.request.RequestAddFavourites
+import com.mguven.holysignal.model.request.RequestAddNote
 import com.mguven.holysignal.model.request.RequestInsertVoter
+import com.mguven.holysignal.model.request.RequestRemoveNote
+import com.mguven.holysignal.model.response.AddNoteEntity
 import com.mguven.holysignal.model.response.InsertVoterEntity
 import com.mguven.holysignal.model.response.GetNotesByAyahNumberEntity
+import com.mguven.holysignal.model.response.RemoveNoteEntity
 import com.mguven.holysignal.network.FavouritesApi
 import com.mguven.holysignal.network.NotesApi
 import com.mguven.holysignal.util.DeviceUtil
@@ -24,7 +28,7 @@ import javax.inject.Inject
 
 class HolyBookViewModel @Inject
 constructor(private val database: ApplicationDatabase,
-            private val cache: ApplicationCache,
+            val cache: ApplicationCache,
             private val favouritesApi: FavouritesApi,
             private val notesApi: NotesApi,
             private val deviceUtil: DeviceUtil) : BaseViewModel() {
@@ -32,6 +36,8 @@ constructor(private val database: ApplicationDatabase,
   val totalFavouriteCount = MutableLiveData<Int>()
   val allNotesFromCloud = MutableLiveData<GetNotesByAyahNumberEntity>()
   val changeAyahNoteVoteCountObserver = MutableLiveData<InsertVoterEntity>()
+  val addNoteObserver = MutableLiveData<AddNoteEntity>()
+  val removeNoteObserver = MutableLiveData<RemoveNoteEntity>()
 
   private var favouriteIdList: List<Long>? = null
   fun getFavouriteIdList(): List<Long>? {
@@ -150,6 +156,24 @@ constructor(private val database: ApplicationDatabase,
       CoroutineScope(Dispatchers.IO).launch {
         val result = notesApi.insertVoter(RequestInsertVoter(cache.getMemberId(), ayahNoteId, vote))
         changeAyahNoteVoteCountObserver.postValue(result)
+      }
+    }
+  }
+
+  fun addNote(ayahNumber: Int, note: String) {
+    if (deviceUtil.isConnected()) {
+      CoroutineScope(Dispatchers.IO).launch {
+        val result = notesApi.addNote(RequestAddNote(cache.getMemberId(), ayahNumber, note))
+        addNoteObserver.postValue(result)
+      }
+    }
+  }
+
+  fun removeAyah(ayahNoteId: Int) {
+    if (deviceUtil.isConnected()) {
+      CoroutineScope(Dispatchers.IO).launch {
+        val result = notesApi.removeNote(RequestRemoveNote(ayahNoteId))
+        removeNoteObserver.postValue(result)
       }
     }
   }

@@ -71,6 +71,8 @@
     <string name="go_to_bookmark_warning_message">Do you want to go to your bookmarked ayah? (%1$s)</string>
     <string name="total_cloud_favourite_count">liked by %1$d people</string>
     <string name="no_notes_found">No notes found</string>
+    <string name="not_connected">Not connected to the internet</string>
+    <string name="notes_are_retrieving">Notes are retrieving</string>
 
     <string-array name="playmodes">
         <item>Shuffle all ayahs</item>

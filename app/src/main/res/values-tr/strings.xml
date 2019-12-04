@@ -72,6 +72,8 @@
     <string name="go_to_bookmark_warning_message">Ayraç olarak işaretlediğiniz ayete (%1$s) gidilecek, devam edilsin mi?</string>
     <string name="total_cloud_favourite_count">%1$d kişi favoriledi</string>
     <string name="no_notes_found">Bu ayetle ilgili not bulunamadı</string>
+    <string name="not_connected">İnternet bağlantısı yok</string>
+    <string name="notes_are_retrieving">Notlar getiriliyor…</string>
 
     <string-array name="playmodes">
         <item>Ayetler karışık şekilde gösterilsin</item>

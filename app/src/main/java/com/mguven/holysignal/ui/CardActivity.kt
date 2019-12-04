@@ -7,6 +7,7 @@ import android.util.Log
 import android.util.TypedValue
 import android.view.View
 import android.widget.AdapterView
+import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import com.mguven.holysignal.FlowController
@@ -24,11 +25,13 @@ import com.mguven.holysignal.ui.fragment.AddNoteFragment
 import com.mguven.holysignal.ui.fragment.BaseDialogFragment
 import com.mguven.holysignal.ui.fragment.NotesFragment
 import com.mguven.holysignal.ui.fragment.SearchWordInAyahsFragment
+import com.mguven.holysignal.util.DeviceUtil
 import com.mguven.holysignal.viewmodel.HolyBookViewModel
 import kotlinx.android.synthetic.main.activity_card.*
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import javax.inject.Inject
 
 
 class CardActivity : AbstractBaseActivity(),
@@ -39,6 +42,9 @@ class CardActivity : AbstractBaseActivity(),
     private const val FAVOURITE_STARTER_AYAH_ID = -100
     private const val SAVED_AYAH_NUMBER = "SAVED_AYAH_NUMBER"
   }
+
+  @Inject
+  lateinit var deviceUtil: DeviceUtil
 
   private lateinit var holyBookViewModel: HolyBookViewModel
 
@@ -231,8 +237,12 @@ class CardActivity : AbstractBaseActivity(),
     }
 
     ivAddNote.setOnClickListener {
-      notesFragment = NotesFragment.newInstance(ayahNumber)
-      notesFragment.show(supportFragmentManager, notesFragment.javaClass.simpleName)
+      if(deviceUtil.isConnected()) {
+        notesFragment = NotesFragment.newInstance(ayahNumber)
+        notesFragment.show(supportFragmentManager, notesFragment.javaClass.simpleName)
+      } else {
+        showErrorDialog(getString(R.string.not_connected))
+      }
     }
 
     ivSelectSurah.setOnClickListener {

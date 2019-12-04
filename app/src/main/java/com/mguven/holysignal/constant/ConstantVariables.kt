@@ -18,4 +18,5 @@ object ConstantVariables {
   const val RESPONSE_OK = 1
 
   const val EMPTY_BOOKMARK = -1
+  const val GUEST_USER = -1
 }
