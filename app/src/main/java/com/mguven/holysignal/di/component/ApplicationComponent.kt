@@ -31,6 +31,8 @@ interface ApplicationComponent {
 
   operator fun plus(searchWordInAyahsFragmentModule: SearchWordInAyahsFragmentModule): SearchWordInAyahsFragmentComponent
 
+  operator fun plus(selectSurahFragmentModule: SelectSurahFragmentModule): SelectSurahFragmentComponent
+
   operator fun plus(signupActivityModule: SignupActivityModule): SignupActivityComponent
 
   operator fun plus(loginActivityModule: LoginActivityModule): LoginActivityComponent

@@ -24,6 +24,7 @@ import com.mguven.holysignal.ui.adapter.AvailableSurahAdapter
 import com.mguven.holysignal.ui.fragment.BaseDialogFragment
 import com.mguven.holysignal.ui.fragment.NotesFragment
 import com.mguven.holysignal.ui.fragment.SearchWordInAyahsFragment
+import com.mguven.holysignal.ui.fragment.SelectSurahFragment
 import com.mguven.holysignal.util.DeviceUtil
 import com.mguven.holysignal.util.OnSwipeTouchListener
 import com.mguven.holysignal.viewmodel.HolyBookViewModel
@@ -34,7 +35,8 @@ import javax.inject.Inject
 
 
 class CardActivity : AbstractBaseActivity(),
-    SearchWordInAyahsFragment.OnFragmentInteractionListener {
+    SearchWordInAyahsFragment.OnFragmentInteractionListener,
+    SelectSurahFragment.OnFragmentInteractionListener {
 
   companion object {
     private const val MAX_SEARCH_KEYWORD_THRESHOLD = 3
@@ -47,8 +49,6 @@ class CardActivity : AbstractBaseActivity(),
 
   private lateinit var holyBookViewModel: HolyBookViewModel
   private var playmode: Int = Int.MIN_VALUE
-  private var availableSurahList: List<AvailableSurahItem>? = null
-  private var spSurahOpeningClick = true
 
   private val playmodes by lazy {
     return@lazy resources.getStringArray(R.array.playmodes)
@@ -56,6 +56,8 @@ class CardActivity : AbstractBaseActivity(),
 
   private lateinit var notesFragment: BaseDialogFragment
   private lateinit var searchWordInAyahsFragment: BaseDialogFragment
+  private lateinit var selectSurahFragment: BaseDialogFragment
+
   private var isFavourite = false
   private var ayahNumber = 0
 
@@ -240,19 +242,8 @@ class CardActivity : AbstractBaseActivity(),
     }
 
     ivSelectSurah.setOnClickListener {
-      spSurahOpeningClick = true
-      if (availableSurahList == null) {
-        lifecycleScope.launch {
-          holyBookViewModel.getAvailableSurahList().also { list ->
-            if (availableSurahList != list) {
-              availableSurahList = list
-              updateAvailableSurahListAdapter(list)
-            }
-          }
-        }
-      } else {
-        updateAvailableSurahListAdapter(availableSurahList!!)
-      }
+      selectSurahFragment = SelectSurahFragment.newInstance()
+      selectSurahFragment.show(supportFragmentManager, selectSurahFragment.javaClass.simpleName)
     }
 
     ivSearch.setOnClickListener {
@@ -299,6 +290,7 @@ class CardActivity : AbstractBaseActivity(),
     })
 
 
+
   }
 
   private fun initPlaymode(mode: Int) {
@@ -315,32 +307,7 @@ class CardActivity : AbstractBaseActivity(),
     tvPrevious.isEnabled = (mode == Playmode.AYAH_BY_AYAH || mode == Playmode.REPEAT_SURAH)
   }
 
-  private fun updateAvailableSurahListAdapter(list: List<AvailableSurahItem>) {
-    var selectedItem = 0
-    list.forEachIndexed { index, it ->
-      if (it.value == cache.getLastShownAyah()?.surahNumber) {
-        selectedItem = index
-        return@forEachIndexed
-      }
-    }
 
-    spSurahList.adapter = AvailableSurahAdapter(this, R.layout.status_item, list, selectedItem)
-    spSurahList.setSelection(selectedItem)
-    spSurahList.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-      override fun onNothingSelected(adapterView: AdapterView<*>?) {
-        //do nothing
-      }
-
-      override fun onItemSelected(adapterView: AdapterView<*>?, view: View?, position: Int, id: Long) {
-        if (!spSurahOpeningClick) {
-          ayahNumber = availableSurahList!![position].min
-          initData()
-        }
-        spSurahOpeningClick = false
-      }
-    }
-    spSurahList.performClick()
-  }
 
   private fun upsertFavourite() = runBlocking {
     var isAdd = 0
@@ -479,6 +446,12 @@ class CardActivity : AbstractBaseActivity(),
   override fun onRestoreInstanceState(savedInstanceState: Bundle) {
     super.onRestoreInstanceState(savedInstanceState)
     savedInstanceState.getInt(SAVED_AYAH_NUMBER)
+  }
+
+  override fun onSurahSelected(surah: AvailableSurahItem) {
+    ayahNumber = surah.min
+    initData()
+    selectSurahFragment.dismiss()
   }
 
 

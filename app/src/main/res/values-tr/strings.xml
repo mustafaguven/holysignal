@@ -78,6 +78,7 @@
     <string name="ayah_number">Ayet No</string>
     <string name="not_an_ayah_number">Geçerli bir ayet numarası değil</string>
     <string name="go">Git</string>
+    <string name="select_surah">Sure Seçiniz</string>
 
     <string-array name="playmodes">
         <item>Bundan sonra ayetler karışık şekilde gösterilsin</item>
