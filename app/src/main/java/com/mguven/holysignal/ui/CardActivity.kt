@@ -3,12 +3,9 @@ package com.mguven.holysignal.ui
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.util.TypedValue
 import android.view.View
 import android.widget.AdapterView
-import android.widget.Toast
-import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import com.mguven.holysignal.FlowController
 import com.mguven.holysignal.R
@@ -17,11 +14,13 @@ import com.mguven.holysignal.constant.ConstantVariables
 import com.mguven.holysignal.constant.Playmode
 import com.mguven.holysignal.db.entity.AvailableSurahItem
 import com.mguven.holysignal.di.module.CardActivityModule
-import com.mguven.holysignal.extension.*
+import com.mguven.holysignal.extension.highlighted
+import com.mguven.holysignal.extension.isNotNullAndNotEmpty
+import com.mguven.holysignal.extension.removeBoxBracketsAndPutSpaceAfterComma
+import com.mguven.holysignal.extension.setEmpty
 import com.mguven.holysignal.inline.whenNotNull
 import com.mguven.holysignal.model.AyahSearchResult
 import com.mguven.holysignal.ui.adapter.AvailableSurahAdapter
-import com.mguven.holysignal.ui.fragment.AddNoteFragment
 import com.mguven.holysignal.ui.fragment.BaseDialogFragment
 import com.mguven.holysignal.ui.fragment.NotesFragment
 import com.mguven.holysignal.ui.fragment.SearchWordInAyahsFragment
@@ -29,7 +28,6 @@ import com.mguven.holysignal.util.DeviceUtil
 import com.mguven.holysignal.util.OnSwipeTouchListener
 import com.mguven.holysignal.viewmodel.HolyBookViewModel
 import kotlinx.android.synthetic.main.activity_card.*
-import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
@@ -274,10 +272,10 @@ class CardActivity : AbstractBaseActivity(),
 
     ivSearchClose.setOnClickListener {
       cache.updateAyahSearchResult(null)
-      //tvNext.visibility = View.VISIBLE
       tvNext.isEnabled = true
       ivPlayMode.visibility = View.VISIBLE
-      //ivSelectSurah.visibility = View.VISIBLE
+      ivSelectSurah.visibility = View.VISIBLE
+      ivSearch.visibility = View.VISIBLE
       ivSearchClose.visibility = View.GONE
       tvKeywords.visibility = View.GONE
       ayahNumber = getAyahNumberByPlaymode()
@@ -299,6 +297,8 @@ class CardActivity : AbstractBaseActivity(),
         tvPrevious.performClick()
       }
     })
+
+
   }
 
   private fun initPlaymode(mode: Int) {
@@ -429,6 +429,7 @@ class CardActivity : AbstractBaseActivity(),
             tvAyahNumber.setEmpty()
             tvAyahTopText.setEmpty()
             tvAyahBottomText.setEmpty()
+            tvViewingCount.setEmpty()
           }
         }
       }
@@ -439,12 +440,34 @@ class CardActivity : AbstractBaseActivity(),
     }
   }
 
+  override fun onSearchAyahNoEntered(ayahNo: Int) {
+    try {
+      if(ayahNo >= 1 && ayahNo <= cache.getMaxAyahCount()) {
+        arrangeViewsBySearch(AyahSearchResult(listOf(ayahNo), ayahNo.toString()))
+        ayahNumber = ayahNo
+        initData()
+      } else {
+        arrangeViewsBySearch(AyahSearchResult(null, ayahNo.toString()))
+        tvAyahNumber.setEmpty()
+        tvAyahTopText.setEmpty()
+        tvAyahBottomText.setEmpty()
+        tvViewingCount.setEmpty()
+      }
+    } catch (ex: Exception) {
+      showErrorSnackBar(ex.message!!)
+    } finally {
+      searchWordInAyahsFragment.dismiss()
+    }
+  }
+
   private fun arrangeViewsBySearch(searchResult: AyahSearchResult) {
-    ivPlayMode.visibility = View.INVISIBLE
+    ivPlayMode.visibility = View.GONE
+    ivSelectSurah.visibility = View.GONE
+    ivSearch.visibility = View.GONE
     ivSearchClose.visibility = View.VISIBLE
     tvNext.isEnabled = searchResult.list.isNotNullAndNotEmpty()
     tvKeywords.visibility = View.VISIBLE
-    tvKeywords.text = getString(R.string.ayah_search_found_text, searchResult.keywords, searchResult.list?.size)
+    tvKeywords.text = getString(R.string.ayah_search_found_text, searchResult.keywords, searchResult.list?.size ?: 0)
   }
 
 

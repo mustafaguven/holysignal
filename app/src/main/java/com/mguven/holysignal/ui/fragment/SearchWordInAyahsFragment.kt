@@ -3,6 +3,7 @@ package com.mguven.holysignal.ui.fragment
 import android.content.Context
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
 import com.mguven.holysignal.R
 import com.mguven.holysignal.TheApplication
@@ -56,10 +57,27 @@ class SearchWordInAyahsFragment : BaseDialogFragment() {
       whenNotNull(it) { btnSearch.isEnabled = !it.toString().isNullOrEmpty() }
     }
 
+    rbWord.setOnClickListener {
+      btnSearch.text = getString(R.string.search)
+    }
+
+    rbAyahNo.setOnClickListener {
+      btnSearch.text = getString(R.string.go)
+    }
+
     btnSearch.setOnClickListener {
       lifecycleScope.launch {
-        val words = etWord.text.toString().removeBoxBrackets().split(",").toMutableSet()
-        listener?.onSearchWordEntered(words)
+        if (radiogroup.checkedRadioButtonId == R.id.rbWord) {
+          val words = etWord.text.toString().removeBoxBrackets().split(",").toMutableSet()
+          listener?.onSearchWordEntered(words)
+        } else {
+          if (etWord.text.toString().toIntOrNull() != null) {
+            listener?.onSearchAyahNoEntered(etWord.text.toString().toInt())
+          } else {
+            Toast.makeText(activity, R.string.not_an_ayah_number, Toast.LENGTH_SHORT).show()
+          }
+        }
+        etWord.setText("")
       }
     }
   }
@@ -77,5 +95,6 @@ class SearchWordInAyahsFragment : BaseDialogFragment() {
 
   interface OnFragmentInteractionListener {
     fun onSearchWordEntered(words: MutableSet<String>)
+    fun onSearchAyahNoEntered(ayahNo: Int)
   }
 }

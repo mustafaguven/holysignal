@@ -73,6 +73,10 @@
     <string name="no_notes_found">No notes found</string>
     <string name="not_connected">Not connected to the internet</string>
     <string name="notes_are_retrieving">Notes are retrieving</string>
+    <string name="word">Word</string>
+    <string name="ayah_number">Ayah Number</string>
+    <string name="not_an_ayah_number">Invalid ayah number</string>
+    <string name="go">Go</string>
 
     <string-array name="playmodes">
         <item>Shuffle all ayahs</item>
