@@ -76,10 +76,10 @@
     <string name="notes_are_retrieving">Notlar getiriliyor…</string>
 
     <string-array name="playmodes">
-        <item>Ayetler karışık şekilde gösterilsin</item>
-        <item>Sadece seçili sureye ait ayetler gösterilsin</item>
-        <item>Sadece bu ayet gösterilsin</item>
-        <item>Ayetler sırayla gösterilsin</item>
-        <item>Favori ayetler gösterilsin</item>
+        <item>Bundan sonra ayetler karışık şekilde gösterilsin</item>
+        <item>Bundan sonra adece seçili sureye ait ayetler gösterilsin</item>
+        <item>Hep bu ayet gösterilsin</item>
+        <item>Bundan sonra ayetler sırayla gösterilsin</item>
+        <item>Bundan sonra favori ayetler gösterilsin</item>
     </string-array>
 </resources>

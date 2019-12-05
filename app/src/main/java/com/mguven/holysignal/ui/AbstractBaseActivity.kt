@@ -6,6 +6,8 @@ import android.content.IntentFilter
 import android.net.ConnectivityManager
 import android.os.Bundle
 import android.util.Log
+import android.util.TypedValue
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleObserver
@@ -21,6 +23,7 @@ import com.mguven.holysignal.di.module.ActivityModule
 import com.mguven.holysignal.util.ConnectivityReceiver
 import io.reactivex.disposables.CompositeDisposable
 import javax.inject.Inject
+
 
 abstract class AbstractBaseActivity : AppCompatActivity(), LifecycleObserver, ConnectivityReceiver.ConnectivityReceiverListener  {
 
@@ -74,7 +77,9 @@ abstract class AbstractBaseActivity : AppCompatActivity(), LifecycleObserver, Co
     val snackbar = Snackbar.make(findViewById(android.R.id.content),
         str,
         Snackbar.LENGTH_SHORT)
+    val textView = snackbar.view.findViewById(com.google.android.material.R.id.snackbar_text) as TextView
     snackbar.view.setBackgroundColor(ContextCompat.getColor(this, if (isError) R.color.error else R.color.black))
+    textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20F)
     snackbar.show()
   }
 

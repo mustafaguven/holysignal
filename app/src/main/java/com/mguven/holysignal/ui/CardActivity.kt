@@ -48,10 +48,8 @@ class CardActivity : AbstractBaseActivity(),
   lateinit var deviceUtil: DeviceUtil
 
   private lateinit var holyBookViewModel: HolyBookViewModel
-
   private var playmode: Int = Int.MIN_VALUE
   private var availableSurahList: List<AvailableSurahItem>? = null
-
   private var spSurahOpeningClick = true
 
   private val playmodes by lazy {
@@ -75,7 +73,6 @@ class CardActivity : AbstractBaseActivity(),
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_card)
     inject()
-    Log.e("AAA", "card activity is on")
     holyBookViewModel = getViewModel(HolyBookViewModel::class.java)
     playmode = cache.getPlaymode()
     initPlaymode(playmode)
@@ -135,8 +132,6 @@ class CardActivity : AbstractBaseActivity(),
     } else {
       tvAyahTopText.text = getString(R.string.none_favourite_found)
       ivFavourite.visibility = View.INVISIBLE
-      //tvNext.visibility = View.GONE
-      //tvPrevious.visibility = View.GONE
       tvNext.isEnabled = false
       tvPrevious.isEnabled = false
       tvAyahBottomText.setEmpty()
@@ -154,7 +149,6 @@ class CardActivity : AbstractBaseActivity(),
   }
 
   private fun onSelectSurah(increment: Int): Int {
-    //ivSelectSurah.setImageResource(R.drawable.ic_select_surah)
     var ayahNumber = cache.getLastShownAyahNumber() + increment
     if (ayahNumber > cache.getLastShownAyah()!!.endingAyahNumber) {
       ayahNumber = cache.getLastShownAyah()!!.startingAyahNumber
@@ -235,7 +229,7 @@ class CardActivity : AbstractBaseActivity(),
       playmode = newPlayMode
       showSnackbar(playmodes[newPlayMode])
       ayahNumber = getAyahNumberByPlaymode()
-      initData()
+      //initData()
     }
 
     ivAddNote.setOnClickListener {
@@ -249,9 +243,6 @@ class CardActivity : AbstractBaseActivity(),
 
     ivSelectSurah.setOnClickListener {
       spSurahOpeningClick = true
-      //if (playmode != Playmode.REPEAT_SURAH) return@setOnClickListener
-      //playmode = Playmode.REPEAT_SURAH
-
       if (availableSurahList == null) {
         lifecycleScope.launch {
           holyBookViewModel.getAvailableSurahList().also { list ->
@@ -320,10 +311,7 @@ class CardActivity : AbstractBaseActivity(),
           else -> R.drawable.ic_loop_24px
         }
     )
-    //ivSelectSurah.setImageResource(if (mode == Playmode.REPEAT_SURAH) R.drawable.ic_select_surah else R.drawable.ic_select_surah_disabled)
-    //tvNext.visibility = if (mode == Playmode.REPEAT_AYAH) View.GONE else View.VISIBLE
     tvNext.isEnabled = mode != Playmode.REPEAT_AYAH
-    //tvPrevious.visibility = if (mode == Playmode.AYAH_BY_AYAH || mode == Playmode.REPEAT_SURAH) View.VISIBLE else View.GONE
     tvPrevious.isEnabled = (mode == Playmode.AYAH_BY_AYAH || mode == Playmode.REPEAT_SURAH)
   }
 
@@ -345,9 +333,6 @@ class CardActivity : AbstractBaseActivity(),
 
       override fun onItemSelected(adapterView: AdapterView<*>?, view: View?, position: Int, id: Long) {
         if (!spSurahOpeningClick) {
-          Log.e("AAA", "position ==> $position ---- min ==> ${availableSurahList!![position].min} ----- max ==> ${availableSurahList!![position].max}")
-          val maxAyah = if (availableSurahList!![position].max >= cache.getMaxAyahCount()) cache.getMaxAyahCount() else availableSurahList!![position].max
-          //ayahNumber = (availableSurahList!![position].min..maxAyah).random()
           ayahNumber = availableSurahList!![position].min
           initData()
         }
@@ -456,9 +441,7 @@ class CardActivity : AbstractBaseActivity(),
 
   private fun arrangeViewsBySearch(searchResult: AyahSearchResult) {
     ivPlayMode.visibility = View.INVISIBLE
-    //ivSelectSurah.visibility = View.GONE
     ivSearchClose.visibility = View.VISIBLE
-    //tvNext.visibilityByIfCollectionHasItems(searchResult.list)
     tvNext.isEnabled = searchResult.list.isNotNullAndNotEmpty()
     tvKeywords.visibility = View.VISIBLE
     tvKeywords.text = getString(R.string.ayah_search_found_text, searchResult.keywords, searchResult.list?.size)
