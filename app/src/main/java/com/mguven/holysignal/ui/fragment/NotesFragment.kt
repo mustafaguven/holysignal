@@ -106,7 +106,6 @@ class NotesFragment : BaseDialogFragment() {
   }
 
   private fun retrieveAllNotes() {
-    Log.e("AAA", "GIRDI")
     holyBookViewModel.getNotesByAyahNumber(ayahNumber)
   }
 

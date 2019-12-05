@@ -26,6 +26,7 @@ import com.mguven.holysignal.ui.fragment.BaseDialogFragment
 import com.mguven.holysignal.ui.fragment.NotesFragment
 import com.mguven.holysignal.ui.fragment.SearchWordInAyahsFragment
 import com.mguven.holysignal.util.DeviceUtil
+import com.mguven.holysignal.util.OnSwipeTouchListener
 import com.mguven.holysignal.viewmodel.HolyBookViewModel
 import kotlinx.android.synthetic.main.activity_card.*
 import kotlinx.android.synthetic.main.activity_main.*
@@ -137,6 +138,8 @@ class CardActivity : AbstractBaseActivity(),
       ivFavourite.visibility = View.INVISIBLE
       tvNext.visibility = View.GONE
       tvPrevious.visibility = View.GONE
+      tvNext.isEnabled = false
+      tvPrevious.isEnabled = false
       tvAyahBottomText.setEmpty()
       tvAyahNumber.setEmpty()
     }
@@ -280,6 +283,7 @@ class CardActivity : AbstractBaseActivity(),
     ivSearchClose.setOnClickListener {
       cache.updateAyahSearchResult(null)
       tvNext.visibility = View.VISIBLE
+      tvNext.isEnabled = true
       ivPlayMode.visibility = View.VISIBLE
       ivSelectSurah.visibility = View.VISIBLE
       ivSearchClose.visibility = View.GONE
@@ -288,8 +292,20 @@ class CardActivity : AbstractBaseActivity(),
       initData()
     }
 
-    holyBookViewModel.totalFavouriteCount.observe(this, Observer<Int> {
-      //tvCloudFavouriteCount.text = getString(R.string.total_cloud_favourite_count, it)
+//    holyBookViewModel.totalFavouriteCount.observe(this, Observer<Int> {
+//      //tvCloudFavouriteCount.text = getString(R.string.total_cloud_favourite_count, it)
+//    })
+
+    scrollview.setOnTouchListener(object : OnSwipeTouchListener(this@CardActivity) {
+      override fun onSwipeLeft() {
+        super.onSwipeLeft()
+        tvNext.performClick()
+      }
+
+      override fun onSwipeRight() {
+        super.onSwipeRight()
+        tvPrevious.performClick()
+      }
     })
   }
 
@@ -305,7 +321,9 @@ class CardActivity : AbstractBaseActivity(),
     )
     ivSelectSurah.setImageResource(if (mode == Playmode.REPEAT_SURAH) R.drawable.ic_select_surah else R.drawable.ic_select_surah_disabled)
     tvNext.visibility = if (mode == Playmode.REPEAT_AYAH) View.GONE else View.VISIBLE
+    tvNext.isEnabled = mode != Playmode.REPEAT_AYAH
     tvPrevious.visibility = if (mode == Playmode.AYAH_BY_AYAH || mode == Playmode.REPEAT_SURAH) View.VISIBLE else View.GONE
+    tvPrevious.isEnabled = (mode == Playmode.AYAH_BY_AYAH || mode == Playmode.REPEAT_SURAH)
   }
 
   private fun updateAvailableSurahListAdapter(list: List<AvailableSurahItem>) {
@@ -440,6 +458,7 @@ class CardActivity : AbstractBaseActivity(),
     ivSelectSurah.visibility = View.GONE
     ivSearchClose.visibility = View.VISIBLE
     tvNext.visibilityByIfCollectionHasItems(searchResult.list)
+    tvNext.isEnabled = searchResult.list.isNotNullAndNotEmpty()
     tvKeywords.visibility = View.VISIBLE
     tvKeywords.text = getString(R.string.ayah_search_found_text, searchResult.keywords, searchResult.list?.size)
   }
