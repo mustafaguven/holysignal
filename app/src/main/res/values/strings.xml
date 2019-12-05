@@ -28,7 +28,7 @@
     <string name="download">Download</string>
     <string name="download_book">Download Book</string>
     <string name="download_finished">download is finished</string>
-    <string name="ayah_not_found_on_this_book">This ayah is not available on this book. Please download it.</string>
+    <string name="ayah_not_found_on_alternative_book">This ayah is not available on this book. Please download it.</string>
     <string name="limited_version">%1$s (First 50 ayahs)</string>
     <string name="surah_ayahs_is_downloading">Ayahs are downloading (%1$s)</string>
     <string name="surah_translate_is_downloading">Translated surah names are downloading (%1$s)</string>
@@ -78,6 +78,7 @@
     <string name="not_an_ayah_number">Invalid ayah number</string>
     <string name="go">Go</string>
     <string name="select_surah">Select Surah</string>
+    <string name="ayah_not_found_on_primary_book">This ayah is not available on the book you have chosen as primarily. Please download it.</string>
 
     <string-array name="playmodes">
         <item>Shuffle all ayahs</item>

@@ -29,7 +29,7 @@
     <string name="download">İndir</string>
     <string name="download_book">İndirilecek Kitap</string>
     <string name="download_finished">indirme tamamlandı</string>
-    <string name="ayah_not_found_on_this_book">(Seçtiğiniz alternatif versiyonda bu ayet bulunamadı. Seçenekler ekranından ilgili kitabı indirerek tekrar deneyin.)</string>
+    <string name="ayah_not_found_on_alternative_book">(Seçtiğiniz alternatif versiyonda bu ayet bulunamadı. Seçenekler ekranından ilgili kitabı indirerek tekrar deneyin.)</string>
     <string name="limited_version">%1$s (İlk 50 ayet)</string>
     <string name="surah_ayahs_is_downloading">Ayetler indiriliyor (%1$s)</string>
     <string name="surah_translate_is_downloading">Sure isimleri indiriliyor (%1$s)</string>
@@ -79,12 +79,13 @@
     <string name="not_an_ayah_number">Geçerli bir ayet numarası değil</string>
     <string name="go">Git</string>
     <string name="select_surah">Sure Seçiniz</string>
+    <string name="ayah_not_found_on_primary_book">Seçtiğiniz birincil kitapta bu ayet bulunamadı. Seçenekler ekranından ilgili kitabı indirerek tekrar deneyin.</string>
 
     <string-array name="playmodes">
-        <item>Bundan sonra ayetler karışık şekilde gösterilsin</item>
-        <item>Bundan sonra adece seçili sureye ait ayetler gösterilsin</item>
-        <item>Hep bu ayet gösterilsin</item>
-        <item>Bundan sonra ayetler sırayla gösterilsin</item>
-        <item>Bundan sonra favori ayetler gösterilsin</item>
+        <item>Ayetler karışık şekilde gösterilecek</item>
+        <item>Sadece seçili sureye ait ayetler gösterilecek</item>
+        <item>Hep bu ayet gösterilecek</item>
+        <item>Ayetler sırayla gösterilecek</item>
+        <item>Favori ayetler gösterilecek</item>
     </string-array>
 </resources>

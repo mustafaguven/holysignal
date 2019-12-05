@@ -5,7 +5,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.TypedValue
 import android.view.View
-import android.widget.AdapterView
 import androidx.lifecycle.lifecycleScope
 import com.mguven.holysignal.FlowController
 import com.mguven.holysignal.R
@@ -20,7 +19,6 @@ import com.mguven.holysignal.extension.removeBoxBracketsAndPutSpaceAfterComma
 import com.mguven.holysignal.extension.setEmpty
 import com.mguven.holysignal.inline.whenNotNull
 import com.mguven.holysignal.model.AyahSearchResult
-import com.mguven.holysignal.ui.adapter.AvailableSurahAdapter
 import com.mguven.holysignal.ui.fragment.BaseDialogFragment
 import com.mguven.holysignal.ui.fragment.NotesFragment
 import com.mguven.holysignal.ui.fragment.SearchWordInAyahsFragment
@@ -89,7 +87,6 @@ class CardActivity : AbstractBaseActivity(),
       ivAllBookmarks.visibility = if (cache.getBookmark() == ConstantVariables.EMPTY_BOOKMARK) View.GONE else View.VISIBLE
       getAyahTopText()
       getAyahBottomText()
-      getViewingCount()
       getViewingPercentage()
       showFavouriteStatus()
     }
@@ -165,16 +162,16 @@ class CardActivity : AbstractBaseActivity(),
 
     ivAllBookmarks.setOnClickListener {
       lifecycleScope.launch {
-        val list = holyBookViewModel.getAyahBottomText(cache.getBookmark())
-        if(list.isNotNullAndNotEmpty()){
+        val list = holyBookViewModel.getAyahTopText(cache.getBookmark())
+        if (list.isNotNullAndNotEmpty()) {
+          showYesNoDialog(getString(R.string.go_to_bookmark_warning_message, "${list[0].surahNumber}:${list[0].numberInSurah}"), DialogInterface.OnClickListener { dialog, yes ->
+            ayahNumber = cache.getBookmark()
+            initData()
+            dialog.dismiss()
+          }, DialogInterface.OnClickListener { dialog, no ->
+            dialog.dismiss()
+          })
         }
-        showYesNoDialog(getString(R.string.go_to_bookmark_warning_message, "${list[0].surahNumber}:${list[0].numberInSurah}"), DialogInterface.OnClickListener { dialog, yes ->
-          ayahNumber = cache.getBookmark()
-          initData()
-          dialog.dismiss()
-        }, DialogInterface.OnClickListener { dialog, no ->
-          dialog.dismiss()
-        })
       }
     }
 
@@ -233,7 +230,7 @@ class CardActivity : AbstractBaseActivity(),
     }
 
     ivAddNote.setOnClickListener {
-      if(deviceUtil.isConnected()) {
+      if (deviceUtil.isConnected()) {
         notesFragment = NotesFragment.newInstance(ayahNumber)
         notesFragment.show(supportFragmentManager, notesFragment.javaClass.simpleName)
       } else {
@@ -290,7 +287,6 @@ class CardActivity : AbstractBaseActivity(),
     })
 
 
-
   }
 
   private fun initPlaymode(mode: Int) {
@@ -306,7 +302,6 @@ class CardActivity : AbstractBaseActivity(),
     tvNext.isEnabled = mode != Playmode.REPEAT_AYAH
     tvPrevious.isEnabled = (mode == Playmode.AYAH_BY_AYAH || mode == Playmode.REPEAT_SURAH)
   }
-
 
 
   private fun upsertFavourite() = runBlocking {
@@ -333,10 +328,17 @@ class CardActivity : AbstractBaseActivity(),
   private fun getAyahTopText() {
     lifecycleScope.launch {
       val list = holyBookViewModel.getAyahTopText(ayahNumber)
-      list.forEach {
-        cache.updateLastShownAyah(it)
-        tvAyahNumber.text = "(${it.meaning})\n${it.surahNameByLanguage} : ${it.numberInSurah}"
-        tvAyahTopText.highlighted("<b>${it.language}:</b> ${it.ayahText}", cache.getAyahSearchResult()?.keywords)
+      if (list.isNotNullAndNotEmpty()) {
+        getViewingCount()
+        list.forEach {
+          cache.updateLastShownAyah(it)
+          tvAyahNumber.text = "(${it.meaning})\n${it.surahNameByLanguage} : ${it.numberInSurah}"
+          tvAyahTopText.highlighted("<b>${it.language}:</b> ${it.ayahText}", cache.getAyahSearchResult()?.keywords)
+        }
+      } else {
+        tvAyahTopText.text = getString(R.string.ayah_not_found_on_primary_book)
+        tvAyahNumber.setEmpty()
+        tvViewingCount.setEmpty()
       }
     }
   }
@@ -353,7 +355,7 @@ class CardActivity : AbstractBaseActivity(),
           }
         } else {
           tvAyahBottomText.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16f)
-          tvAyahBottomText.text = getString(R.string.ayah_not_found_on_this_book)
+          tvAyahBottomText.text = getString(R.string.ayah_not_found_on_alternative_book)
         }
       }
     } else {
@@ -409,7 +411,7 @@ class CardActivity : AbstractBaseActivity(),
 
   override fun onSearchAyahNoEntered(ayahNo: Int) {
     try {
-      if(ayahNo >= 1 && ayahNo <= cache.getMaxAyahCount()) {
+      if (ayahNo >= 1 && ayahNo <= cache.getMaxAyahCount()) {
         arrangeViewsBySearch(AyahSearchResult(listOf(ayahNo), ayahNo.toString()))
         ayahNumber = ayahNo
         initData()
@@ -434,7 +436,8 @@ class CardActivity : AbstractBaseActivity(),
     ivSearchClose.visibility = View.VISIBLE
     tvNext.isEnabled = searchResult.list.isNotNullAndNotEmpty()
     tvKeywords.visibility = View.VISIBLE
-    tvKeywords.text = getString(R.string.ayah_search_found_text, searchResult.keywords, searchResult.list?.size ?: 0)
+    tvKeywords.text = getString(R.string.ayah_search_found_text, searchResult.keywords, searchResult.list?.size
+        ?: 0)
   }
 
 
