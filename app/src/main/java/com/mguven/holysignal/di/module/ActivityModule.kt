@@ -4,6 +4,7 @@ import android.content.Context
 import android.view.LayoutInflater
 import com.mguven.holysignal.di.scope.PerActivity
 import com.mguven.holysignal.ui.AbstractBaseActivity
+import com.mguven.holysignal.viewmodel.HolyBookViewModel
 import dagger.Module
 import dagger.Provides
 import io.reactivex.disposables.CompositeDisposable
