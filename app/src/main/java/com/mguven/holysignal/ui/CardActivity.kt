@@ -110,39 +110,37 @@ class CardActivity : AbstractBaseActivity(),
     }
   }*/
 
-  private fun populateAyahSet(playmode: Int, atLastPage: Boolean = false) {
-    if (ayahMap.isEmpty() || atLastPage) {
-      val newAyahSet: Map<Int, SurahAyahSampleData?> = when (playmode) {
-        Playmode.RANDOM -> {
-          List(AYAH_SET_MAX_SIZE) { Random.nextInt(0, cache.getMaxAyahCount()) }.associateWith { null }
-        }
-        Playmode.REPEAT_AYAH -> (1..AYAH_SET_MAX_SIZE).map { cache.getLastShownAyahNumber() }.associateWith { null }
-        Playmode.AYAH_BY_AYAH -> populateAyahSetByAyahByAyah()
-        Playmode.REPEAT_SURAH -> populateAyahSetByRepeatSurah(cache.getLastShownAyahNumber(), cache.getLastShownAyah()!!.endingAyahNumber)
-        Playmode.FAVOURITES ->
-          List(AYAH_SET_MAX_SIZE) { Random.nextInt(0, cache.getMaxAyahCount()) }.associateWith { null }
-        else -> {
-          List(AYAH_SET_MAX_SIZE) { Random.nextInt(0, cache.getMaxAyahCount()) }.associateWith { null }
-        }
+  private fun populateAyahSet(playmode: Int) {
+    val newAyahSet: Map<Int, SurahAyahSampleData?> = when (playmode) {
+      Playmode.RANDOM -> {
+        List(AYAH_SET_MAX_SIZE) { Random.nextInt(0, cache.getMaxAyahCount()) }.associateWith { null }
       }
-      ayahMap.putAll(newAyahSet)
-      updateAdapter()
+      Playmode.REPEAT_AYAH -> (1..AYAH_SET_MAX_SIZE).map { cache.getLastShownAyahNumber() }.associateWith { null }
+      Playmode.AYAH_BY_AYAH -> populateAyahSetByAyahByAyah()
+      Playmode.REPEAT_SURAH -> populateAyahSetByRepeatSurah(cache.getLastShownAyahNumber(), cache.getLastShownAyah()!!.endingAyahNumber)
+      Playmode.FAVOURITES ->
+        List(AYAH_SET_MAX_SIZE) { Random.nextInt(0, cache.getMaxAyahCount()) }.associateWith { null }
+      else -> {
+        List(AYAH_SET_MAX_SIZE) { Random.nextInt(0, cache.getMaxAyahCount()) }.associateWith { null }
+      }
     }
+    ayahMap.putAll(newAyahSet)
+    updateAdapter()
   }
 
   private fun populateAyahSetByAyahByAyah(): Map<Int, SurahAyahSampleData?> {
     var theMap = mutableMapOf<Int, SurahAyahSampleData?>()
-    if (firstOpening) {
-      val margin = cache.getLastShownAyahNumber() - cache.getLastShownAyah()!!.startingAyahNumber
-      diffByPrevious = if (margin >= AYAH_SET_MAX_SIZE) AYAH_SET_MAX_SIZE else margin
-      val lowerLimit = cache.getLastShownAyahNumber() - diffByPrevious
-      val previousItemsMap = (cache.getLastShownAyahNumber() downTo lowerLimit).reversed().map { it }.associateWith { null }
-      theMap.putAll(previousItemsMap)
-    }
+    val margin = cache.getLastShownAyahNumber() - cache.getLastShownAyah()!!.startingAyahNumber
+    diffByPrevious = if (margin >= AYAH_SET_MAX_SIZE) AYAH_SET_MAX_SIZE else margin
+    val lowerLimit = cache.getLastShownAyahNumber() - diffByPrevious
+    val previousItemsMap = (cache.getLastShownAyahNumber() downTo lowerLimit).reversed().map { it }.associateWith { null }
+    theMap.putAll(previousItemsMap)
+
     val diff = ConstantVariables.MAX_AYAH_NUMBER - cache.getLastShownAyahNumber()
     val addableItemCount = if (diff > AYAH_SET_MAX_SIZE) AYAH_SET_MAX_SIZE else diff
     val nextItemsMap = (cache.getLastShownAyahNumber()..(cache.getLastShownAyahNumber() + addableItemCount)).map { it }.associateWith { null }
     theMap.putAll(nextItemsMap)
+
     return theMap
   }
 
@@ -317,32 +315,42 @@ class CardActivity : AbstractBaseActivity(),
 
 
     viewpager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+
+      override fun onPageScrollStateChanged(state: Int) {
+        super.onPageScrollStateChanged(state)
+        firstOpening = false
+      }
+
       override fun onPageSelected(pos: Int) {
         super.onPageSelected(pos)
         fun isFirstPage(position: Int) = position == 0
         fun isLastPage(position: Int) = position == ayahMap.size - 1
 
-        val lastShownAyah = ayahMap.getValue(pos)
-        whenNotNull(lastShownAyah) {
-          cache.updateLastShownAyah(lastShownAyah)
-        }
+        updateLastShownAyah(pos)
+
         onPageChanged()
 
         if (isFirstPage(pos)) {
           if (!firstOpening) {
-
-          } else {
-            viewpager.setCurrentItem(diffByPrevious, false)
-            firstOpening = false
+            ayahMap.clear()
+            populateAyahSet(playmode)
           }
+          viewpager.setCurrentItem(diffByPrevious, false)
         }
 
         if (isLastPage(pos)) {
-          populateAyahSet(playmode, true)
+          populateAyahSet(playmode)
         }
 
       }
     })
+  }
+
+  private fun updateLastShownAyah(pos: Int) {
+    val lastShownAyah = ayahMap.getValue(pos)
+    whenNotNull(lastShownAyah) {
+      cache.updateLastShownAyah(lastShownAyah)
+    }
   }
 
 //  private fun addAyahsToPrevious() {
