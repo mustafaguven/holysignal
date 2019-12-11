@@ -260,17 +260,9 @@ class CardActivity : AbstractBaseActivity(),
 //    })
 
     ivPlayMode.setOnClickListener {
-      ayahMap.clear()
-      tvKeywords.visibility = View.GONE
-      val newPlayMode = (playmode + 1) % playmodes.size
-      initPlaymode(newPlayMode)
-      cache.updatePlaymode(newPlayMode)
-      playmode = newPlayMode
-      showSnackbar(playmodes[newPlayMode])
+      val newPlayMode = onPlayModeChanged()
       populateAyahSet(newPlayMode)
-      if (playmode == Playmode.AYAH_BY_AYAH) {
-        goToSelectedAyah()
-      }
+      goToSelectedAyah()
     }
 
 
@@ -298,15 +290,29 @@ class CardActivity : AbstractBaseActivity(),
         }
 
         if (isLastPage(pos)) {
-          populateAyahSet(playmode)
+          if (!firstOpening) {
+            //populateAyahSet(playmode)
+          }
         }
 
       }
     })
   }
 
+  private fun onPlayModeChanged(newPlayMode: Int = (playmode + 1) % playmodes.size): Int {
+    ayahMap.clear()
+    tvKeywords.visibility = View.GONE
+    initPlaymode(newPlayMode)
+    cache.updatePlaymode(newPlayMode)
+    playmode = newPlayMode
+    showSnackbar(playmodes[newPlayMode])
+    return newPlayMode
+  }
+
   private fun goToSelectedAyah() {
-    viewpager.setCurrentItem(diffByPrevious, false)
+    if (playmode == Playmode.AYAH_BY_AYAH) {
+      viewpager.setCurrentItem(diffByPrevious, false)
+    }
   }
 
   private fun updateLastShownAyah(pos: Int) {
@@ -340,7 +346,7 @@ class CardActivity : AbstractBaseActivity(),
   }
 
   private fun populateAyahSetByAyahByAyah(): Map<Int, SurahAyahSampleData?> {
-    var theMap = mutableMapOf<Int, SurahAyahSampleData?>()
+    val theMap = mutableMapOf<Int, SurahAyahSampleData?>()
     val margin = cache.getLastShownAyahNumber() - 1
     diffByPrevious = if (margin >= AYAH_SET_MAX_SIZE) AYAH_SET_MAX_SIZE else margin
     val lowerLimit = cache.getLastShownAyahNumber() - diffByPrevious
@@ -355,25 +361,29 @@ class CardActivity : AbstractBaseActivity(),
     return theMap
   }
 
-  private fun populateAyahSetByRepeatSurah(): Map<Int, SurahAyahSampleData?> {
-    var theMap = mutableMapOf<Int, SurahAyahSampleData?>()
-    val margin = cache.getLastShownAyahNumber() - cache.getLastShownAyah()!!.startingAyahNumber
-    diffByPrevious = if (margin >= AYAH_SET_MAX_SIZE) AYAH_SET_MAX_SIZE else margin
-    val lowerLimit = cache.getLastShownAyahNumber() - diffByPrevious
-    val previousItemsMap = (cache.getLastShownAyahNumber() downTo lowerLimit).reversed().map { it }.associateWith { null }
-    theMap.putAll(previousItemsMap)
-
-    val diff = cache.getLastShownAyah()!!.endingAyahNumber - cache.getLastShownAyahNumber()
+  private fun populateAyahSetByRepeatSurah(ayahNumber: Int = cache.getLastShownAyahNumber(),
+                                           start: Int = cache.getLastShownAyahNumber() + 1,
+                                           end: Int = cache.getLastShownAyah()!!.endingAyahNumber): Map<Int, SurahAyahSampleData?> {
+    val diff = end - ayahNumber
     val addableItemCount = if (diff > AYAH_SET_MAX_SIZE) AYAH_SET_MAX_SIZE else diff
-    val nextItemsMap = (cache.getLastShownAyahNumber()..(cache.getLastShownAyahNumber() + addableItemCount)).map { it }.associateWith { null }
-    theMap.putAll(nextItemsMap)
-
-    return theMap
+    return (start..(ayahNumber + addableItemCount)).map { it }.associateWith { null }
   }
 
+  override fun onSurahSelected(surah: AvailableSurahItem) {
+    onPlayModeChanged(Playmode.REPEAT_SURAH)
+    ayahMap.clear()
+    val next = populateAyahSetByRepeatSurah(surah.min, surah.min, surah.max)
+    ayahMap.putAll(next)
+    updateAdapter()
+    firstOpening = true
+    viewpager.setCurrentItem(0, false)
+    selectSurahFragment.dismiss()
+  }
 
-  private fun canGoPrevious() =
-      playmode == Playmode.REPEAT_SURAH || playmode == Playmode.AYAH_BY_AYAH
+  private fun updateAdapter() {
+    ayahViewPagerAdapter.updateAyahSet(ayahMap)
+    Log.e("AYAH_SET", "Playmode: $playmode map size: ${ayahMap.size} selected ayah no: ${cache.getLastShownAyahNumber()}")
+  }
 
   private fun onPageChanged() {
     if (!isFavourite()) {
@@ -502,19 +512,6 @@ class CardActivity : AbstractBaseActivity(),
     savedInstanceState.getInt(SAVED_AYAH_NUMBER)
   }*/
 
-  override fun onSurahSelected(surah: AvailableSurahItem) {
-    ayahMap.clear()
-/*    val next = populateAyahSetByRepeatSurah(surah.min, surah.max)
-    ayahMap.putAll(next)
-    updateAdapter()
-    viewpager.setCurrentItem(0, false)*/
-    selectSurahFragment.dismiss()
-  }
-
-  private fun updateAdapter() {
-    ayahViewPagerAdapter.updateAyahSet(ayahMap)
-    Log.e("AYAH_SET", "Playmode: $playmode map size: ${ayahMap.size} selected ayah no: ${cache.getLastShownAyahNumber()}")
-  }
 
   override fun onSearchWordEntered(words: MutableSet<String>) {
     TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
@@ -526,6 +523,9 @@ class CardActivity : AbstractBaseActivity(),
 
   override fun onMapValueFound(ayahMap: AyahMap) {
     this.ayahMap = ayahMap
+    if (cache.getLastShownAyah() == null) {
+      cache.updateLastShownAyah(ayahMap.getValue(0))
+    }
   }
 
 
