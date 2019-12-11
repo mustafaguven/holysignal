@@ -63,6 +63,7 @@ class CardActivity : AbstractBaseActivity(),
 
   private var diffByPrevious = AYAH_SET_MAX_SIZE
   private var firstOpening = true
+  private var goForward = false
   private var isFavourite = false
   private var playmode: Int = Int.MIN_VALUE
   private val playmodes by lazy {
@@ -313,9 +314,9 @@ class CardActivity : AbstractBaseActivity(),
   }
 
   private fun goToSelectedAyah() {
-    if (playmode == Playmode.AYAH_BY_AYAH ||
-        (playmode == Playmode.REPEAT_SURAH && (cache.getLastShownAyahNumber() != cache.getLastShownAyah()!!.startingAyahNumber))) {
+    if (goForward) {
       viewpager.setCurrentItem(diffByPrevious, false)
+      goForward = false
     }
   }
 
@@ -350,6 +351,7 @@ class CardActivity : AbstractBaseActivity(),
   }
 
   private fun populateAyahSetByAyahByAyah(): Map<Int, SurahAyahSampleData?> {
+    goForward = true
     val theMap = mutableMapOf<Int, SurahAyahSampleData?>()
     val margin = cache.getLastShownAyahNumber() - 1
     diffByPrevious = if (margin >= AYAH_SET_MAX_SIZE) AYAH_SET_MAX_SIZE else margin
@@ -361,25 +363,25 @@ class CardActivity : AbstractBaseActivity(),
     val addableItemCount = if (diff > AYAH_SET_MAX_SIZE) AYAH_SET_MAX_SIZE else diff
     val nextItemsMap = (cache.getLastShownAyahNumber()..(cache.getLastShownAyahNumber() + addableItemCount)).map { it }.associateWith { null }
     theMap.putAll(nextItemsMap)
-
     return theMap
   }
 
   private fun populateAyahSetByRepeatSurah(ayahNumber: Int = cache.getLastShownAyahNumber(),
-                                           start: Int = cache.getLastShownAyahNumber(),
+                                           start: Int = cache.getLastShownAyah()!!.startingAyahNumber,
                                            end: Int = cache.getLastShownAyah()!!.endingAyahNumber): Map<Int, SurahAyahSampleData?> {
     val theMap = mutableMapOf<Int, SurahAyahSampleData?>()
-    if (ayahNumber > 1) {
-      val margin = cache.getLastShownAyahNumber() - 1
-      diffByPrevious = if (margin >= AYAH_SET_MAX_SIZE) AYAH_SET_MAX_SIZE else margin
-      val lowerLimit = cache.getLastShownAyahNumber() - diffByPrevious
-      val previousItemsMap = (cache.getLastShownAyahNumber() downTo lowerLimit).reversed().map { it }.associateWith { null }
-      theMap.putAll(previousItemsMap)
+    if (ayahNumber != start) {
+      goForward = true
     }
+    val margin = ayahNumber - start
+    diffByPrevious = if (margin >= AYAH_SET_MAX_SIZE) AYAH_SET_MAX_SIZE else margin
+    val lowerLimit = ayahNumber - diffByPrevious
+    val previousItemsMap = (ayahNumber downTo lowerLimit).reversed().map { it }.associateWith { null }
+    theMap.putAll(previousItemsMap)
 
     val diff = end - ayahNumber
     val addableItemCount = if (diff > AYAH_SET_MAX_SIZE) AYAH_SET_MAX_SIZE else diff
-    val nextItemsMap = (start..(ayahNumber + addableItemCount)).map { it }.associateWith { null }
+    val nextItemsMap = (ayahNumber..(ayahNumber + addableItemCount)).map { it }.associateWith { null }
     theMap.putAll(nextItemsMap)
     return theMap
   }
