@@ -87,12 +87,25 @@ class CardActivity : AbstractBaseActivity(),
     playmode = cache.getPlaymode()
     initPlaymode(playmode)
 
-    cache.arrangeAyahCacheForOpening()
+    arrangeCacheForOpening()
+
+
 
     viewpager.adapter = ayahViewPagerAdapter
     populateAyahSet(playmode)
 
     initListeners()
+  }
+
+  private fun arrangeCacheForOpening() {
+    if (cache.getLastShownAyah() != null) {
+      val isRepeatAyah = playmode == Playmode.REPEAT_AYAH
+      val isAtLastItemOfRepeatSurah = (playmode == Playmode.REPEAT_SURAH && cache.getLastShownAyah()!!.endingAyahNumber == cache.getLastShownAyahNumber())
+
+      if (!isRepeatAyah && !isAtLastItemOfRepeatSurah) {
+        cache.arrangeAyahCacheForOpening()
+      }
+    }
   }
 
 
