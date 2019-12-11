@@ -85,6 +85,9 @@ class CardActivity : AbstractBaseActivity(),
     holyBookViewModel = getViewModel(HolyBookViewModel::class.java)
     playmode = cache.getPlaymode()
     initPlaymode(playmode)
+
+    cache.arrangeAyahCacheForOpening()
+
     viewpager.adapter = ayahViewPagerAdapter
     populateAyahSet(playmode)
 
@@ -291,7 +294,7 @@ class CardActivity : AbstractBaseActivity(),
 
         if (isLastPage(pos)) {
           if (!firstOpening) {
-            //populateAyahSet(playmode)
+            populateAyahSet(playmode)
           }
         }
 
@@ -310,7 +313,8 @@ class CardActivity : AbstractBaseActivity(),
   }
 
   private fun goToSelectedAyah() {
-    if (playmode == Playmode.AYAH_BY_AYAH) {
+    if (playmode == Playmode.AYAH_BY_AYAH ||
+        (playmode == Playmode.REPEAT_SURAH && (cache.getLastShownAyahNumber() != cache.getLastShownAyah()!!.startingAyahNumber))) {
       viewpager.setCurrentItem(diffByPrevious, false)
     }
   }
@@ -362,11 +366,22 @@ class CardActivity : AbstractBaseActivity(),
   }
 
   private fun populateAyahSetByRepeatSurah(ayahNumber: Int = cache.getLastShownAyahNumber(),
-                                           start: Int = cache.getLastShownAyahNumber() + 1,
+                                           start: Int = cache.getLastShownAyahNumber(),
                                            end: Int = cache.getLastShownAyah()!!.endingAyahNumber): Map<Int, SurahAyahSampleData?> {
+    val theMap = mutableMapOf<Int, SurahAyahSampleData?>()
+    if (ayahNumber > 1) {
+      val margin = cache.getLastShownAyahNumber() - 1
+      diffByPrevious = if (margin >= AYAH_SET_MAX_SIZE) AYAH_SET_MAX_SIZE else margin
+      val lowerLimit = cache.getLastShownAyahNumber() - diffByPrevious
+      val previousItemsMap = (cache.getLastShownAyahNumber() downTo lowerLimit).reversed().map { it }.associateWith { null }
+      theMap.putAll(previousItemsMap)
+    }
+
     val diff = end - ayahNumber
     val addableItemCount = if (diff > AYAH_SET_MAX_SIZE) AYAH_SET_MAX_SIZE else diff
-    return (start..(ayahNumber + addableItemCount)).map { it }.associateWith { null }
+    val nextItemsMap = (start..(ayahNumber + addableItemCount)).map { it }.associateWith { null }
+    theMap.putAll(nextItemsMap)
+    return theMap
   }
 
   override fun onSurahSelected(surah: AvailableSurahItem) {

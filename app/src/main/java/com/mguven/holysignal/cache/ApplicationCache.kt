@@ -64,12 +64,12 @@ class ApplicationCache(private val applicationSharedPreferences: SharedPreferenc
   }
 
   private var lastShownAyahNumber = Int.MIN_VALUE
-  private fun updateLastShownAyahNumber(ayahNumber: Int) {
+  fun updateLastShownAyahNumber(ayahNumber: Int) {
     this.applicationSharedPreferences.edit().putInt(CacheKey.LAST_SHOWN_AYAH_NUMBER, ayahNumber).apply()
     lastShownAyahNumber = ayahNumber
   }
 
-  fun getLastShownAyahNumber() : Int {
+  fun getLastShownAyahNumber(): Int {
     if (lastShownAyahNumber == Int.MIN_VALUE) {
       lastShownAyahNumber = this.applicationSharedPreferences.getInt(CacheKey.LAST_SHOWN_AYAH_NUMBER, 1)
     }
@@ -164,6 +164,12 @@ class ApplicationCache(private val applicationSharedPreferences: SharedPreferenc
   fun getMemberId() = this.applicationSharedPreferences.getInt(CacheKey.MEMBER_ID, -1)
 
   fun updateMemberId(memberId: Int) = this.applicationSharedPreferences.edit().putInt(CacheKey.MEMBER_ID, memberId).apply()
+
+  fun arrangeAyahCacheForOpening() {
+    if (getLastShownAyahNumber() != Int.MIN_VALUE) {
+      updateLastShownAyahNumber(getLastShownAyahNumber() + 1)
+    }
+  }
 
 
 }
