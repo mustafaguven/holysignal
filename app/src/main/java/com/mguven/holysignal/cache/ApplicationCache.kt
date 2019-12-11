@@ -63,12 +63,19 @@ class ApplicationCache(private val applicationSharedPreferences: SharedPreferenc
     this.applicationSharedPreferences.edit().putInt(CacheKey.PLAY_MODE, playmode).apply()
   }
 
-  fun updateLastShownAyahNumber(ayahNumber: Int) {
+  private var lastShownAyahNumber = Int.MIN_VALUE
+  private fun updateLastShownAyahNumber(ayahNumber: Int) {
     this.applicationSharedPreferences.edit().putInt(CacheKey.LAST_SHOWN_AYAH_NUMBER, ayahNumber).apply()
+    lastShownAyahNumber = ayahNumber
   }
 
-  fun getLastShownAyahNumber() =
-      this.applicationSharedPreferences.getInt(CacheKey.LAST_SHOWN_AYAH_NUMBER, 1)
+  fun getLastShownAyahNumber() : Int {
+    if (lastShownAyahNumber == Int.MIN_VALUE) {
+      lastShownAyahNumber = this.applicationSharedPreferences.getInt(CacheKey.LAST_SHOWN_AYAH_NUMBER, 1)
+    }
+    return lastShownAyahNumber
+  }
+
 
   fun updateMaxAyahCount(maxAyahCount: Int) =
       this.applicationSharedPreferences.edit().putInt(CacheKey.MAX_AYAH_COUNT, maxAyahCount).apply()
@@ -157,5 +164,6 @@ class ApplicationCache(private val applicationSharedPreferences: SharedPreferenc
   fun getMemberId() = this.applicationSharedPreferences.getInt(CacheKey.MEMBER_ID, -1)
 
   fun updateMemberId(memberId: Int) = this.applicationSharedPreferences.edit().putInt(CacheKey.MEMBER_ID, memberId).apply()
+
 
 }

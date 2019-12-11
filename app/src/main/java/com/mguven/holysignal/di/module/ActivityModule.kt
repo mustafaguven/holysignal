@@ -12,6 +12,9 @@ import io.reactivex.disposables.CompositeDisposable
 @Module
 open class ActivityModule(private val activity: AbstractBaseActivity) {
 
+  @Provides
+  fun provideActivity(): AbstractBaseActivity = activity
+
   @PerActivity
   @Provides
   fun provideContext(): Context = activity

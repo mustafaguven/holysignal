@@ -9,18 +9,24 @@ import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.recyclerview.widget.RecyclerView
 import com.mguven.holysignal.R
 import com.mguven.holysignal.cache.ApplicationCache
+import com.mguven.holysignal.db.entity.SurahAyahSampleData
 import com.mguven.holysignal.extension.highlighted
 import com.mguven.holysignal.extension.isNotNullAndNotEmpty
 import com.mguven.holysignal.extension.setEmpty
+import com.mguven.holysignal.ui.AbstractBaseActivity
 import com.mguven.holysignal.viewmodel.HolyBookViewModel
 import kotlinx.coroutines.launch
 
-class AyahViewPagerAdapter(val lifecycleScope: LifecycleCoroutineScope,
+class AyahViewPagerAdapter(var activity: AbstractBaseActivity?,
+                           val lifecycleScope: LifecycleCoroutineScope,
                            val holyBookViewModel: HolyBookViewModel,
                            val cache: ApplicationCache) :
     RecyclerView.Adapter<AyahViewPagerAdapter.ViewHolder>() {
 
-  var ayahSet: Set<Int>? = null
+  var listener: MapValueListener? = null
+  private var ayahSet: MutableSet<Int>? = null
+
+
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder =
       ViewHolder(
@@ -39,6 +45,7 @@ class AyahViewPagerAdapter(val lifecycleScope: LifecycleCoroutineScope,
 
   fun updateAyahSet(ayahSet: MutableSet<Int>) {
     this.ayahSet = ayahSet
+    this.notifyDataSetChanged()
   }
 
   inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -57,7 +64,9 @@ class AyahViewPagerAdapter(val lifecycleScope: LifecycleCoroutineScope,
         if (list.isNotNullAndNotEmpty()) {
           getViewingCount(ayahNumber)
           list.forEach {
-            cache.updateLastShownAyah(it)
+            if (listener != null) {
+              listener!!.onMapValueFound(ayahNumber, it)
+            }
             tvAyahNumber.text = "(${it.meaning})\n${it.surahNameByLanguage} : ${it.numberInSurah}"
             tvAyahTopText.highlighted("<b>${it.language}:</b> ${it.ayahText}", cache.getAyahSearchResult()?.keywords)
           }
@@ -98,5 +107,19 @@ class AyahViewPagerAdapter(val lifecycleScope: LifecycleCoroutineScope,
 
   }
 
+  interface MapValueListener {
+    fun onMapValueFound(key: Int, value: SurahAyahSampleData)
+  }
+
+  override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
+    super.onAttachedToRecyclerView(recyclerView)
+    listener = activity as MapValueListener
+  }
+
+  override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
+    super.onDetachedFromRecyclerView(recyclerView)
+    listener = null
+    activity = null
+  }
 
 }
