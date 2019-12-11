@@ -15,6 +15,7 @@ import com.mguven.holysignal.db.entity.AvailableSurahItem
 import com.mguven.holysignal.db.entity.SurahAyahSampleData
 import com.mguven.holysignal.di.module.CardActivityModule
 import com.mguven.holysignal.extension.isNotNullAndNotEmpty
+import com.mguven.holysignal.inline.whenNotNull
 import com.mguven.holysignal.model.AyahMap
 import com.mguven.holysignal.model.AyahSearchResult
 import com.mguven.holysignal.ui.adapter.AyahViewPagerAdapter
@@ -60,7 +61,7 @@ class CardActivity : AbstractBaseActivity(),
   private var ayahMap = AyahMap()
 
 
-  private var diffByPrevious = 5
+  private var diffByPrevious = AYAH_SET_MAX_SIZE
   private var firstOpening = true
   private var isFavourite = false
   private var playmode: Int = Int.MIN_VALUE
@@ -131,11 +132,13 @@ class CardActivity : AbstractBaseActivity(),
 
   private fun populateAyahSetByAyahByAyah(): Map<Int, SurahAyahSampleData?> {
     var theMap = mutableMapOf<Int, SurahAyahSampleData?>()
-//    if (firstOpening) {
-//      diffByPrevious = cache.getLastShownAyahNumber() - cache.getLastShownAyah()!!.startingAyahNumber
-//      val lowerLimit = if (diffByPrevious > AYAH_SET_MAX_SIZE) AYAH_SET_MAX_SIZE else cache.getLastShownAyahNumber() - diffByPrevious
-//      theSet = (cache.getLastShownAyahNumber() downTo lowerLimit).reversed().map { it }.toMutableSet()
-//    }
+    if (firstOpening) {
+      val margin = cache.getLastShownAyahNumber() - cache.getLastShownAyah()!!.startingAyahNumber
+      diffByPrevious = if (margin >= AYAH_SET_MAX_SIZE) AYAH_SET_MAX_SIZE else margin
+      val lowerLimit = cache.getLastShownAyahNumber() - diffByPrevious
+      val previousItemsMap = (cache.getLastShownAyahNumber() downTo lowerLimit).reversed().map { it }.associateWith { null }
+      theMap.putAll(previousItemsMap)
+    }
     val diff = ConstantVariables.MAX_AYAH_NUMBER - cache.getLastShownAyahNumber()
     val addableItemCount = if (diff > AYAH_SET_MAX_SIZE) AYAH_SET_MAX_SIZE else diff
     val nextItemsMap = (cache.getLastShownAyahNumber()..(cache.getLastShownAyahNumber() + addableItemCount)).map { it }.associateWith { null }
@@ -319,26 +322,24 @@ class CardActivity : AbstractBaseActivity(),
         fun isFirstPage(position: Int) = position == 0
         fun isLastPage(position: Int) = position == ayahMap.size - 1
 
-        Log.e("AYAH_SET", "opened: ${ayahMap[cache.getLastShownAyahNumber() + pos]}")
-
         val lastShownAyah = ayahMap.getValue(pos)
-        lastShownAyah.let {
+        whenNotNull(lastShownAyah) {
           cache.updateLastShownAyah(lastShownAyah)
         }
         onPageChanged()
 
-//        if (isFirstPage(pos)) {
-//          if (!firstOpening) {
-//            addAyahsToPrevious()
-//          } else {
-//            viewpager.setCurrentItem(diffByPrevious, false)
-//          }
-//
-//        }
-//
-//        if (isLastPage(pos)) {
-//          populateAyahSet(playmode, true)
-//        }
+        if (isFirstPage(pos)) {
+          if (!firstOpening) {
+
+          } else {
+            viewpager.setCurrentItem(diffByPrevious, false)
+            firstOpening = false
+          }
+        }
+
+        if (isLastPage(pos)) {
+          populateAyahSet(playmode, true)
+        }
 
       }
     })
