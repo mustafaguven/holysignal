@@ -110,59 +110,6 @@ class CardActivity : AbstractBaseActivity(),
     }
   }*/
 
-  private fun populateAyahSet(playmode: Int) {
-    val newAyahSet: Map<Int, SurahAyahSampleData?> = when (playmode) {
-      Playmode.RANDOM -> {
-        List(AYAH_SET_MAX_SIZE) { Random.nextInt(0, cache.getMaxAyahCount()) }.associateWith { null }
-      }
-      Playmode.REPEAT_AYAH -> (1..AYAH_SET_MAX_SIZE).map { cache.getLastShownAyahNumber() }.associateWith { null }
-      Playmode.AYAH_BY_AYAH -> populateAyahSetByAyahByAyah()
-      Playmode.REPEAT_SURAH -> populateAyahSetByRepeatSurah()
-      Playmode.FAVOURITES ->
-        List(AYAH_SET_MAX_SIZE) { Random.nextInt(0, cache.getMaxAyahCount()) }.associateWith { null }
-      else -> {
-        List(AYAH_SET_MAX_SIZE) { Random.nextInt(0, cache.getMaxAyahCount()) }.associateWith { null }
-      }
-    }
-    ayahMap.putAll(newAyahSet)
-    updateAdapter()
-  }
-
-  private fun populateAyahSetByAyahByAyah(): Map<Int, SurahAyahSampleData?> {
-    var theMap = mutableMapOf<Int, SurahAyahSampleData?>()
-    val margin = cache.getLastShownAyahNumber() - 1
-    diffByPrevious = if (margin >= AYAH_SET_MAX_SIZE) AYAH_SET_MAX_SIZE else margin
-    val lowerLimit = cache.getLastShownAyahNumber() - diffByPrevious
-    val previousItemsMap = (cache.getLastShownAyahNumber() downTo lowerLimit).reversed().map { it }.associateWith { null }
-    theMap.putAll(previousItemsMap)
-
-    val diff = ConstantVariables.MAX_AYAH_NUMBER - cache.getLastShownAyahNumber()
-    val addableItemCount = if (diff > AYAH_SET_MAX_SIZE) AYAH_SET_MAX_SIZE else diff
-    val nextItemsMap = (cache.getLastShownAyahNumber()..(cache.getLastShownAyahNumber() + addableItemCount)).map { it }.associateWith { null }
-    theMap.putAll(nextItemsMap)
-
-    return theMap
-  }
-
-  private fun populateAyahSetByRepeatSurah(): Map<Int, SurahAyahSampleData?> {
-    var theMap = mutableMapOf<Int, SurahAyahSampleData?>()
-    val margin = cache.getLastShownAyahNumber() - cache.getLastShownAyah()!!.startingAyahNumber
-    diffByPrevious = if (margin >= AYAH_SET_MAX_SIZE) AYAH_SET_MAX_SIZE else margin
-    val lowerLimit = cache.getLastShownAyahNumber() - diffByPrevious
-    val previousItemsMap = (cache.getLastShownAyahNumber() downTo lowerLimit).reversed().map { it }.associateWith { null }
-    theMap.putAll(previousItemsMap)
-
-    val diff = cache.getLastShownAyah()!!.endingAyahNumber - cache.getLastShownAyahNumber()
-    val addableItemCount = if (diff > AYAH_SET_MAX_SIZE) AYAH_SET_MAX_SIZE else diff
-    val nextItemsMap = (cache.getLastShownAyahNumber()..(cache.getLastShownAyahNumber() + addableItemCount)).map { it }.associateWith { null }
-    theMap.putAll(nextItemsMap)
-
-    return theMap
-
-//    val diff = endingNumber - ayahNumber
-//    val addableItemCount = if (diff > AYAH_SET_MAX_SIZE) AYAH_SET_MAX_SIZE else diff
-//    return (ayahNumber..(ayahNumber + addableItemCount)).map { it }.associateWith { null }
-  }
 
 //  private fun byFavourites(): Int {
 //    val favouriteIdList = holyBookViewModel.getFavouriteIdList()
@@ -265,18 +212,7 @@ class CardActivity : AbstractBaseActivity(),
       }
     }*/
 
-    ivPlayMode.setOnClickListener {
-      if(playmode == Playmode.RANDOM || playmode == Playmode.FAVOURITES){
-        ayahMap.clear()
-      }
-      tvKeywords.visibility = View.GONE
-      val newPlayMode = (playmode + 1) % playmodes.size
-      initPlaymode(newPlayMode)
-      cache.updatePlaymode(newPlayMode)
-      playmode = newPlayMode
-      showSnackbar(playmodes[newPlayMode])
-      populateAyahSet(newPlayMode)
-    }
+
 
     ivAddNote.setOnClickListener {
       if (deviceUtil.isConnected()) {
@@ -323,9 +259,22 @@ class CardActivity : AbstractBaseActivity(),
 //      //tvCloudFavouriteCount.text = getString(R.string.total_cloud_favourite_count, it)
 //    })
 
+    ivPlayMode.setOnClickListener {
+      ayahMap.clear()
+      tvKeywords.visibility = View.GONE
+      val newPlayMode = (playmode + 1) % playmodes.size
+      initPlaymode(newPlayMode)
+      cache.updatePlaymode(newPlayMode)
+      playmode = newPlayMode
+      showSnackbar(playmodes[newPlayMode])
+      populateAyahSet(newPlayMode)
+      if (playmode == Playmode.AYAH_BY_AYAH) {
+        goToSelectedAyah()
+      }
+    }
+
 
     viewpager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
-
       override fun onPageScrollStateChanged(state: Int) {
         super.onPageScrollStateChanged(state)
         firstOpening = false
@@ -345,7 +294,7 @@ class CardActivity : AbstractBaseActivity(),
             ayahMap.clear()
             populateAyahSet(playmode)
           }
-          viewpager.setCurrentItem(diffByPrevious, false)
+          goToSelectedAyah()
         }
 
         if (isLastPage(pos)) {
@@ -356,6 +305,10 @@ class CardActivity : AbstractBaseActivity(),
     })
   }
 
+  private fun goToSelectedAyah() {
+    viewpager.setCurrentItem(diffByPrevious, false)
+  }
+
   private fun updateLastShownAyah(pos: Int) {
     val lastShownAyah = ayahMap.getValue(pos)
     whenNotNull(lastShownAyah) {
@@ -363,18 +316,61 @@ class CardActivity : AbstractBaseActivity(),
     }
   }
 
-//  private fun addAyahsToPrevious() {
-//    if (canGoPrevious()) {
-//      val previous5 = populatePrevious5AyahForRepeatSurah(cache.getLastShownAyahNumber(), cache.getLastShownAyah()!!.startingAyahNumber)
-//      val previous5Size = previous5.size
-//      previous5.addAll(ayahSet)
-//      ayahSet = previous5
-//      updateAdapter()
-//      if (cache.getLastShownAyahNumber() > cache.getLastShownAyah()!!.startingAyahNumber) {
-//        viewpager.setCurrentItem(if (previous5Size > AYAH_SET_MAX_SIZE) AYAH_SET_MAX_SIZE else previous5Size, false)
-//      }
-//    }
-//  }
+  private fun populateAyahSet(playmode: Int) {
+    val newAyahSet: Map<Int, SurahAyahSampleData?> = when (playmode) {
+      Playmode.RANDOM -> populateAyahByRandom()
+      Playmode.REPEAT_AYAH -> populateRepeatAyah()
+      Playmode.AYAH_BY_AYAH -> populateAyahSetByAyahByAyah()
+      Playmode.REPEAT_SURAH -> populateAyahSetByRepeatSurah()
+      Playmode.FAVOURITES ->
+        List(AYAH_SET_MAX_SIZE) { Random.nextInt(0, cache.getMaxAyahCount()) }.associateWith { null }
+      else -> {
+        List(AYAH_SET_MAX_SIZE) { Random.nextInt(0, cache.getMaxAyahCount()) }.associateWith { null }
+      }
+    }
+    ayahMap.putAll(newAyahSet)
+    updateAdapter()
+  }
+
+  private fun populateRepeatAyah(): Map<Int, SurahAyahSampleData?> =
+      (1..1).map { cache.getLastShownAyahNumber() }.associateWith { null }
+
+  private fun populateAyahByRandom(): Map<Int, SurahAyahSampleData?> {
+    return List(AYAH_SET_MAX_SIZE) { Random.nextInt(0, cache.getMaxAyahCount()) }.associateWith { null }
+  }
+
+  private fun populateAyahSetByAyahByAyah(): Map<Int, SurahAyahSampleData?> {
+    var theMap = mutableMapOf<Int, SurahAyahSampleData?>()
+    val margin = cache.getLastShownAyahNumber() - 1
+    diffByPrevious = if (margin >= AYAH_SET_MAX_SIZE) AYAH_SET_MAX_SIZE else margin
+    val lowerLimit = cache.getLastShownAyahNumber() - diffByPrevious
+    val previousItemsMap = (cache.getLastShownAyahNumber() downTo lowerLimit).reversed().map { it }.associateWith { null }
+    theMap.putAll(previousItemsMap)
+
+    val diff = ConstantVariables.MAX_AYAH_NUMBER - cache.getLastShownAyahNumber()
+    val addableItemCount = if (diff > AYAH_SET_MAX_SIZE) AYAH_SET_MAX_SIZE else diff
+    val nextItemsMap = (cache.getLastShownAyahNumber()..(cache.getLastShownAyahNumber() + addableItemCount)).map { it }.associateWith { null }
+    theMap.putAll(nextItemsMap)
+
+    return theMap
+  }
+
+  private fun populateAyahSetByRepeatSurah(): Map<Int, SurahAyahSampleData?> {
+    var theMap = mutableMapOf<Int, SurahAyahSampleData?>()
+    val margin = cache.getLastShownAyahNumber() - cache.getLastShownAyah()!!.startingAyahNumber
+    diffByPrevious = if (margin >= AYAH_SET_MAX_SIZE) AYAH_SET_MAX_SIZE else margin
+    val lowerLimit = cache.getLastShownAyahNumber() - diffByPrevious
+    val previousItemsMap = (cache.getLastShownAyahNumber() downTo lowerLimit).reversed().map { it }.associateWith { null }
+    theMap.putAll(previousItemsMap)
+
+    val diff = cache.getLastShownAyah()!!.endingAyahNumber - cache.getLastShownAyahNumber()
+    val addableItemCount = if (diff > AYAH_SET_MAX_SIZE) AYAH_SET_MAX_SIZE else diff
+    val nextItemsMap = (cache.getLastShownAyahNumber()..(cache.getLastShownAyahNumber() + addableItemCount)).map { it }.associateWith { null }
+    theMap.putAll(nextItemsMap)
+
+    return theMap
+  }
+
 
   private fun canGoPrevious() =
       playmode == Playmode.REPEAT_SURAH || playmode == Playmode.AYAH_BY_AYAH
