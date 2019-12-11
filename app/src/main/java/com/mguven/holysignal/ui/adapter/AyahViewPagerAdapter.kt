@@ -13,6 +13,7 @@ import com.mguven.holysignal.db.entity.SurahAyahSampleData
 import com.mguven.holysignal.extension.highlighted
 import com.mguven.holysignal.extension.isNotNullAndNotEmpty
 import com.mguven.holysignal.extension.setEmpty
+import com.mguven.holysignal.model.AyahMap
 import com.mguven.holysignal.ui.AbstractBaseActivity
 import com.mguven.holysignal.viewmodel.HolyBookViewModel
 import kotlinx.coroutines.launch
@@ -24,7 +25,7 @@ class AyahViewPagerAdapter(var activity: AbstractBaseActivity?,
     RecyclerView.Adapter<AyahViewPagerAdapter.ViewHolder>() {
 
   var listener: MapValueListener? = null
-  private var ayahSet: MutableSet<Int>? = null
+  private var ayahMap: AyahMap? = null
 
 
 
@@ -37,14 +38,14 @@ class AyahViewPagerAdapter(var activity: AbstractBaseActivity?,
           )
       )
 
-  override fun getItemCount() = ayahSet?.size ?: 0
+  override fun getItemCount() = ayahMap?.size ?: 0
 
   override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-    holder.bind(ayahSet!!.elementAt(position))
+    holder.bind(ayahMap!!.getEntry(position)!!.key)
   }
 
-  fun updateAyahSet(ayahSet: MutableSet<Int>) {
-    this.ayahSet = ayahSet
+  fun updateAyahSet(map: AyahMap?) {
+    this.ayahMap = map
     this.notifyDataSetChanged()
   }
 
@@ -53,6 +54,7 @@ class AyahViewPagerAdapter(var activity: AbstractBaseActivity?,
     private val tvAyahTopText = view.findViewById<TextView>(R.id.tvAyahTopText)
     private val tvViewingCount = view.findViewById<TextView>(R.id.tvViewingCount)
     private val tvAyahBottomText = view.findViewById<TextView>(R.id.tvAyahBottomText)
+
     fun bind(ayahNumber: Int) {
       getAyahTopText(ayahNumber)
       getAyahBottomText(ayahNumber)
@@ -65,7 +67,8 @@ class AyahViewPagerAdapter(var activity: AbstractBaseActivity?,
           getViewingCount(ayahNumber)
           list.forEach {
             if (listener != null) {
-              listener!!.onMapValueFound(ayahNumber, it)
+              ayahMap!![ayahNumber] = it
+              listener!!.onMapValueFound(ayahMap!!)
             }
             tvAyahNumber.text = "(${it.meaning})\n${it.surahNameByLanguage} : ${it.numberInSurah}"
             tvAyahTopText.highlighted("<b>${it.language}:</b> ${it.ayahText}", cache.getAyahSearchResult()?.keywords)
@@ -108,7 +111,7 @@ class AyahViewPagerAdapter(var activity: AbstractBaseActivity?,
   }
 
   interface MapValueListener {
-    fun onMapValueFound(key: Int, value: SurahAyahSampleData)
+    fun onMapValueFound(ayahMap: AyahMap)
   }
 
   override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {

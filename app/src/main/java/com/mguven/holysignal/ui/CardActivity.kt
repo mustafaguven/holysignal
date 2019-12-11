@@ -15,6 +15,7 @@ import com.mguven.holysignal.db.entity.AvailableSurahItem
 import com.mguven.holysignal.db.entity.SurahAyahSampleData
 import com.mguven.holysignal.di.module.CardActivityModule
 import com.mguven.holysignal.extension.isNotNullAndNotEmpty
+import com.mguven.holysignal.model.AyahMap
 import com.mguven.holysignal.model.AyahSearchResult
 import com.mguven.holysignal.ui.adapter.AyahViewPagerAdapter
 import com.mguven.holysignal.ui.fragment.BaseDialogFragment
@@ -56,7 +57,9 @@ class CardActivity : AbstractBaseActivity(),
   private lateinit var selectSurahFragment: BaseDialogFragment
 
   //other
-  private var ayahMap = mutableMapOf<Int, SurahAyahSampleData?>()
+  private var ayahMap = AyahMap()
+
+
   private var diffByPrevious = 5
   private var firstOpening = true
   private var isFavourite = false
@@ -310,7 +313,6 @@ class CardActivity : AbstractBaseActivity(),
 //    })
 
 
-
     viewpager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
       override fun onPageSelected(pos: Int) {
         super.onPageSelected(pos)
@@ -319,8 +321,10 @@ class CardActivity : AbstractBaseActivity(),
 
         Log.e("AYAH_SET", "opened: ${ayahMap[cache.getLastShownAyahNumber() + pos]}")
 
-        //TODO: altsatira gore ilerle
-        //cache.updateLastShownAyah(it)
+        val lastShownAyah = ayahMap.getValue(pos)
+        lastShownAyah.let {
+          cache.updateLastShownAyah(lastShownAyah)
+        }
         onPageChanged()
 
 //        if (isFirstPage(pos)) {
@@ -493,7 +497,7 @@ class CardActivity : AbstractBaseActivity(),
   }
 
   private fun updateAdapter() {
-    ayahViewPagerAdapter.updateAyahSet(HashSet(ayahMap.keys))
+    ayahViewPagerAdapter.updateAyahSet(ayahMap)
     Log.e("AYAH_SET", "Playmode: $playmode set: $ayahMap selected ayah no: ${cache.getLastShownAyahNumber()}")
   }
 
@@ -505,9 +509,8 @@ class CardActivity : AbstractBaseActivity(),
     TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
   }
 
-  override fun onMapValueFound(key: Int, value: SurahAyahSampleData) {
-    ayahMap[key] = value
-    Log.e("AYAH_SET", "key: $key value: $value")
+  override fun onMapValueFound(ayahMap: AyahMap) {
+    this.ayahMap = ayahMap
   }
 
 
