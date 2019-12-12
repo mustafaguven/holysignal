@@ -334,18 +334,27 @@ class CardActivity : AbstractBaseActivity(),
       Playmode.REPEAT_AYAH -> populateRepeatAyah()
       Playmode.AYAH_BY_AYAH -> populateAyahSetByAyahByAyah()
       Playmode.REPEAT_SURAH -> populateAyahSetByRepeatSurah()
-      Playmode.FAVOURITES ->
-        List(AYAH_SET_MAX_SIZE) { Random.nextInt(0, cache.getMaxAyahCount()) }.associateWith { null }
+      Playmode.FAVOURITES -> populateAyahsByFavourites()
       else -> {
         populateRepeatAyah()
       }
     }
     ayahMap.putAll(newAyahSet)
+
     updateAdapter()
 
     if (playmode == Playmode.RANDOM && !firstOpening) {
       viewpager.setCurrentItem(0, false)
     }
+  }
+
+  private fun populateAyahsByFavourites(): Map<Int, SurahAyahSampleData?> {
+    lifecycleScope.launch {
+      val favouriteMap = holyBookViewModel.getFavouriteIdList()!!.map { it.toInt() }.associateWith { null }
+      ayahMap.putAll(favouriteMap)
+      return@launch
+    }
+    return ayahMap
   }
 
   private fun populateRepeatAyah(): Map<Int, SurahAyahSampleData?> {
@@ -402,10 +411,27 @@ class CardActivity : AbstractBaseActivity(),
   }
 
   private fun updateAdapter() {
-    ayahViewPagerAdapter.updateAyahSet(ayahMap)
+    if(ayahMap.isEmpty()){
+      viewpager.visibility = View.GONE
+      tvEmptyMessage.text = getString(R.string.none_items_found)
+      tvEmptyMessage.visibility = View.VISIBLE
+      tvViewingCount.visibility = View.GONE
+      ivShare.visibility = View.GONE
+      ivFavourite.visibility = View.GONE
+      ivAddNote.visibility = View.GONE
+      ivBookMarkAyah.visibility = View.GONE
+    } else {
+      viewpager.visibility = View.VISIBLE
+      tvEmptyMessage.visibility = View.GONE
+      tvViewingCount.visibility = View.VISIBLE
+      ivShare.visibility = View.VISIBLE
+      ivFavourite.visibility = View.VISIBLE
+      ivAddNote.visibility = View.VISIBLE
+      ivBookMarkAyah.visibility = View.VISIBLE
+      ayahViewPagerAdapter.updateAyahSet(ayahMap)
+    }
     Log.e("AYAH_SET", "playmode: $playmode  mapSize: ${ayahMap.size} map: $ayahMap")
   }
-
 
   private fun getViewingCount() {
     lifecycleScope.launch {
