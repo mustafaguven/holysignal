@@ -2,6 +2,7 @@ package com.mguven.holysignal.ui
 
 import android.content.DialogInterface
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.lifecycle.lifecycleScope
 import androidx.viewpager2.widget.ViewPager2
@@ -304,7 +305,9 @@ class CardActivity : AbstractBaseActivity(),
               populateAyahSet(playmode)
             }
           }
-          goToSelectedAyah()
+          if (canGoBack()) {
+            goToSelectedAyah()
+          }
         }
 
         if (isLastPage(pos)) {
@@ -312,10 +315,7 @@ class CardActivity : AbstractBaseActivity(),
             populateAyahSet(playmode)
           }
         }
-
       }
-
-
     })
   }
 
@@ -349,19 +349,22 @@ class CardActivity : AbstractBaseActivity(),
       Playmode.FAVOURITES ->
         List(AYAH_SET_MAX_SIZE) { Random.nextInt(0, cache.getMaxAyahCount()) }.associateWith { null }
       else -> {
-        List(AYAH_SET_MAX_SIZE) { Random.nextInt(0, cache.getMaxAyahCount()) }.associateWith { null }
+        populateRepeatAyah()
       }
     }
     ayahMap.putAll(newAyahSet)
     updateAdapter()
+
+    if (playmode == Playmode.RANDOM && !firstOpening) {
+      viewpager.setCurrentItem(0, false)
+    }
   }
 
   private fun populateRepeatAyah(): Map<Int, SurahAyahSampleData?> =
       (1..1).map { cache.getLastShownAyahNumber() }.associateWith { null }
 
-  private fun populateAyahByRandom(): Map<Int, SurahAyahSampleData?> {
-    return List(AYAH_SET_MAX_SIZE) { Random.nextInt(0, cache.getMaxAyahCount()) }.associateWith { null }
-  }
+  private fun populateAyahByRandom(): Map<Int, SurahAyahSampleData?> =
+      List(AYAH_SET_MAX_SIZE) { Random.nextInt(1, cache.getMaxAyahCount()) }.map { it }.associateWith { null }
 
   private fun populateAyahSetByAyahByAyah(): Map<Int, SurahAyahSampleData?> {
     val theMap = mutableMapOf<Int, SurahAyahSampleData?>()
@@ -409,6 +412,7 @@ class CardActivity : AbstractBaseActivity(),
 
   private fun updateAdapter() {
     ayahViewPagerAdapter.updateAyahSet(ayahMap)
+    Log.e("AYAH_SET", "playmode: $playmode  mapSize: ${ayahMap.size} map: $ayahMap")
   }
 
   private fun onPageChanged() {
