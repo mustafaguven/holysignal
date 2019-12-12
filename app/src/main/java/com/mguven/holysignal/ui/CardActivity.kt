@@ -2,7 +2,6 @@ package com.mguven.holysignal.ui
 
 import android.content.DialogInterface
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.lifecycle.lifecycleScope
 import androidx.viewpager2.widget.ViewPager2
@@ -63,7 +62,6 @@ class CardActivity : AbstractBaseActivity(),
 
   private var diffByPrevious = AYAH_SET_MAX_SIZE
   private var firstOpening = true
-  private var goForward = false
   private var isFavourite = false
   private var playmode: Int = Int.MIN_VALUE
   private val playmodes by lazy {
@@ -293,6 +291,7 @@ class CardActivity : AbstractBaseActivity(),
         super.onPageSelected(pos)
         fun isFirstPage(position: Int) = position == 0
         fun isLastPage(position: Int) = position == ayahMap.size - 1
+        fun canGoBack() = playmode == Playmode.AYAH_BY_AYAH || playmode == Playmode.REPEAT_SURAH
 
         updateLastShownAyah(pos)
 
@@ -300,8 +299,10 @@ class CardActivity : AbstractBaseActivity(),
 
         if (isFirstPage(pos)) {
           if (!firstOpening) {
-            ayahMap.clear()
-            populateAyahSet(playmode)
+            if (canGoBack()) {
+              ayahMap.clear()
+              populateAyahSet(playmode)
+            }
           }
           goToSelectedAyah()
         }
@@ -313,6 +314,8 @@ class CardActivity : AbstractBaseActivity(),
         }
 
       }
+
+
     })
   }
 
@@ -327,10 +330,7 @@ class CardActivity : AbstractBaseActivity(),
   }
 
   private fun goToSelectedAyah() {
-    if (goForward) {
-      viewpager.setCurrentItem(diffByPrevious, false)
-      goForward = false
-    }
+    viewpager.setCurrentItem(diffByPrevious, false)
   }
 
   private fun updateLastShownAyah(pos: Int) {
@@ -364,7 +364,6 @@ class CardActivity : AbstractBaseActivity(),
   }
 
   private fun populateAyahSetByAyahByAyah(): Map<Int, SurahAyahSampleData?> {
-    goForward = true
     val theMap = mutableMapOf<Int, SurahAyahSampleData?>()
     val margin = cache.getLastShownAyahNumber() - 1
     diffByPrevious = if (margin >= AYAH_SET_MAX_SIZE) AYAH_SET_MAX_SIZE else margin
@@ -383,9 +382,6 @@ class CardActivity : AbstractBaseActivity(),
                                            start: Int = cache.getLastShownAyah()!!.startingAyahNumber,
                                            end: Int = cache.getLastShownAyah()!!.endingAyahNumber): Map<Int, SurahAyahSampleData?> {
     val theMap = mutableMapOf<Int, SurahAyahSampleData?>()
-    if (ayahNumber != start) {
-      goForward = true
-    }
     val margin = ayahNumber - start
     diffByPrevious = if (margin >= AYAH_SET_MAX_SIZE) AYAH_SET_MAX_SIZE else margin
     val lowerLimit = ayahNumber - diffByPrevious
@@ -404,6 +400,7 @@ class CardActivity : AbstractBaseActivity(),
     ayahMap.clear()
     val next = populateAyahSetByRepeatSurah(surah.min, surah.min, surah.max)
     ayahMap.putAll(next)
+    cache.updateLastShownAyah(null)
     updateAdapter()
     firstOpening = true
     viewpager.setCurrentItem(0, false)
@@ -412,7 +409,6 @@ class CardActivity : AbstractBaseActivity(),
 
   private fun updateAdapter() {
     ayahViewPagerAdapter.updateAyahSet(ayahMap)
-    Log.e("AYAH_SET", "Playmode: $playmode map size: ${ayahMap.size} selected ayah no: ${cache.getLastShownAyahNumber()}")
   }
 
   private fun onPageChanged() {
@@ -558,6 +554,10 @@ class CardActivity : AbstractBaseActivity(),
     }
   }
 
+  override fun onPause() {
+    super.onPause()
+    //goForward = false
+  }
 
 }
 

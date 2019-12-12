@@ -70,7 +70,7 @@ class AyahViewPagerAdapter(var activity: AbstractBaseActivity?,
               ayahMap!![ayahNumber] = it
               listener!!.onMapValueFound(ayahMap!!)
             }
-            tvAyahNumber.text = "(${it.meaning})\n${it.surahNameByLanguage} : ${it.numberInSurah}"
+            tvAyahNumber.text = "(${it.meaning})\n${it.surahNameByLanguage} : ${it.numberInSurah} / ${it.endingAyahNumber - it.startingAyahNumber + 1}"
             tvAyahTopText.highlighted("<b>${it.language}:</b> ${it.ayahText}", cache.getAyahSearchResult()?.keywords)
           }
         } else {
