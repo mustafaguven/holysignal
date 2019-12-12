@@ -46,14 +46,21 @@ class ApplicationCache(private val applicationSharedPreferences: SharedPreferenc
       this.applicationSharedPreferences.getInt(CacheKey.BOTTOM_TEXT_EDITION_ID, 53)
 
   fun updateLastShownAyah(lastShownAyah: SurahAyahSampleData?) {
+    surahAyahSampleData = lastShownAyah
     setObjectWithGenericSerializer(CacheKey.LAST_SHOWN_AYAH, lastShownAyah)
     whenNotNull(lastShownAyah) {
       updateLastShownAyahNumber(it.ayahNumber)
     }
   }
 
-  fun getLastShownAyah(): SurahAyahSampleData? = getObjectWithGenericDeserializer(CacheKey.LAST_SHOWN_AYAH,
-      SurahAyahSampleData::class.java)
+  private var surahAyahSampleData: SurahAyahSampleData? = null
+  fun getLastShownAyah(): SurahAyahSampleData? {
+    if (surahAyahSampleData == null) {
+      surahAyahSampleData = getObjectWithGenericDeserializer(CacheKey.LAST_SHOWN_AYAH,
+          SurahAyahSampleData::class.java)
+    }
+    return surahAyahSampleData
+  }
 
   fun getPlaymode(): Int {
     return this.applicationSharedPreferences.getInt(CacheKey.PLAY_MODE, 0)

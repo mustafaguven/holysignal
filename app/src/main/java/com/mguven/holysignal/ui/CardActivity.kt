@@ -1,6 +1,7 @@
 package com.mguven.holysignal.ui
 
 import android.content.DialogInterface
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -151,15 +152,6 @@ class CardActivity : AbstractBaseActivity(),
 //    }
 //    return index
 //  }
-//
-//  private fun onSelectSurah(increment: Int): Int {
-//    var ayahNumber = cache.getLastShownAyahNumber() + increment
-//    if (ayahNumber > cache.getLastShownAyah()!!.endingAyahNumber) {
-//      ayahNumber = cache.getLastShownAyah()!!.startingAyahNumber
-//    } else if (ayahNumber < cache.getLastShownAyah()!!.startingAyahNumber) {
-//      ayahNumber = cache.getLastShownAyah()!!.endingAyahNumber
-//    }
-//    return ayahNumber
 //  }
 
   private fun initListeners() {
@@ -212,10 +204,10 @@ class CardActivity : AbstractBaseActivity(),
       showSnackbar(if (isFavourite) getString(R.string.added_to_favourites) else getString(R.string.removed_from_favourites))
     }
 
-    /*ivShare.setOnClickListener {
+    ivShare.setOnClickListener {
       whenNotNull(cache.getLastShownAyah()) {
         val shareText = "(${cache.getLastShownAyah()?.surahNumber}:${cache.getLastShownAyah()?.numberInSurah})" +
-            " ${tvAyahTopText.text} *** ${tvAyahBottomText.text} ${getString(R.string.via_holy_signal)}"
+            " ${cache.getLastShownAyah()?.ayahText} ${getString(R.string.via_holy_signal)}"
         val sendIntent: Intent = Intent().apply {
           action = Intent.ACTION_SEND
           putExtra(Intent.EXTRA_TEXT, shareText)
@@ -224,9 +216,7 @@ class CardActivity : AbstractBaseActivity(),
         val shareIntent = Intent.createChooser(sendIntent, null)
         startActivity(shareIntent)
       }
-    }*/
-
-
+    }
 
     ivAddNote.setOnClickListener {
       if (deviceUtil.isConnected()) {
@@ -246,16 +236,6 @@ class CardActivity : AbstractBaseActivity(),
       searchWordInAyahsFragment = SearchWordInAyahsFragment.newInstance()
       searchWordInAyahsFragment.show(supportFragmentManager, searchWordInAyahsFragment.javaClass.simpleName)
     }
-
-//    tvNext.setOnClickListener {
-//      ayahNumber = getAyahNumberByPlaymode()
-//      initData()
-//    }
-//
-//    tvPrevious.setOnClickListener {
-//      ayahNumber = getAyahNumberByPlaymode(-1)
-//      initData()
-//    }
 
 //    ivSearchClose.setOnClickListener {
 //      cache.updateAyahSearchResult(null)
@@ -539,17 +519,6 @@ class CardActivity : AbstractBaseActivity(),
         ?: 0)
   }
 
-/*  override fun onSaveInstanceState(outState: Bundle) {
-    super.onSaveInstanceState(outState)
-    outState.putInt(SAVED_AYAH_NUMBER, cache.getLastShownAyahNumber())
-  }
-
-  override fun onRestoreInstanceState(savedInstanceState: Bundle) {
-    super.onRestoreInstanceState(savedInstanceState)
-    savedInstanceState.getInt(SAVED_AYAH_NUMBER)
-  }*/
-
-
   override fun onSearchWordEntered(words: MutableSet<String>) {
     TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
   }
@@ -563,11 +532,6 @@ class CardActivity : AbstractBaseActivity(),
     if (cache.getLastShownAyah() == null) {
       cache.updateLastShownAyah(ayahMap.getValue(0))
     }
-  }
-
-  override fun onPause() {
-    super.onPause()
-    //goForward = false
   }
 
 }
