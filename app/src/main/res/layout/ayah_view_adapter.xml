@@ -72,20 +72,7 @@
                 tools:text="bottom text" />
 
 
-            <TextView
-                android:id="@+id/tvViewingCount"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="3dp"
-                android:fontFamily="@font/gotham_narrow_book"
-                android:gravity="center"
-                android:textColor="@color/black"
-                android:textSize="18sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintHorizontal_chainStyle="packed"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                tools:text="goruntulenme sayisi: 3" />
+
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

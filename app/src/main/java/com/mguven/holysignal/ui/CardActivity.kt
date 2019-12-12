@@ -88,8 +88,6 @@ class CardActivity : AbstractBaseActivity(),
 
     arrangeCacheForOpening()
 
-
-
     viewpager.adapter = ayahViewPagerAdapter
     populateAyahSet(playmode)
 
@@ -415,6 +413,14 @@ class CardActivity : AbstractBaseActivity(),
     Log.e("AYAH_SET", "playmode: $playmode  mapSize: ${ayahMap.size} map: $ayahMap")
   }
 
+
+  private fun getViewingCount() {
+    lifecycleScope.launch {
+      val count = holyBookViewModel.getViewingCount(cache.getLastShownAyahNumber())
+      tvViewingCount.text = tvViewingCount.context.getString(R.string.total_viewing_count, count)
+    }
+  }
+
   private fun onPageChanged() {
     if (!isFavourite()) {
       //holyBookViewModel.getFavouriteCountByAyahNumber(ayahNumber)
@@ -424,6 +430,7 @@ class CardActivity : AbstractBaseActivity(),
       getViewingPercentage()
       showFavouriteStatus()
     }
+    getViewingCount()
   }
 
   private fun initPlaymode(mode: Int) {
