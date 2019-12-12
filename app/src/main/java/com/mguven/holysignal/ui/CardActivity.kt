@@ -108,26 +108,6 @@ class CardActivity : AbstractBaseActivity(),
     }
   }
 
-/*  private fun getAyahNumberByPlaymode(): Int {
-    try {
-      val searchCriteriaResult = cache.getAyahSearchResult()
-      if (searchCriteriaResult != null && searchCriteriaResult.list.isNotNullAndNotEmpty()) {
-        ++searchCriteriaResult.lastIndex
-        cache.updateAyahSearchResult(searchCriteriaResult)
-        arrangeViewsBySearch(searchCriteriaResult)
-        return searchCriteriaResult.list!![searchCriteriaResult.lastIndex % searchCriteriaResult.list.size]
-      }
-
-      populateAyahSet(playmode)
-      return ayahSet.elementAt(0)
-
-    } catch (ex: Exception) {
-      return (1..cache.getMaxAyahCount()).random()
-    }
-  }*/
-
-//  }
-
   private fun initListeners() {
     ivPreferences.setOnClickListener {
       FlowController.launchMainActivity(this)
@@ -220,7 +200,6 @@ class CardActivity : AbstractBaseActivity(),
 
     ivSearchClose.setOnClickListener {
       arrangeBySearchViewClosed()
-      playmode = Playmode.FAVOURITES
       ivPlayMode.performClick()
     }
 
@@ -229,6 +208,7 @@ class CardActivity : AbstractBaseActivity(),
 //    })
 
     ivPlayMode.setOnClickListener {
+      if (playmode == Playmode.SEARCH) ++playmode
       ayahMap.clear()
       val newPlayMode = onPlayModeChanged()
       populateAyahSet(newPlayMode)
@@ -250,6 +230,7 @@ class CardActivity : AbstractBaseActivity(),
         fun isFirstPage(position: Int) = position == 0
         fun isLastPage(position: Int) = position == ayahMap.size - 1
         fun canGoBack() = playmode == Playmode.AYAH_BY_AYAH || playmode == Playmode.REPEAT_SURAH
+        fun canNotMove() = ayahMap.size == 1
 
         updateLastShownAyah(pos)
         getViewingPercentage()
@@ -261,7 +242,9 @@ class CardActivity : AbstractBaseActivity(),
           if (!firstOpening) {
             if (canGoBack()) {
               ayahMap.clear()
-              populateAyahSet(playmode)
+              if (!canNotMove()) {
+                populateAyahSet(playmode)
+              }
             }
           }
           if (canGoBack()) {
@@ -271,7 +254,9 @@ class CardActivity : AbstractBaseActivity(),
 
         if (isLastPage(pos)) {
           if (!firstOpening) {
-            populateAyahSet(playmode)
+            if (!canNotMove()) {
+              populateAyahSet(playmode)
+            }
           }
         }
       }
@@ -335,6 +320,7 @@ class CardActivity : AbstractBaseActivity(),
       ayahMap.putAll(searchMap)
     }
     updateAdapter()
+    viewpager.setCurrentItem(0, false)
   }
 
   private fun populateAyahsByFavourites(): Map<Int, SurahAyahSampleData?> {
@@ -498,6 +484,7 @@ class CardActivity : AbstractBaseActivity(),
 
   override fun onSearchWordEntered(words: MutableSet<String>) {
     try {
+      playmode = Playmode.FAVOURITES
       words.removeAll { it.trim() == "" }
       if (words.isEmpty() || words.size > MAX_SEARCH_KEYWORD_THRESHOLD) {
         showErrorSnackBar(R.string.ayah_search_validation_error)
@@ -529,6 +516,7 @@ class CardActivity : AbstractBaseActivity(),
 
   override fun onSearchAyahNoEntered(ayahNo: Int) {
     try {
+      playmode = Playmode.FAVOURITES
       if (ayahNo >= 1 && ayahNo <= cache.getMaxAyahCount()) {
         val searchResult = AyahSearchResult(listOf(ayahNo), ayahNo.toString())
         cache.updateAyahSearchResult(searchResult)

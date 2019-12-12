@@ -6,6 +6,7 @@ object Playmode {
   const val REPEAT_AYAH = 2
   const val AYAH_BY_AYAH = 3
   const val FAVOURITES = 4
+  const val SEARCH = 5
 
 
 }
