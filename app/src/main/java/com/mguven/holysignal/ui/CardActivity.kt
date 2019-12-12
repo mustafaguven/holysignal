@@ -300,6 +300,7 @@ class CardActivity : AbstractBaseActivity(),
       Playmode.AYAH_BY_AYAH -> populateAyahSetByAyahByAyah()
       Playmode.REPEAT_SURAH -> populateAyahSetByRepeatSurah()
       Playmode.FAVOURITES -> populateAyahsByFavourites()
+      Playmode.SEARCH -> populateBySearchResult()
       else -> {
         populateRepeatAyah()
       }
@@ -313,14 +314,13 @@ class CardActivity : AbstractBaseActivity(),
     }
   }
 
-  private fun populateBySearchResult() {
+  private fun populateBySearchResult(): Map<Int, SurahAyahSampleData?> {
     ayahMap.clear()
     lifecycleScope.launch {
       val searchMap = cache.getAyahSearchResult()?.list!!.map { it }.associateWith { null }
       ayahMap.putAll(searchMap)
     }
-    updateAdapter()
-    viewpager.setCurrentItem(0, false)
+    return ayahMap
   }
 
   private fun populateAyahsByFavourites(): Map<Int, SurahAyahSampleData?> {
@@ -484,7 +484,7 @@ class CardActivity : AbstractBaseActivity(),
 
   override fun onSearchWordEntered(words: MutableSet<String>) {
     try {
-      playmode = Playmode.FAVOURITES
+      playmode = Playmode.SEARCH
       words.removeAll { it.trim() == "" }
       if (words.isEmpty() || words.size > MAX_SEARCH_KEYWORD_THRESHOLD) {
         showErrorSnackBar(R.string.ayah_search_validation_error)
@@ -516,7 +516,7 @@ class CardActivity : AbstractBaseActivity(),
 
   override fun onSearchAyahNoEntered(ayahNo: Int) {
     try {
-      playmode = Playmode.FAVOURITES
+      playmode = Playmode.SEARCH
       if (ayahNo >= 1 && ayahNo <= cache.getMaxAyahCount()) {
         val searchResult = AyahSearchResult(listOf(ayahNo), ayahNo.toString())
         cache.updateAyahSearchResult(searchResult)
