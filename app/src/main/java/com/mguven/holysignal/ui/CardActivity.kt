@@ -29,6 +29,7 @@ import com.mguven.holysignal.util.DepthPageTransformer
 import com.mguven.holysignal.util.DeviceUtil
 import com.mguven.holysignal.viewmodel.HolyBookViewModel
 import kotlinx.android.synthetic.main.activity_card.*
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
@@ -42,7 +43,6 @@ class CardActivity : AbstractBaseActivity(),
 
   companion object {
     private const val MAX_SEARCH_KEYWORD_THRESHOLD = 3
-    private const val FAVOURITE_STARTER_AYAH_ID = -100
     private const val AYAH_SET_MAX_SIZE = 5
     private const val SAVED_AYAH_NUMBER = "SAVED_AYAH_NUMBER"
   }
@@ -63,7 +63,7 @@ class CardActivity : AbstractBaseActivity(),
   //other
   private var ayahMap = AyahMap()
 
-
+  private var lastOpenedAyahNo = -100
   private var diffByPrevious = AYAH_SET_MAX_SIZE
   private var firstOpening = true
   private var isFavourite = false
@@ -71,8 +71,6 @@ class CardActivity : AbstractBaseActivity(),
   private val playmodes by lazy {
     return@lazy resources.getStringArray(R.array.playmodes)
   }
-
-  private fun isFavourite() = cache.getLastShownAyahNumber() == FAVOURITE_STARTER_AYAH_ID
 
   private fun inject() {
     (application as TheApplication)
@@ -284,6 +282,8 @@ class CardActivity : AbstractBaseActivity(),
         fun canGoBack() = playmode == Playmode.AYAH_BY_AYAH || playmode == Playmode.REPEAT_SURAH
 
         updateLastShownAyah(pos)
+        getViewingPercentage()
+        getViewingCount()
 
         onPageChanged()
 
@@ -411,7 +411,7 @@ class CardActivity : AbstractBaseActivity(),
   }
 
   private fun updateAdapter() {
-    if(ayahMap.isEmpty()){
+    if (ayahMap.isEmpty()) {
       viewpager.visibility = View.GONE
       tvEmptyMessage.text = getString(R.string.none_items_found)
       tvEmptyMessage.visibility = View.VISIBLE
@@ -441,16 +441,16 @@ class CardActivity : AbstractBaseActivity(),
   }
 
   private fun onPageChanged() {
-    Log.e("AYAH_SET", "PAGE CHANGED")
-    if (!isFavourite()) {
+    Log.e("AYAH_SET", "PAGE CHANGED -- ayahNumber: ${cache.getLastShownAyahNumber()}")
+    if (lastOpenedAyahNo != cache.getLastShownAyahNumber()) {
       //holyBookViewModel.getFavouriteCountByAyahNumber(ayahNumber)
       ivFavourite.visibility = View.VISIBLE
       ivBookMarkAyah.setImageResource(if (cache.getBookmark() == cache.getLastShownAyahNumber()) R.drawable.ic_bookmark_filled_24px else R.drawable.ic_bookmark_empty_24px)
       ivAllBookmarks.visibility = if (cache.getBookmark() == ConstantVariables.EMPTY_BOOKMARK) View.GONE else View.VISIBLE
-      getViewingPercentage()
+
       showFavouriteStatus()
+      lastOpenedAyahNo = cache.getLastShownAyahNumber()
     }
-    getViewingCount()
   }
 
   private fun initPlaymode(mode: Int) {
@@ -481,7 +481,7 @@ class CardActivity : AbstractBaseActivity(),
   }
 
   private fun showFavouriteStatus() {
-    lifecycleScope.launch {
+    lifecycleScope.launch(Dispatchers.IO) {
       holyBookViewModel.hasFavourite(cache.getLastShownAyahNumber()).also { list ->
         isFavourite = list.isNotEmpty()
         ivFavourite.setImageResource(if (isFavourite) R.drawable.ic_star_fill_24px else R.drawable.ic_star_empty_24px)
@@ -571,6 +571,7 @@ class CardActivity : AbstractBaseActivity(),
     this.ayahMap = ayahMap
     ayahMap.forEach {
       if (it.value != null) {
+        Log.e("AYAH_SET", "MAPVALUEFOUND -- ayahNumber: ${it.value}")
         cache.updateLastShownAyah(it.value)
         onPageChanged()
         return@forEach
