@@ -17,6 +17,8 @@ import com.mguven.holysignal.db.entity.AvailableSurahItem
 import com.mguven.holysignal.db.entity.SurahAyahSampleData
 import com.mguven.holysignal.di.module.CardActivityModule
 import com.mguven.holysignal.extension.isNotNullAndNotEmpty
+import com.mguven.holysignal.extension.removeBoxBracketsAndPutSpaceAfterComma
+import com.mguven.holysignal.extension.setEmpty
 import com.mguven.holysignal.inline.whenNotNull
 import com.mguven.holysignal.model.AyahMap
 import com.mguven.holysignal.model.AyahSearchResult
@@ -44,7 +46,7 @@ class CardActivity : AbstractBaseActivity(),
   companion object {
     private const val MAX_SEARCH_KEYWORD_THRESHOLD = 3
     private const val AYAH_SET_MAX_SIZE = 5
-    private const val SAVED_AYAH_NUMBER = "SAVED_AYAH_NUMBER"
+
   }
 
   //injections
@@ -124,33 +126,6 @@ class CardActivity : AbstractBaseActivity(),
     }
   }*/
 
-
-//  private fun byFavourites(): Int {
-//    val favouriteIdList = holyBookViewModel.getFavouriteIdList()
-//    if (favouriteIdList.isNotNullAndNotEmpty()) {
-//      tvKeywords.visibility = View.VISIBLE
-//      tvKeywords.text = getString(R.string.favourites_are_getting_randomly)
-//      val randomIndex = getRandomFavouriteIndex(favouriteIdList)
-//      cache.updateLastShownFavouriteIndex(randomIndex)
-//      return favouriteIdList!![randomIndex].toInt()
-//    } else {
-//      tvAyahTopText.text = getString(R.string.none_favourite_found)
-//      ivFavourite.visibility = View.INVISIBLE
-//      tvNext.isEnabled = false
-//      tvPrevious.isEnabled = false
-//      tvAyahBottomText.setEmpty()
-//      tvAyahNumber.setEmpty()
-//    }
-//    return FAVOURITE_STARTER_AYAH_ID
-//  }
-
-//  private fun getRandomFavouriteIndex(favouriteIdList: List<Long>?): Int {
-//    var index = (favouriteIdList!!.indices).random()
-//    if (cache.getLatestShownFavouriteIndex() == index && favouriteIdList.size > 1) {
-//      index = getRandomFavouriteIndex(favouriteIdList)
-//    }
-//    return index
-//  }
 //  }
 
   private fun initListeners() {
@@ -165,6 +140,7 @@ class CardActivity : AbstractBaseActivity(),
           showYesNoDialog(getString(R.string.go_to_bookmark_warning_message, "${list[0].surahNumber}:${list[0].numberInSurah}"), DialogInterface.OnClickListener { dialog, yes ->
             val ayahNumber = cache.getBookmark()
             lifecycleScope.launch {
+              arrangeBySearchViewClosed()
               val ayah = holyBookViewModel.getAyahTopText(ayahNumber)
               cache.updateLastShownAyah(ayah[0])
               playmode = Playmode.REPEAT_AYAH
@@ -242,17 +218,11 @@ class CardActivity : AbstractBaseActivity(),
       searchWordInAyahsFragment.show(supportFragmentManager, searchWordInAyahsFragment.javaClass.simpleName)
     }
 
-//    ivSearchClose.setOnClickListener {
-//      cache.updateAyahSearchResult(null)
-//      tvNext.isEnabled = true
-//      ivPlayMode.visibility = View.VISIBLE
-//      ivSelectSurah.visibility = View.VISIBLE
-//      ivSearch.visibility = View.VISIBLE
-//      ivSearchClose.visibility = View.GONE
-//      tvKeywords.visibility = View.GONE
-//      ayahNumber = getAyahNumberByPlaymode()
-//      pageChanged()
-//    }
+    ivSearchClose.setOnClickListener {
+      arrangeBySearchViewClosed()
+      playmode = Playmode.FAVOURITES
+      ivPlayMode.performClick()
+    }
 
 //    holyBookViewModel.totalFavouriteCount.observe(this, Observer<Int> {
 //      //tvCloudFavouriteCount.text = getString(R.string.total_cloud_favourite_count, it)
@@ -308,6 +278,16 @@ class CardActivity : AbstractBaseActivity(),
     })
   }
 
+  private fun arrangeBySearchViewClosed() {
+    cache.updateAyahSearchResult(null)
+    tvNext.isEnabled = true
+    ivPlayMode.visibility = View.VISIBLE
+    ivSelectSurah.visibility = View.VISIBLE
+    ivSearch.visibility = View.VISIBLE
+    ivSearchClose.visibility = View.GONE
+    tvKeywords.visibility = View.GONE
+  }
+
   private fun onPlayModeChanged(newPlayMode: Int = (playmode + 1) % playmodes.size): Int {
     tvKeywords.visibility = View.GONE
     initPlaymode(newPlayMode)
@@ -348,6 +328,15 @@ class CardActivity : AbstractBaseActivity(),
     }
   }
 
+  private fun populateBySearchResult() {
+    ayahMap.clear()
+    lifecycleScope.launch {
+      val searchMap = cache.getAyahSearchResult()?.list!!.map { it }.associateWith { null }
+      ayahMap.putAll(searchMap)
+    }
+    updateAdapter()
+  }
+
   private fun populateAyahsByFavourites(): Map<Int, SurahAyahSampleData?> {
     lifecycleScope.launch {
       val favouriteMap = holyBookViewModel.getFavouriteIdList()!!.map { it.toInt() }.associateWith { null }
@@ -361,7 +350,6 @@ class CardActivity : AbstractBaseActivity(),
     firstOpening = true
     return (1..1).map { cache.getLastShownAyahNumber() }.associateWith { null }
   }
-
 
   private fun populateAyahByRandom(): Map<Int, SurahAyahSampleData?> =
       List(AYAH_SET_MAX_SIZE) { Random.nextInt(1, cache.getMaxAyahCount()) }.map { it }.associateWith { null }
@@ -497,57 +485,6 @@ class CardActivity : AbstractBaseActivity(),
     }
   }
 
-//  override fun onSearchWordEntered(words: MutableSet<String>) {
-//    try {
-//      words.removeAll { it.trim() == "" }
-//      if (words.isEmpty() || words.size > MAX_SEARCH_KEYWORD_THRESHOLD) {
-//        showErrorSnackBar(R.string.ayah_search_validation_error)
-//      } else {
-//        lifecycleScope.launch {
-//          val ayahNumbersBySearch: List<Int>? = holyBookViewModel.getAyahsByKeywords(cache.getTopTextEditionId(), words.toList())
-//          val keywords = words.toString().removeBoxBracketsAndPutSpaceAfterComma()
-//          val searchResult = AyahSearchResult(ayahNumbersBySearch, keywords)
-//          cache.updateAyahSearchResult(searchResult)
-//          arrangeViewsBySearch(searchResult)
-//
-//          if (ayahNumbersBySearch.isNotNullAndNotEmpty()) {
-//            ayahNumber = getAyahNumberByPlaymode()
-//            initData()
-//          } else {
-//            tvAyahNumber.setEmpty()
-//            tvAyahTopText.setEmpty()
-//            tvAyahBottomText.setEmpty()
-//            tvViewingCount.setEmpty()
-//          }
-//        }
-//      }
-//    } catch (ex: Exception) {
-//      showErrorSnackBar(ex.message!!)
-//    } finally {
-//      searchWordInAyahsFragment.dismiss()
-//    }
-//  }
-//
-//  override fun onSearchAyahNoEntered(ayahNo: Int) {
-//    try {
-//      if (ayahNo >= 1 && ayahNo <= cache.getMaxAyahCount()) {
-//        arrangeViewsBySearch(AyahSearchResult(listOf(ayahNo), ayahNo.toString()))
-//        ayahNumber = ayahNo
-//        initData()
-//      } else {
-//        arrangeViewsBySearch(AyahSearchResult(null, ayahNo.toString()))
-//        tvAyahNumber.setEmpty()
-//        tvAyahTopText.setEmpty()
-//        tvAyahBottomText.setEmpty()
-//        tvViewingCount.setEmpty()
-//      }
-//    } catch (ex: Exception) {
-//      showErrorSnackBar(ex.message!!)
-//    } finally {
-//      searchWordInAyahsFragment.dismiss()
-//    }
-//  }
-
   private fun arrangeViewsBySearch(searchResult: AyahSearchResult) {
     ivPlayMode.visibility = View.GONE
     ivSelectSurah.visibility = View.GONE
@@ -560,11 +497,57 @@ class CardActivity : AbstractBaseActivity(),
   }
 
   override fun onSearchWordEntered(words: MutableSet<String>) {
-    TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    try {
+      words.removeAll { it.trim() == "" }
+      if (words.isEmpty() || words.size > MAX_SEARCH_KEYWORD_THRESHOLD) {
+        showErrorSnackBar(R.string.ayah_search_validation_error)
+      } else {
+        lifecycleScope.launch {
+          val ayahNumbersBySearch: List<Int>? = holyBookViewModel.getAyahsByKeywords(cache.getTopTextEditionId(), words.toList())
+          val keywords = words.toString().removeBoxBracketsAndPutSpaceAfterComma()
+          val searchResult = AyahSearchResult(ayahNumbersBySearch, keywords)
+          cache.updateAyahSearchResult(searchResult)
+          arrangeViewsBySearch(searchResult)
+          if (ayahNumbersBySearch.isNotNullAndNotEmpty()) {
+            populateBySearchResult()
+            viewpager.visibility = View.VISIBLE
+            tvEmptyMessage.visibility = View.GONE
+          } else {
+            viewpager.visibility = View.GONE
+            tvEmptyMessage.visibility = View.VISIBLE
+            tvEmptyMessage.text = getString(R.string.none_items_found)
+            tvViewingCount.setEmpty()
+          }
+        }
+      }
+    } catch (ex: Exception) {
+      showErrorSnackBar(ex.message!!)
+    } finally {
+      searchWordInAyahsFragment.dismiss()
+    }
   }
 
   override fun onSearchAyahNoEntered(ayahNo: Int) {
-    TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    try {
+      if (ayahNo >= 1 && ayahNo <= cache.getMaxAyahCount()) {
+        val searchResult = AyahSearchResult(listOf(ayahNo), ayahNo.toString())
+        cache.updateAyahSearchResult(searchResult)
+        arrangeViewsBySearch(searchResult)
+        populateBySearchResult()
+        viewpager.visibility = View.VISIBLE
+        tvEmptyMessage.visibility = View.GONE
+      } else {
+        arrangeViewsBySearch(AyahSearchResult(null, ayahNo.toString()))
+        viewpager.visibility = View.GONE
+        tvEmptyMessage.visibility = View.VISIBLE
+        tvEmptyMessage.text = getString(R.string.none_items_found)
+        tvViewingCount.setEmpty()
+      }
+    } catch (ex: Exception) {
+      showErrorSnackBar(ex.message!!)
+    } finally {
+      searchWordInAyahsFragment.dismiss()
+    }
   }
 
   override fun onMapValueFound(ayahMap: AyahMap) {
@@ -573,7 +556,7 @@ class CardActivity : AbstractBaseActivity(),
       if (it.value != null) {
         Log.e("AYAH_SET", "MAPVALUEFOUND -- ayahNumber: ${it.value}")
         cache.updateLastShownAyah(it.value)
-        onPageChanged()
+        //onPageChanged()
         return@forEach
       }
     }
