@@ -159,13 +159,32 @@ class CardActivity : AbstractBaseActivity(),
       FlowController.launchMainActivity(this)
     }
 
+//    override fun onSurahSelected(surah: AvailableSurahItem) {
+//      onPlayModeChanged(Playmode.REPEAT_SURAH)
+//      ayahMap.clear()
+//      val next = populateAyahSetByRepeatSurah(surah.min, surah.min, surah.max)
+//      ayahMap.putAll(next)
+//      cache.updateLastShownAyah(null)
+//      updateAdapter()
+//      firstOpening = true
+//      viewpager.setCurrentItem(0, false)
+//      selectSurahFragment.dismiss()
+//    }
+
+
     ivAllBookmarks.setOnClickListener {
       lifecycleScope.launch {
         val list = holyBookViewModel.getAyahTopText(cache.getBookmark())
         if (list.isNotNullAndNotEmpty()) {
           showYesNoDialog(getString(R.string.go_to_bookmark_warning_message, "${list[0].surahNumber}:${list[0].numberInSurah}"), DialogInterface.OnClickListener { dialog, yes ->
             val ayahNumber = cache.getBookmark()
-            onPageChanged()
+            lifecycleScope.launch {
+              val ayah = holyBookViewModel.getAyahTopText(ayahNumber)
+              cache.updateLastShownAyah(ayah[0])
+              playmode = Playmode.REPEAT_AYAH
+              ivPlayMode.performClick()
+            }
+
             dialog.dismiss()
           }, DialogInterface.OnClickListener { dialog, no ->
             dialog.dismiss()
@@ -254,6 +273,7 @@ class CardActivity : AbstractBaseActivity(),
 //    })
 
     ivPlayMode.setOnClickListener {
+      ayahMap.clear()
       val newPlayMode = onPlayModeChanged()
       populateAyahSet(newPlayMode)
       goToSelectedAyah()
@@ -298,7 +318,6 @@ class CardActivity : AbstractBaseActivity(),
   }
 
   private fun onPlayModeChanged(newPlayMode: Int = (playmode + 1) % playmodes.size): Int {
-    ayahMap.clear()
     tvKeywords.visibility = View.GONE
     initPlaymode(newPlayMode)
     cache.updatePlaymode(newPlayMode)
@@ -338,23 +357,26 @@ class CardActivity : AbstractBaseActivity(),
     }
   }
 
-  private fun populateRepeatAyah(): Map<Int, SurahAyahSampleData?> =
-      (1..1).map { cache.getLastShownAyahNumber() }.associateWith { null }
+  private fun populateRepeatAyah(): Map<Int, SurahAyahSampleData?> {
+    firstOpening = true
+    return (1..1).map { cache.getLastShownAyahNumber() }.associateWith { null }
+  }
+
 
   private fun populateAyahByRandom(): Map<Int, SurahAyahSampleData?> =
       List(AYAH_SET_MAX_SIZE) { Random.nextInt(1, cache.getMaxAyahCount()) }.map { it }.associateWith { null }
 
-  private fun populateAyahSetByAyahByAyah(): Map<Int, SurahAyahSampleData?> {
+  private fun populateAyahSetByAyahByAyah(ayahNumber: Int = cache.getLastShownAyahNumber()): Map<Int, SurahAyahSampleData?> {
     val theMap = mutableMapOf<Int, SurahAyahSampleData?>()
-    val margin = cache.getLastShownAyahNumber() - 1
+    val margin = ayahNumber - 1
     diffByPrevious = if (margin >= AYAH_SET_MAX_SIZE) AYAH_SET_MAX_SIZE else margin
-    val lowerLimit = cache.getLastShownAyahNumber() - diffByPrevious
-    val previousItemsMap = (cache.getLastShownAyahNumber() downTo lowerLimit).reversed().map { it }.associateWith { null }
+    val lowerLimit = ayahNumber - diffByPrevious
+    val previousItemsMap = (ayahNumber downTo lowerLimit).reversed().map { it }.associateWith { null }
     theMap.putAll(previousItemsMap)
 
-    val diff = ConstantVariables.MAX_AYAH_NUMBER - cache.getLastShownAyahNumber()
+    val diff = ConstantVariables.MAX_AYAH_NUMBER - ayahNumber
     val addableItemCount = if (diff > AYAH_SET_MAX_SIZE) AYAH_SET_MAX_SIZE else diff
-    val nextItemsMap = (cache.getLastShownAyahNumber()..(cache.getLastShownAyahNumber() + addableItemCount)).map { it }.associateWith { null }
+    val nextItemsMap = (ayahNumber..(ayahNumber + addableItemCount)).map { it }.associateWith { null }
     theMap.putAll(nextItemsMap)
     return theMap
   }
@@ -402,6 +424,7 @@ class CardActivity : AbstractBaseActivity(),
   }
 
   private fun onPageChanged() {
+    Log.e("AYAH_SET", "PAGE CHANGED")
     if (!isFavourite()) {
       //holyBookViewModel.getFavouriteCountByAyahNumber(ayahNumber)
       ivFavourite.visibility = View.VISIBLE
@@ -529,9 +552,14 @@ class CardActivity : AbstractBaseActivity(),
 
   override fun onMapValueFound(ayahMap: AyahMap) {
     this.ayahMap = ayahMap
-    if (cache.getLastShownAyah() == null) {
-      cache.updateLastShownAyah(ayahMap.getValue(0))
+    ayahMap.forEach {
+      if (it.value != null) {
+        cache.updateLastShownAyah(it.value)
+        onPageChanged()
+        return@forEach
+      }
     }
+
   }
 
 }
