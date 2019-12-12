@@ -120,7 +120,6 @@
                 app:layout_constraintWidth_default="wrap" />
 
 
-
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <TextView
@@ -143,11 +142,13 @@
             android:id="@+id/viewpager"
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:clickable="true"
+            android:focusable="true"
             android:overScrollMode="never"
             app:layout_constraintBottom_toTopOf="@id/tvViewingCount"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvKeywords"/>
+            app:layout_constraintTop_toBottomOf="@+id/tvKeywords" />
 
 
         <TextView

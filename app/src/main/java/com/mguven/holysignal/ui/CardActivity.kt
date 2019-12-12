@@ -2,6 +2,7 @@ package com.mguven.holysignal.ui
 
 import android.content.DialogInterface
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -24,6 +25,7 @@ import com.mguven.holysignal.ui.fragment.BaseDialogFragment
 import com.mguven.holysignal.ui.fragment.NotesFragment
 import com.mguven.holysignal.ui.fragment.SearchWordInAyahsFragment
 import com.mguven.holysignal.ui.fragment.SelectSurahFragment
+import com.mguven.holysignal.util.DepthPageTransformer
 import com.mguven.holysignal.util.DeviceUtil
 import com.mguven.holysignal.viewmodel.HolyBookViewModel
 import kotlinx.android.synthetic.main.activity_card.*
@@ -106,7 +108,6 @@ class CardActivity : AbstractBaseActivity(),
     }
   }
 
-
 /*  private fun getAyahNumberByPlaymode(): Int {
     try {
       val searchCriteriaResult = cache.getAyahSearchResult()
@@ -158,19 +159,6 @@ class CardActivity : AbstractBaseActivity(),
     ivPreferences.setOnClickListener {
       FlowController.launchMainActivity(this)
     }
-
-//    override fun onSurahSelected(surah: AvailableSurahItem) {
-//      onPlayModeChanged(Playmode.REPEAT_SURAH)
-//      ayahMap.clear()
-//      val next = populateAyahSetByRepeatSurah(surah.min, surah.min, surah.max)
-//      ayahMap.putAll(next)
-//      cache.updateLastShownAyah(null)
-//      updateAdapter()
-//      firstOpening = true
-//      viewpager.setCurrentItem(0, false)
-//      selectSurahFragment.dismiss()
-//    }
-
 
     ivAllBookmarks.setOnClickListener {
       lifecycleScope.launch {
@@ -279,6 +267,9 @@ class CardActivity : AbstractBaseActivity(),
       goToSelectedAyah()
     }
 
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+      viewpager.setPageTransformer(DepthPageTransformer())
+    }
 
     viewpager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
       override fun onPageScrollStateChanged(state: Int) {
