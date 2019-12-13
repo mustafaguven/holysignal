@@ -67,20 +67,6 @@
             app:layout_constraintTop_toBottomOf="@id/tvProgress">
 
             <ImageView
-                android:id="@+id/ivBookMarkAyah"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_marginEnd="20dp"
-                android:src="@drawable/ic_bookmark_empty_24px"
-                android:textColor="@color/black"
-                android:textSize="18sp"
-                app:layout_constrainedWidth="true"
-                app:layout_constraintRight_toLeftOf="@id/ivSearch"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintWidth_default="wrap" />
-
-            <ImageView
                 android:id="@+id/ivSearch"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
@@ -88,7 +74,8 @@
                 android:textColor="@color/black"
                 android:textSize="18sp"
                 app:layout_constrainedWidth="true"
-                app:layout_constraintRight_toLeftOf="@id/ivSelectSurah"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintWidth_default="wrap" />
 
@@ -115,6 +102,19 @@
                 android:textColor="@color/black"
                 android:textSize="18sp"
                 app:layout_constraintLeft_toRightOf="@id/ivSelectSurah"
+                app:layout_constraintRight_toLeftOf="@id/ivBookMarkAyah"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintWidth_default="wrap" />
+
+            <ImageView
+                android:id="@+id/ivBookMarkAyah"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/ic_bookmark_empty_24px"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                app:layout_constraintLeft_toRightOf="@id/ivPlayMode"
+                app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintWidth_default="wrap" />
 
@@ -172,14 +172,14 @@
             android:layout_height="100dp"
             android:layout_marginTop="8dp"
             android:gravity="center"
-            android:textColor="@color/black"
             android:src="@drawable/instagram_like"
+            android:textColor="@color/black"
             android:visibility="gone"
-            tools:visibility="visible"
             app:layout_constraintBottom_toTopOf="@id/tvViewingCount"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvKeywords" />
+            app:layout_constraintTop_toBottomOf="@+id/tvKeywords"
+            tools:visibility="visible" />
 
         <TextView
             android:id="@+id/tvViewingCount"
@@ -204,41 +204,6 @@
             android:layout_marginBottom="60dp"
             android:background="@color/gray"
             app:layout_constraintBottom_toBottomOf="parent" />
-
-        <TextView
-            android:id="@+id/tvPrevious"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="20dp"
-            android:fontFamily="@font/gotham_narrow_book"
-            android:gravity="center"
-            android:text="@string/previous_ayah"
-            android:textColor="@color/black"
-            android:textSize="20sp"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintHorizontal_chainStyle="packed"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toLeftOf="@id/tvNext"
-            app:layout_constraintTop_toBottomOf="@id/bottom"
-            tools:visibility="gone" />
-
-        <TextView
-            android:id="@+id/tvNext"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/gotham_narrow_book"
-            android:gravity="center"
-            android:text="@string/next_ayah"
-            android:textColor="@color/black"
-            android:textSize="20sp"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintHorizontal_chainStyle="packed"
-            app:layout_constraintLeft_toRightOf="@id/tvPrevious"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/bottom" />
-
 
         <ImageView
             android:id="@+id/ivAllBookmarks"

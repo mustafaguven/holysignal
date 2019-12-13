@@ -31,6 +31,10 @@ open class OnSwipeTouchListener(ctx: Context) : View.OnTouchListener {
       return true
     }
 
+    override fun onLongPress(e: MotionEvent?) {
+      onLongPress()
+    }
+
     override fun onDown(e: MotionEvent): Boolean {
       return true
     }
@@ -65,6 +69,8 @@ open class OnSwipeTouchListener(ctx: Context) : View.OnTouchListener {
     }
 
   }
+
+  open fun onLongPress() {}
 
   open fun onDoubleTap() {}
 

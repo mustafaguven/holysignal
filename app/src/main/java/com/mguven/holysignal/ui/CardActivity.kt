@@ -282,7 +282,6 @@ class CardActivity : AbstractBaseActivity(),
 
   private fun arrangeBySearchViewClosed() {
     cache.updateAyahSearchResult(null)
-    tvNext.isEnabled = true
     ivPlayMode.visibility = View.VISIBLE
     ivSelectSurah.visibility = View.VISIBLE
     ivSearch.visibility = View.VISIBLE
@@ -328,6 +327,7 @@ class CardActivity : AbstractBaseActivity(),
 
   private fun populateBySearchResult(): Map<Int, SurahAyahSampleData?> {
     ayahMap.clear()
+    ayahViewPagerAdapter.updateAyahSet(ayahMap)
     lifecycleScope.launch {
       val searchMap = cache.getAyahSearchResult()?.list!!.map { it }.associateWith { null }
       ayahMap.putAll(searchMap)
@@ -416,8 +416,6 @@ class CardActivity : AbstractBaseActivity(),
       ivBookMarkAyah.visibility = View.VISIBLE
       ayahViewPagerAdapter.updateAyahSet(ayahMap)
     }
-
-
     Log.e("AYAH_SET", "playmode: $playmode  mapSize: ${ayahMap.size} map: $ayahMap")
   }
 
@@ -447,8 +445,6 @@ class CardActivity : AbstractBaseActivity(),
           else -> R.drawable.ic_loop_24px
         }
     )
-    tvNext.isEnabled = mode != Playmode.REPEAT_AYAH
-    tvPrevious.isEnabled = (mode == Playmode.AYAH_BY_AYAH || mode == Playmode.REPEAT_SURAH)
   }
 
 
@@ -486,7 +482,7 @@ class CardActivity : AbstractBaseActivity(),
     ivSelectSurah.visibility = View.GONE
     ivSearch.visibility = View.GONE
     ivSearchClose.visibility = View.VISIBLE
-    tvNext.isEnabled = searchResult.list.isNotNullAndNotEmpty()
+    ivBookMarkAyah.visibility = if (searchResult.list.isNotNullAndNotEmpty()) View.VISIBLE else View.GONE
     tvKeywords.visibility = View.VISIBLE
     tvKeywords.text = getString(R.string.ayah_search_found_text, searchResult.keywords, searchResult.list?.size
         ?: 0)
@@ -509,6 +505,7 @@ class CardActivity : AbstractBaseActivity(),
             populateBySearchResult()
             viewpager.visibility = View.VISIBLE
             tvEmptyMessage.visibility = View.GONE
+            viewpager.setCurrentItem(0, false)
           } else {
             viewpager.visibility = View.GONE
             tvEmptyMessage.visibility = View.VISIBLE
@@ -571,6 +568,10 @@ class CardActivity : AbstractBaseActivity(),
     } else {
       ivHeart.visibility = View.GONE
     }
+  }
+
+  override fun onAyahLongPressed() {
+    ivBookMarkAyah.performClick()
   }
 
 }
