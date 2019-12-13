@@ -2,11 +2,13 @@ package com.mguven.holysignal.ui
 
 import android.content.DialogInterface
 import android.content.Intent
+import android.graphics.drawable.AnimatedVectorDrawable
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.lifecycle.lifecycleScope
+import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat
 import androidx.viewpager2.widget.ViewPager2
 import com.mguven.holysignal.FlowController
 import com.mguven.holysignal.R
@@ -32,6 +34,7 @@ import com.mguven.holysignal.util.DeviceUtil
 import com.mguven.holysignal.viewmodel.HolyBookViewModel
 import kotlinx.android.synthetic.main.activity_card.*
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
@@ -86,15 +89,27 @@ class CardActivity : AbstractBaseActivity(),
     setContentView(R.layout.activity_card)
     inject()
     holyBookViewModel = getViewModel(HolyBookViewModel::class.java)
+    updateFirstAyahIfLastShownAyahIsNull()
     playmode = cache.getPlaymode()
     initPlaymode(playmode)
-
     arrangeCacheForOpening()
 
     viewpager.adapter = ayahViewPagerAdapter
     populateAyahSet(playmode)
 
     initListeners()
+  }
+
+  private fun updateFirstAyahIfLastShownAyahIsNull() {
+    if (cache.getLastShownAyah() == null) {
+      lifecycleScope.launch(Dispatchers.IO) {
+        val result = async {
+          val ayah = holyBookViewModel.getAyahTopText(1)[0]
+          cache.updateLastShownAyah(ayah)
+        }
+        result.await()
+      }
+    }
   }
 
   private fun arrangeCacheForOpening() {
@@ -159,11 +174,6 @@ class CardActivity : AbstractBaseActivity(),
       }
     }
 
-    ivFavourite.setOnClickListener {
-      isFavourite = !isFavourite
-      upsertFavourite()
-      showSnackbar(if (isFavourite) getString(R.string.added_to_favourites) else getString(R.string.removed_from_favourites))
-    }
 
     ivShare.setOnClickListener {
       whenNotNull(cache.getLastShownAyah()) {
@@ -232,11 +242,8 @@ class CardActivity : AbstractBaseActivity(),
         fun canGoBack() = playmode == Playmode.AYAH_BY_AYAH || playmode == Playmode.REPEAT_SURAH
         fun canNotMove() = ayahMap.size == 1
 
-        updateLastShownAyah(pos)
-        getViewingPercentage()
-        getViewingCount()
-
-        onPageChanged()
+        updateLastShownAyah()
+        refreshPageValues()
 
         if (isFirstPage(pos)) {
           if (!firstOpening) {
@@ -263,6 +270,16 @@ class CardActivity : AbstractBaseActivity(),
     })
   }
 
+  private fun refreshPageValues() {
+    if (lastOpenedAyahNo != cache.getLastShownAyahNumber()) {
+      Log.e("REFRESH PAGE", "PAGE CHANGED -- ayahNumber: ${cache.getLastShownAyahNumber()}")
+      getViewingPercentage()
+      getViewingCount()
+      showFavouriteStatus()
+      onPageChanged()
+    }
+  }
+
   private fun arrangeBySearchViewClosed() {
     cache.updateAyahSearchResult(null)
     tvNext.isEnabled = true
@@ -286,11 +303,10 @@ class CardActivity : AbstractBaseActivity(),
     viewpager.setCurrentItem(diffByPrevious, false)
   }
 
-  private fun updateLastShownAyah(pos: Int) {
-    val lastShownAyah = ayahMap.getValue(pos)
-    whenNotNull(lastShownAyah) {
-      cache.updateLastShownAyah(lastShownAyah)
-    }
+  private fun updateLastShownAyah() {
+    val lastShownAyah = ayahMap.getValue(viewpager.currentItem)
+    cache.updateLastShownAyah(lastShownAyah)
+    Log.e("SELECTED_SURAH", lastShownAyah?.numberInSurah.toString())
   }
 
   private fun populateAyahSet(playmode: Int) {
@@ -308,10 +324,6 @@ class CardActivity : AbstractBaseActivity(),
     ayahMap.putAll(newAyahSet)
 
     updateAdapter()
-
-    if (playmode == Playmode.RANDOM && !firstOpening) {
-      viewpager.setCurrentItem(0, false)
-    }
   }
 
   private fun populateBySearchResult(): Map<Int, SurahAyahSampleData?> {
@@ -404,6 +416,8 @@ class CardActivity : AbstractBaseActivity(),
       ivBookMarkAyah.visibility = View.VISIBLE
       ayahViewPagerAdapter.updateAyahSet(ayahMap)
     }
+
+
     Log.e("AYAH_SET", "playmode: $playmode  mapSize: ${ayahMap.size} map: $ayahMap")
   }
 
@@ -415,16 +429,12 @@ class CardActivity : AbstractBaseActivity(),
   }
 
   private fun onPageChanged() {
-    Log.e("AYAH_SET", "PAGE CHANGED -- ayahNumber: ${cache.getLastShownAyahNumber()}")
-    if (lastOpenedAyahNo != cache.getLastShownAyahNumber()) {
-      //holyBookViewModel.getFavouriteCountByAyahNumber(ayahNumber)
-      ivFavourite.visibility = View.VISIBLE
-      ivBookMarkAyah.setImageResource(if (cache.getBookmark() == cache.getLastShownAyahNumber()) R.drawable.ic_bookmark_filled_24px else R.drawable.ic_bookmark_empty_24px)
-      ivAllBookmarks.visibility = if (cache.getBookmark() == ConstantVariables.EMPTY_BOOKMARK) View.GONE else View.VISIBLE
+    //holyBookViewModel.getFavouriteCountByAyahNumber(ayahNumber)
+    ivFavourite.visibility = View.VISIBLE
+    ivBookMarkAyah.setImageResource(if (cache.getBookmark() == cache.getLastShownAyahNumber()) R.drawable.ic_bookmark_filled_24px else R.drawable.ic_bookmark_empty_24px)
+    ivAllBookmarks.visibility = if (cache.getBookmark() == ConstantVariables.EMPTY_BOOKMARK) View.GONE else View.VISIBLE
+    lastOpenedAyahNo = cache.getLastShownAyahNumber()
 
-      showFavouriteStatus()
-      lastOpenedAyahNo = cache.getLastShownAyahNumber()
-    }
   }
 
   private fun initPlaymode(mode: Int) {
@@ -458,7 +468,7 @@ class CardActivity : AbstractBaseActivity(),
     lifecycleScope.launch(Dispatchers.IO) {
       holyBookViewModel.hasFavourite(cache.getLastShownAyahNumber()).also { list ->
         isFavourite = list.isNotEmpty()
-        ivFavourite.setImageResource(if (isFavourite) R.drawable.ic_star_fill_24px else R.drawable.ic_star_empty_24px)
+        ivFavourite.setImageResource(if (isFavourite) R.drawable.ic_heart_fill else R.drawable.ic_heart)
       }
     }
   }
@@ -540,15 +550,27 @@ class CardActivity : AbstractBaseActivity(),
 
   override fun onMapValueFound(ayahMap: AyahMap) {
     this.ayahMap = ayahMap
-    ayahMap.forEach {
-      if (it.value != null) {
-        Log.e("AYAH_SET", "MAPVALUEFOUND -- ayahNumber: ${it.value}")
-        cache.updateLastShownAyah(it.value)
-        //onPageChanged()
-        return@forEach
-      }
-    }
+    updateLastShownAyah()
+    refreshPageValues()
+  }
 
+  override fun onAyahClicked() {
+    isFavourite = !isFavourite
+    upsertFavourite()
+    playHeartAnimation()
+  }
+
+  private fun playHeartAnimation() {
+    ivHeart.alpha = 0.9f
+    if (ivHeart.drawable is AnimatedVectorDrawableCompat) {
+      ivHeart.visibility = View.VISIBLE
+      (ivHeart.drawable as AnimatedVectorDrawableCompat).start()
+    } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && ivHeart.drawable is AnimatedVectorDrawable) {
+      ivHeart.visibility = View.VISIBLE
+      (ivHeart.drawable as AnimatedVectorDrawable).start()
+    } else {
+      ivHeart.visibility = View.GONE
+    }
   }
 
 }

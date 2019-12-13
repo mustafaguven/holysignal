@@ -15,6 +15,7 @@ import com.mguven.holysignal.extension.isNotNullAndNotEmpty
 import com.mguven.holysignal.extension.setEmpty
 import com.mguven.holysignal.model.AyahMap
 import com.mguven.holysignal.ui.AbstractBaseActivity
+import com.mguven.holysignal.util.OnSwipeTouchListener
 import com.mguven.holysignal.viewmodel.HolyBookViewModel
 import kotlinx.coroutines.launch
 
@@ -60,6 +61,12 @@ class AyahViewPagerAdapter(var activity: AbstractBaseActivity?,
       getAyahBottomText(ayahNumber)
     }
 
+    private val onTouchListener = object: OnSwipeTouchListener(tvAyahTopText.context){
+      override fun onDoubleTap() {
+        listener?.onAyahClicked()
+      }
+    }
+
     private fun getAyahTopText(ayahNumber: Int) {
       lifecycleScope.launch {
         val list = holyBookViewModel.getAyahTopText(ayahNumber)
@@ -71,6 +78,9 @@ class AyahViewPagerAdapter(var activity: AbstractBaseActivity?,
             }
             tvAyahNumber.text = "(${it.meaning})\n${it.surahNameByLanguage} : ${it.numberInSurah} / ${it.endingAyahNumber - it.startingAyahNumber + 1}"
             tvAyahTopText.highlighted("<b>${it.language}:</b> ${it.ayahText}", cache.getAyahSearchResult()?.keywords)
+            tvAyahNumber.setOnTouchListener(onTouchListener)
+            tvAyahTopText.setOnTouchListener(onTouchListener)
+            tvAyahBottomText.setOnTouchListener(onTouchListener)
           }
         } else {
           tvAyahTopText.text = tvAyahTopText.context.getString(R.string.ayah_not_found_on_primary_book)
@@ -105,6 +115,7 @@ class AyahViewPagerAdapter(var activity: AbstractBaseActivity?,
 
   interface MapValueListener {
     fun onMapValueFound(ayahMap: AyahMap)
+    fun onAyahClicked()
   }
 
   override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
