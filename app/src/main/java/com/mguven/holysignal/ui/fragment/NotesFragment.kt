@@ -1,10 +1,9 @@
 package com.mguven.holysignal.ui.fragment
 
+import android.content.DialogInterface
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.lifecycle.Observer
-import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mguven.holysignal.R
 import com.mguven.holysignal.constant.ConstantVariables
@@ -37,12 +36,9 @@ class NotesFragment : BaseDialogFragment() {
     super.onViewCreated(view, savedInstanceState)
     rvNotes.layoutManager = LinearLayoutManager(activity)
 
-
-
     arguments?.let {
       ayahNumber = it.getInt(AYAH_NUMBER)
     }
-
   }
 
   override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -84,7 +80,9 @@ class NotesFragment : BaseDialogFragment() {
     })
 
     adapter.removeObservable.observe(this, Observer<Int> {
-      holyBookViewModel.removeAyah(it)
+      (activity as AbstractBaseActivity).showYesNoDialog(getString(R.string.delete_note_warning_message),
+          DialogInterface.OnClickListener { dialog, yes -> holyBookViewModel.removeAyah(it) },
+          DialogInterface.OnClickListener { dialog, no -> })
     })
 
     holyBookViewModel.removeNoteObserver.observe(this, Observer<RemoveNoteEntity> {

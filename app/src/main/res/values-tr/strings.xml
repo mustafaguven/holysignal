@@ -81,6 +81,7 @@
     <string name="select_surah">Sure Seçiniz</string>
     <string name="ayah_not_found_on_primary_book">Seçtiğiniz birincil kitapta bu ayet bulunamadı. Seçenekler ekranından ilgili kitabı indirerek tekrar deneyin.</string>
     <string name="none_items_found">Gösterilecek öğe bulunamadı</string>
+    <string name="delete_note_warning_message">Bu notu silmek istediğinizden emin misiniz?</string>
 
     <string-array name="playmodes">
         <item>Ayetler karışık şekilde gösterilecek</item>

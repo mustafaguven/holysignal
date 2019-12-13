@@ -49,7 +49,6 @@ class CardActivity : AbstractBaseActivity(),
   companion object {
     private const val MAX_SEARCH_KEYWORD_THRESHOLD = 3
     private const val AYAH_SET_MAX_SIZE = 5
-
   }
 
   //injections
@@ -441,7 +440,7 @@ class CardActivity : AbstractBaseActivity(),
           Playmode.RANDOM -> R.drawable.ic_random_24px
           Playmode.REPEAT_SURAH -> R.drawable.ic_repeat_surah24px
           Playmode.REPEAT_AYAH -> R.drawable.ic_repeat_ayah_24px
-          Playmode.FAVOURITES -> R.drawable.ic_star_playlist_24px
+          Playmode.FAVOURITES -> R.drawable.ic_heart
           else -> R.drawable.ic_loop_24px
         }
     )

@@ -80,6 +80,7 @@
     <string name="select_surah">Select Surah</string>
     <string name="ayah_not_found_on_primary_book">This ayah is not available on the book you have chosen as primarily. Please download it.</string>
     <string name="none_items_found">None items found</string>
+    <string name="delete_note_warning_message">Are you sure to delete this note?</string>
 
     <string-array name="playmodes">
         <item>Shuffle all ayahs</item>
