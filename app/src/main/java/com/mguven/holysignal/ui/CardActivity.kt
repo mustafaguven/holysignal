@@ -126,6 +126,9 @@ class CardActivity : AbstractBaseActivity(),
     val sixthTarget = makeTarget(targetViewId = R.id.ivPreferences, descriptionId = R.string.spotlight_layout_6_text)
     targets.add(sixthTarget)
 
+    val eleventhTarget = makeTarget(targetViewId = R.id.ivAudio, descriptionId = R.string.spotlight_layout_11_text, radius = 100f)
+    targets.add(eleventhTarget)
+
     val seventhTarget = makeTarget(targetViewId = R.id.ivShare, descriptionId = R.string.spotlight_layout_7_text, radius = 100f)
     targets.add(seventhTarget)
 
@@ -135,7 +138,7 @@ class CardActivity : AbstractBaseActivity(),
     val ninthTarget = makeTarget(targetViewId = R.id.ivAddNote, descriptionId = R.string.spotlight_layout_9_text)
     targets.add(ninthTarget)
 
-    val tenthTarget = makeTarget(targetViewId = R.id.tvViewingCount, descriptionId = R.string.spotlight_layout_9_text, radius = 200f)
+    val tenthTarget = makeTarget(targetViewId = R.id.tvViewingCount, descriptionId = R.string.spotlight_layout_10_text, radius = 200f)
     targets.add(tenthTarget)
 
     val spotlight = Spotlight.Builder(this@CardActivity)
@@ -158,6 +161,7 @@ class CardActivity : AbstractBaseActivity(),
     eightTarget.overlay?.findViewById<View>(R.id.close_target)?.setOnClickListener(nextTarget)
     ninthTarget.overlay?.findViewById<View>(R.id.close_target)?.setOnClickListener(nextTarget)
     tenthTarget.overlay?.findViewById<View>(R.id.close_target)?.setOnClickListener(nextTarget)
+    eleventhTarget.overlay?.findViewById<View>(R.id.close_target)?.setOnClickListener(nextTarget)
   }
 
   private fun makeTarget(layoutId: Int = R.layout.layout_target_1, targetViewId: Int, descriptionId: Int, radius: Float = 100f): Target {
@@ -666,6 +670,11 @@ class CardActivity : AbstractBaseActivity(),
 
   override fun onAudioWaiting() {
     ivAudio.setImageResource(R.drawable.ic_import_export_24px)
+  }
+
+  override fun onPause() {
+    super.onPause()
+    deviceUtil.stopAudio()
   }
 
 }

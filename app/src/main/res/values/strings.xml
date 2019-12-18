@@ -46,7 +46,7 @@
     <string name="phone_changed_warning">You are changing your stored phone, this can be only 2 times in a year for security reasons. Do you want to change your stored phone?</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
-    <string name="sign_in_error">Mistake email or password</string>
+    <string name="sign_in_error">Incorrect email or password</string>
     <string name="phone_invalid">You have changed your stored phone more than 2 times in a year, this is invalid for security reasons. To make valid your phone please contact us via communication screen</string>
     <string name="session_no_is_different">Session seems different, please choose yes to change with the new one to use full version again</string>
     <string name="offline">Offline</string>
@@ -103,6 +103,8 @@
     <string name="spotlight_layout_7_text">Share spotlight text</string>
     <string name="spotlight_layout_8_text">Like spotlight text</string>
     <string name="spotlight_layout_9_text">Note spotlight text</string>
+    <string name="spotlight_layout_10_text">viewingcount spotlight text</string>
+    <string name="spotlight_layout_11_text">Audio text</string>
 
     <string-array name="playmodes">
         <item>Shuffle all ayahs</item>

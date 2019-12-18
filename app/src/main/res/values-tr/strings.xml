@@ -95,15 +95,17 @@
     <string name="sign_out">Hesaptan Çık</string>
     <string name="sign_out_warning_message">Hesabınızdan çıkmak istediğinizden emin misiniz?</string>
     <string name="close">Close</string>
-    <string name="spotlight_layout_1_text">Arama düğmesine basarak ister kelimeye göre ister ayet numarasına göre arama yapın. Hatta aralarına virgül koyarak aynı anda isterseniz 3 tane kelimeyi bile arayabilirsiniz</string>
-    <string name="spotlight_layout_2_text">Kaldığınız yeri unutmayın, ayraç butonuna tıkladığınızda ya da ayetin üzerinde basılı tuttuğunuzda istediğiniz zaman tekrar o ayete geri dönebilmeniz için kaydederiz</string>
-    <string name="spotlight_layout_3_text">Select surah spotlight text</string>
-    <string name="spotlight_layout_4_text">Playmode surah spotlight text</string>
-    <string name="spotlight_layout_5_text">Progress spotlight text</string>
-    <string name="spotlight_layout_6_text">Settings spotlight text</string>
-    <string name="spotlight_layout_7_text">Share spotlight text</string>
-    <string name="spotlight_layout_8_text">Like spotlight text</string>
-    <string name="spotlight_layout_9_text">Note spotlight text</string>
+    <string name="spotlight_layout_1_text">Arama düğmesine basarak ister kelimeye göre ister ayet numarasına göre arama yapın. Hatta aralarına virgül koyarak aynı anda isterseniz 3 farklı kelimeyi bile arayabilirsiniz</string>
+    <string name="spotlight_layout_2_text">Kaldığınız yeri unutmayın, ayraç butonuna tıkladığınızda ya da ayetin üzerine basılı tuttuğunuzda istediğiniz zaman geri dönebilmeniz için kaydediyoruz</string>
+    <string name="spotlight_layout_3_text">Tüm sureleri listeleyin, istediğiniz sureye direk ulaşın</string>
+    <string name="spotlight_layout_4_text">Ayetlerin gösterimini farklı şekillerde düzenleyebilirsiniz. Karışık, sırayla, sadece favoriler bunlardan birkaçı</string>
+    <string name="spotlight_layout_5_text">Kitabın toplamda yüzde kaçını okuduğunuzu sizin için burada gösteriyoruz</string>
+    <string name="spotlight_layout_6_text">Tercihler ekranına gidip farklı kuran indirebilir, alternatif kitap ekleyebilir veya tuş kilidi sonrası gösterimin kapatılması gibi farklı ayarları buradan değiştirebilirsiniz</string>
+    <string name="spotlight_layout_7_text">Ayeti değer verdiklerinizle paylaşın</string>
+    <string name="spotlight_layout_8_text">Sizin için farklı anlam ifade eden ayeti favoriye alın, daha sonra favoriler listenizde sadece favorilerinizi dönerek ezberlemenizde yardımcı olacaktır</string>
+    <string name="spotlight_layout_9_text">Ayet ile ilgili not ekleyin, eklenen notları görün ve puanlayın</string>
+    <string name="spotlight_layout_10_text">Bu ayeti kaç kere görüntülediniz acaba?</string>
+    <string name="spotlight_layout_11_text">Ayetin arapça okunuşunu dinleyin</string>
 
     <string-array name="playmodes">
         <item>Ayetler karışık şekilde gösterilecek</item>

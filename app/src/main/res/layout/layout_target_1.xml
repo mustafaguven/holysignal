@@ -11,6 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
+        android:padding="10dp"
         android:fontFamily="@font/gotham_narrow_book"
         android:gravity="center"
         android:text="@string/spotlight_layout_1_text"
