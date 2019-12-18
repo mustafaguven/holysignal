@@ -19,24 +19,26 @@ class DeviceUtil(val context: Context) {
   private var mediaPlayer: MediaPlayer = MediaPlayer()
   @Throws(java.lang.Exception::class)
   fun playAudio(url: String) {
-    mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC)
-    try {
-      if (mediaPlayer.isPlaying) {
-        mediaPlayer.stop()
-        audioListener?.onAudioFinished()
-      } else {
-        audioListener?.onAudioWaiting()
-        mediaPlayer.reset()
-        mediaPlayer.setDataSource(url)
-        mediaPlayer.prepareAsync()
-        mediaPlayer.setOnPreparedListener {
-          audioListener?.onAudioStarted()
-          mediaPlayer.start()
+    if (isConnected()) {
+      mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC)
+      try {
+        if (mediaPlayer.isPlaying) {
+          mediaPlayer.stop()
+          audioListener?.onAudioFinished()
+        } else {
+          audioListener?.onAudioWaiting()
+          mediaPlayer.reset()
+          mediaPlayer.setDataSource(url)
+          mediaPlayer.prepareAsync()
+          mediaPlayer.setOnPreparedListener {
+            audioListener?.onAudioStarted()
+            mediaPlayer.start()
+          }
+          mediaPlayer.setOnCompletionListener { audioListener?.onAudioFinished() }
         }
-        mediaPlayer.setOnCompletionListener { audioListener?.onAudioFinished() }
+      } catch (e: IOException) {
+        e.printStackTrace()
       }
-    } catch (e: IOException) {
-      e.printStackTrace()
     }
   }
 
