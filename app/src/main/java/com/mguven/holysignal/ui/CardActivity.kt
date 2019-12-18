@@ -102,7 +102,7 @@ class CardActivity : AbstractBaseActivity(),
     }
 
     ivAudio.setOnClickListener {
-      deviceUtil.playAudio("https://cdn.islamic.network/quran/audio/64/ar.saoodshuraym/${cache.getLastShownAyahNumber()}.mp3")
+      deviceUtil.playAudio(ConstantVariables.getAudioUrl(cache.getLastShownAyahNumber()))
     }
   }
 

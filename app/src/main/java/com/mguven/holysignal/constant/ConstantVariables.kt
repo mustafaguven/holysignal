@@ -2,6 +2,7 @@ package com.mguven.holysignal.constant
 
 object ConstantVariables {
 
+  fun getAudioUrl(ayahNo: Int) = "https://cdn.islamic.network/quran/audio/64/ar.saoodshuraym/$ayahNo.mp3"
   const val MIN_SURAH_NUMBER = 1
   const val MAX_SURAH_NUMBER = 114
   const val MAX_AYAH_NUMBER = 6236
