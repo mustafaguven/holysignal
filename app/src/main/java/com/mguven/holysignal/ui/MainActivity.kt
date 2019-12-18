@@ -1,9 +1,11 @@
 package com.mguven.holysignal.ui
 
+import android.content.DialogInterface
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.*
+import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import com.evernote.android.job.JobManager
@@ -13,8 +15,9 @@ import com.mguven.holysignal.R
 import com.mguven.holysignal.constant.ConstantVariables
 import com.mguven.holysignal.db.entity.EditionAdapterData
 import com.mguven.holysignal.di.module.MainActivityModule
+import com.mguven.holysignal.extension.isNotNullAndNotEmpty
 import com.mguven.holysignal.job.LockScreenJob
-import com.mguven.holysignal.ui.adapter.EditionAdapter
+import com.mguven.holysignal.ui.adapter.SearchableSpinnerAdapter
 import com.mguven.holysignal.viewmodel.PreferencesViewModel
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.loadingprogress.*
@@ -23,6 +26,7 @@ import kotlinx.coroutines.launch
 
 class MainActivity : AbstractBaseActivity() {
 
+  private lateinit var spannerList: List<EditionAdapterData>
   private lateinit var preferencesViewModel: PreferencesViewModel
   var membershipState = ConstantVariables.MEMBER_IS_NOT_FOUND
 
@@ -31,6 +35,7 @@ class MainActivity : AbstractBaseActivity() {
     setContentView(R.layout.activity_main)
     inject(MainActivityModule(this))
     preferencesViewModel = getViewModel(PreferencesViewModel::class.java)
+
     cbActivePassive.isChecked = cache.isActive()
     cbActivePassive.text = if (cbActivePassive.isChecked) {
       getString(R.string.active)
@@ -40,43 +45,23 @@ class MainActivity : AbstractBaseActivity() {
     cbAltTextActivePassive.isChecked = cache.hasSecondLanguageSupport()
     clAlternateText.visibility = if (cbAltTextActivePassive.isChecked) View.VISIBLE else View.GONE
 
+    cbTopOnlyFull.setOnClickListener {
+      initEditionSpinners()
+    }
+
     runJobScheduler()
 
     initEditionSpinners()
 
     btnOk.setOnClickListener {
-      val topTextEditionSpinnerSelectedItem = spTopTextEdition.selectedItem as EditionAdapterData
-      val bottomTextEditionSpinnerSelectedItem = spBottomTextEdition.selectedItem as EditionAdapterData
+      val topTextEditionSpinnerSelectedItem = spannerList[spTopTextEdition.selectedItemPosition]
+      val bottomTextEditionSpinnerSelectedItem = spannerList[spBottomTextEdition.selectedItemPosition]
       cache.updateTopTextEditionId(topTextEditionSpinnerSelectedItem.value)
       cache.updateBottomTextEditionId(bottomTextEditionSpinnerSelectedItem.value)
       updateMaxAyahCount()
       FlowController.launchCardActivity(this, true)
       Toast.makeText(this, getString(R.string.preferences_saved), Toast.LENGTH_SHORT).show()
     }
-
-    btnDownloadTop.setOnClickListener {
-      onClickDownloadButton(spTopTextEdition, ConstantVariables.TOP_TEXT)
-    }
-
-    btnDownloadBottom.setOnClickListener {
-      onClickDownloadButton(spBottomTextEdition, ConstantVariables.BOTTOM_TEXT)
-    }
-
-    cache.downloadedTopSurahTranslate.observe(this, Observer<IntArray> {
-      percentageSurahTranslate(it, progressTop, tvProgressTextTop, btnDownloadTop)
-    })
-
-    cache.downloadedBottomSurahTranslate.observe(this, Observer<IntArray> {
-      percentageSurahTranslate(it, progressBottom, tvProgressTextBottom, btnDownloadBottom)
-    })
-
-    cache.downloadedTopSurah.observe(this, Observer<Int> {
-      percentageDownload(it, progressTop, tvProgressTextTop, btnDownloadTop)
-    })
-
-    cache.downloadedBottomSurah.observe(this, Observer<Int> {
-      percentageDownload(it, progressBottom, tvProgressTextBottom, btnDownloadBottom)
-    })
 
     preferencesViewModel.isMember.observe(this, Observer<Int> {
       prepareScreenByMembership(it)
@@ -101,21 +86,28 @@ class MainActivity : AbstractBaseActivity() {
       clAlternateText.visibility = if (cbAltTextActivePassive.isChecked) View.VISIBLE else View.GONE
     }
 
+    btnDownload.setOnClickListener {
+      FlowController.launchDownloadActivity(this)
+    }
 
+    btnSignOut.setOnClickListener {
+      showYesNoDialog(getString(R.string.sign_out_warning_message), DialogInterface.OnClickListener { dialog, yes ->
+        cache.clear()
+        FlowController.launchMainActivity(this, true)
+        dialog.dismiss()
+      }, DialogInterface.OnClickListener { dialog, no ->
+        dialog.dismiss()
+      })
+    }
+
+    btnSignIn.setOnClickListener {
+      FlowController.launchLoginActivity(this)
+    }
   }
 
   private fun checkLogin() {
     loading.visibility = View.VISIBLE
     preferencesViewModel.loginCheck()
-  }
-
-  private fun onClickDownloadButton(spinner: Spinner, direction: Int) {
-    if (membershipState != ConstantVariables.MEMBER_IS_FOUND) {
-      openLoginActivity()
-      return
-    }
-    val downloadableSelectedItem = spinner.selectedItem as EditionAdapterData
-    preferencesViewModel.download(downloadableSelectedItem.value, direction)
   }
 
   private fun openLoginActivity() {
@@ -125,94 +117,50 @@ class MainActivity : AbstractBaseActivity() {
 
   private fun prepareScreenByMembership(value: Int) {
     loading.visibility = View.GONE
+    btnSignOut.visibility = View.GONE
+    btnSignIn.visibility = View.GONE
     this.membershipState = value
-
-    btnDownloadTop.isEnabled = membershipState != ConstantVariables.LOCAL_MODE_DUE_TO_CONNECTION
-    btnDownloadBottom.isEnabled = membershipState != ConstantVariables.LOCAL_MODE_DUE_TO_CONNECTION
-    progressTop.visibility = if (membershipState != ConstantVariables.LOCAL_MODE_DUE_TO_CONNECTION) View.VISIBLE else View.GONE
-    progressBottom.visibility = if (membershipState != ConstantVariables.LOCAL_MODE_DUE_TO_CONNECTION) View.VISIBLE else View.GONE
-    btnDownloadTop.visibility = View.VISIBLE
-    btnDownloadBottom.visibility = View.VISIBLE
 
     tvLoginMessage.isEnabled = false
     when (membershipState) {
       ConstantVariables.MEMBER_IS_FOUND -> lifecycleScope.launch {
         val memberInfo = preferencesViewModel.getMemberInfo()
         tvLoginMessage.text = getString(R.string.welcome_message_for_member, "${memberInfo[0].name} ${memberInfo[0].surname}")
-        btnDownloadTop.text = getString(R.string.download)
-        btnDownloadBottom.text = getString(R.string.download)
+        btnDownload.visibility = View.VISIBLE
+        btnSignOut.visibility = View.VISIBLE
       }
       ConstantVariables.MEMBER_IS_NOT_FOUND -> {
-        btnDownloadTop.text = getString(R.string.order)
-        btnDownloadBottom.text = getString(R.string.order)
         tvLoginMessage.isEnabled = true
         tvLoginMessage.text = getString(R.string.signup_warning)
+        tvLoginMessage.setTextColor(ContextCompat.getColor(this, R.color.error))
+        //tvLoginMessage.setBackgroundColor(ContextCompat.getColor(this, R.color.black))
+        btnSignIn.visibility = View.VISIBLE
       }
       ConstantVariables.SESSION_IS_DIFFERENT -> {
         showErrorDialog(getString(R.string.logout_due_to_session_number_is_different))
         updateMaxAyahCount()
-        btnDownloadTop.text = getString(R.string.order)
-        btnDownloadBottom.text = getString(R.string.order)
         tvLoginMessage.isEnabled = true
+        tvLoginMessage.setTextColor(ContextCompat.getColor(this, R.color.error))
+        //tvLoginMessage.setBackgroundColor(ContextCompat.getColor(this, R.color.black))
+        btnSignIn.visibility = View.VISIBLE
         tvLoginMessage.text = getString(R.string.signup_warning)
       }
       else -> {
+        btnSignIn.visibility = View.VISIBLE
         tvLoginMessage.text = getString(R.string.local_mode_warning)
-        tvProgressTextTop.text = ""
-        tvProgressTextBottom.text = ""
-        btnDownloadTop.text = getString(R.string.offline)
-        btnDownloadBottom.text = getString(R.string.offline)
       }
     }
   }
 
-  private fun percentageSurahTranslate(it: IntArray?,
-                                       progress: ProgressBar,
-                                       tvProgressText: TextView,
-                                       btnDownload: Button) {
-    btnDownload.visibility = View.INVISIBLE
-    it?.let {
-      progress.max = it[0]
-      val isDone = (it[0]) == it[1]
-      progress.progress = it[1]
-      tvProgressText.text = if (isDone)
-        getString(R.string.download_finished)
-      else
-        calculatePercentage(R.string.surah_translate_is_downloading, it[1], it[0])
-      btnDownload.visibility = if (isDone) View.VISIBLE else View.INVISIBLE
-      progress.visibility = if (isDone) View.GONE else View.VISIBLE
-      tvProgressText.visibility = if (isDone) View.GONE else View.VISIBLE
-      Log.e("BBB", "${(it[0])} -- ${it[1]}")
-    }
-  }
-
-  private fun percentageDownload(it: Int?,
-                                 progress: ProgressBar,
-                                 tvProgressText: TextView,
-                                 btnDownload: Button) {
-    it?.let {
-      progress.max = ConstantVariables.MAX_SURAH_NUMBER
-      progress.progress = it
-      tvProgressText.text = if (it == ConstantVariables.MAX_SURAH_NUMBER)
-        getString(R.string.download_finished)
-      else
-        calculatePercentage(R.string.surah_ayahs_is_downloading, it, ConstantVariables.MAX_SURAH_NUMBER)
-      val isDone = it == ConstantVariables.MAX_SURAH_NUMBER
-      btnDownload.visibility = if (isDone) View.VISIBLE else View.INVISIBLE
-      progress.visibility = if (isDone) View.GONE else View.VISIBLE
-      tvProgressText.visibility = if (isDone) View.GONE else View.VISIBLE
-    }
-  }
-
-  private fun calculatePercentage(res: Int, number: Int, total: Int): String = "${((number * 100) / total)}%"
-
-  private fun initEditionSpinners() {
+  private fun initEditionSpinners(selectedItem: Int = 0) {
+    spTopTextEdition.setTitle(getString(R.string.select_book))
     lifecycleScope.launch {
-      val list = preferencesViewModel.getEditionNameIdList()
-      val res = resources
-      val adapter = EditionAdapter(this@MainActivity, R.layout.status_item, list, res)
+      spannerList = preferencesViewModel.getEditionNameIdList(cbTopOnlyFull.isChecked)
+      btnOk.visibility = if (spannerList.isNotNullAndNotEmpty()) View.VISIBLE else View.GONE
+
+      val adapter = SearchableSpinnerAdapter(this@MainActivity, R.layout.status_item, spannerList.map { it.key }, selectedItem)
       spTopTextEdition.adapter = adapter
-      list.forEachIndexed { index, it ->
+      spannerList.forEachIndexed { index, it ->
         if (it.value == cache.getTopTextEditionId()) {
           spTopTextEdition.setSelection(index)
           return@forEachIndexed
@@ -220,7 +168,7 @@ class MainActivity : AbstractBaseActivity() {
       }
 
       spBottomTextEdition.adapter = adapter
-      list.forEachIndexed { index, it ->
+      spannerList.forEachIndexed { index, it ->
         if (it.value == cache.getBottomTextEditionId()) {
           spBottomTextEdition.setSelection(index)
           return@forEachIndexed

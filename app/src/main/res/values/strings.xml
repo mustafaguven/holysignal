@@ -4,7 +4,7 @@
     <string name="edition_select_text">Please select an edition</string>
     <string name="main_save_and_close">Save</string>
     <string name="main_save">Save</string>
-    <string name="main_primary_text">First Book</string>
+    <string name="main_primary_text">Select Primary Book</string>
     <string name="main_alternative_text">Second Book</string>
 
     <string name="added_to_favourites">Added to favourites</string>
@@ -33,10 +33,10 @@
     <string name="surah_ayahs_is_downloading">Ayahs are downloading (%1$s)</string>
     <string name="surah_translate_is_downloading">Translated surah names are downloading (%1$s)</string>
     <string name="total_viewing_count">%1$d time(s) viewed</string>
-    <string name="x_ayah_displayed">%1$d%% displayed</string>
+    <string name="x_ayah_displayed">%1$d%%</string>
     <string name="preferences">Preferences</string>
-    <string name="signup_warning">You should be logged in to use full version of the application. Please do login first via click this text.</string>
-    <string name="welcome_message_for_member">Welcome\n%1$s</string>
+    <string name="signup_warning">You are using free version which has only 50 ayahs.\n\nSign up in 30 seconds, download tens of quran in different languages and read the whole of the quran from start to end within the way you want.</string>
+    <string name="welcome_message_for_member">Hello\n%1$s</string>
     <string name="order">Order</string>
     <string name="login_title">Sign In</string>
     <string name="username">Username</string>
@@ -60,9 +60,9 @@
     <string name="error">Error</string>
     <string name="warning">Warning</string>
     <string name="logout_due_to_session_number_is_different">Session is closed due to your active session number is different</string>
-    <string name="passive">Passive mode on</string>
-    <string name="active">Active mode on</string>
-    <string name="show_alternate_text">Show ayah within second language I choose</string>
+    <string name="passive">Will NOT show ayahs after unlocking</string>
+    <string name="active">Will show ayahs after unlocking</string>
+    <string name="show_alternate_text">Show along with the second book</string>
     <string name="remember_password">Remember Password</string>
     <string name="forgot_password">Forgot password</string>
     <string name="new_bookmark_set_warning_message">Do you want to bookmark on this ayah?</string>
@@ -81,6 +81,28 @@
     <string name="ayah_not_found_on_primary_book">This ayah is not available on the book you have chosen as primarily. Please download it.</string>
     <string name="none_items_found">None items found</string>
     <string name="delete_note_warning_message">Are you sure to delete this note?</string>
+    <string name="language_selection">Language Selection</string>
+    <string name="please_select_language_description">Please choose the language</string>
+    <string name="next">Next</string>
+    <string name="book_selection">Book Selection</string>
+    <string name="please_select_book_description">Please select available book by the language</string>
+    <string name="selected_language_is">Available books for %1$s</string>
+    <string name="downloading">Downloading %1$d%%</string>
+    <string name="checking">checking…</string>
+    <string name="select_book">Select Book</string>
+    <string name="filtered_by_only_full_versions">Retrieve only downloads</string>
+    <string name="sign_out">Sign out</string>
+    <string name="sign_out_warning_message">Do you really want to sign out?</string>
+    <string name="close">Close</string>
+    <string name="spotlight_layout_1_text">By clicking here you can search ayahs by word or ayah number. Also you can search 3 different words at the same time by putting comma between them</string>
+    <string name="spotlight_layout_2_text">Bookmark spotlight text</string>
+    <string name="spotlight_layout_3_text">Select surah spotlight text</string>
+    <string name="spotlight_layout_4_text">Playmode surah spotlight text</string>
+    <string name="spotlight_layout_5_text">Progress spotlight text</string>
+    <string name="spotlight_layout_6_text">Settings spotlight text</string>
+    <string name="spotlight_layout_7_text">Share spotlight text</string>
+    <string name="spotlight_layout_8_text">Like spotlight text</string>
+    <string name="spotlight_layout_9_text">Note spotlight text</string>
 
     <string-array name="playmodes">
         <item>Shuffle all ayahs</item>

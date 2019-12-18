@@ -4,7 +4,7 @@
     <string name="edition_select_text">Lütfen bir versiyon seçin</string>
     <string name="main_save_and_close">Kaydet</string>
     <string name="main_save">Kaydet</string>
-    <string name="main_primary_text">Birinci Kitap</string>
+    <string name="main_primary_text">Birinci Kitabı Seç</string>
     <string name="main_alternative_text">İkinci Kitap</string>
 
     <string name="added_to_favourites">Favorilere eklendi</string>
@@ -27,17 +27,17 @@
     <string name="none_favourite_found">Favori bulunamadı</string>
     <string name="favourites_are_getting_randomly">(*) Favoriler karışık olarak getirilir</string>
     <string name="download">İndir</string>
-    <string name="download_book">İndirilecek Kitap</string>
+    <string name="download_book">Kuran İndir</string>
     <string name="download_finished">indirme tamamlandı</string>
     <string name="ayah_not_found_on_alternative_book">(Seçtiğiniz alternatif versiyonda bu ayet bulunamadı. Seçenekler ekranından ilgili kitabı indirerek tekrar deneyin.)</string>
     <string name="limited_version">%1$s (İlk 50 ayet)</string>
     <string name="surah_ayahs_is_downloading">Ayetler indiriliyor (%1$s)</string>
     <string name="surah_translate_is_downloading">Sure isimleri indiriliyor (%1$s)</string>
     <string name="total_viewing_count">%1$d kez görüntülendi</string>
-    <string name="x_ayah_displayed">%1$d%% görüntülediniz</string>
+    <string name="x_ayah_displayed">%1$d%%</string>
     <string name="preferences">Tercihler</string>
-    <string name="signup_warning">Uygulamanın tam versiyonunu kullanmak için sisteme giriş yapmanız gerekmektedir. Lütfen bu yazıya tıklayarak sisteme giriş yapın.</string>
-    <string name="welcome_message_for_member">Hoş geldiniz\n%1$s</string>
+    <string name="signup_warning">Sadece 50 ayet bulunan ücretsiz versiyonu kullanıyorsunuz.\n\n30 saniyede hesap oluşturun, onlarca farklı dilde Kuran indirin, gün içinde farkında olmadan hatim indirin.</string>
+    <string name="welcome_message_for_member">Merhaba\n%1$s</string>
     <string name="order">Satın Al</string>
     <string name="login_title">Giriş Yap</string>
     <string name="username">Kullanıcı Adı</string>
@@ -61,9 +61,9 @@
     <string name="error">Hata</string>
     <string name="warning">Uyarı</string>
     <string name="logout_due_to_session_number_is_different">Bu cihazdaki oturumunuz başka bir cihazda açılan oturum dolayısıyla sonlandırıldı.</string>
-    <string name="passive">Ayetler gösterilmesin</string>
-    <string name="active">Ayetler gösterilsin</string>
-    <string name="show_alternate_text">Ayetler seçtiğim 2. dil ile birlikte gösterilsin</string>
+    <string name="passive">Ekran kilidinden sonra ayetleri gösterME</string>
+    <string name="active">Ekran kilidinden sonra ayetleri göster</string>
+    <string name="show_alternate_text">İkinci kitap ile beraber göster</string>
     <string name="remember_password">Şifremi hatırlat</string>
     <string name="forgot_password">Şifremi unuttum</string>
     <string name="new_bookmark_set_warning_message">Bu ayet ayraç olarak kaydedilecek, devam edilsin mi?</string>
@@ -82,6 +82,28 @@
     <string name="ayah_not_found_on_primary_book">Seçtiğiniz birincil kitapta bu ayet bulunamadı. Seçenekler ekranından ilgili kitabı indirerek tekrar deneyin.</string>
     <string name="none_items_found">Gösterilecek öğe bulunamadı</string>
     <string name="delete_note_warning_message">Bu notu silmek istediğinizden emin misiniz?</string>
+    <string name="language_selection">Dil Seçimi</string>
+    <string name="please_select_language_description">Lütfen indirmek istediğiniz kitabın dilini seçin</string>
+    <string name="next">Sonraki</string>
+    <string name="book_selection">Kitap Seçimi</string>
+    <string name="please_select_book_description">Please select available book by the language</string>
+    <string name="selected_language_is">Seçilen Dil: %1$s</string>
+    <string name="downloading">İndiriliyor %%%1$d</string>
+    <string name="checking">kontrol ediliyor…</string>
+    <string name="select_book">Kitap Seç</string>
+    <string name="filtered_by_only_full_versions">Sadece indirdiklerimi listele</string>
+    <string name="sign_out">Hesaptan Çık</string>
+    <string name="sign_out_warning_message">Hesabınızdan çıkmak istediğinizden emin misiniz?</string>
+    <string name="close">Close</string>
+    <string name="spotlight_layout_1_text">Arama düğmesine basarak ister kelimeye göre ister ayet numarasına göre arama yapın. Hatta aralarına virgül koyarak aynı anda isterseniz 3 tane kelimeyi bile arayabilirsiniz</string>
+    <string name="spotlight_layout_2_text">Kaldığınız yeri unutmayın, ayraç butonuna tıkladığınızda ya da ayetin üzerinde basılı tuttuğunuzda istediğiniz zaman tekrar o ayete geri dönebilmeniz için kaydederiz</string>
+    <string name="spotlight_layout_3_text">Select surah spotlight text</string>
+    <string name="spotlight_layout_4_text">Playmode surah spotlight text</string>
+    <string name="spotlight_layout_5_text">Progress spotlight text</string>
+    <string name="spotlight_layout_6_text">Settings spotlight text</string>
+    <string name="spotlight_layout_7_text">Share spotlight text</string>
+    <string name="spotlight_layout_8_text">Like spotlight text</string>
+    <string name="spotlight_layout_9_text">Note spotlight text</string>
 
     <string-array name="playmodes">
         <item>Ayetler karışık şekilde gösterilecek</item>

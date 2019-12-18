@@ -20,6 +20,18 @@ fun TextView.highlighted(text: String, highlightKeywords: String? = "") {
   }
 }
 
+fun TextView.bold(text: String, boldWord: String) {
+  var newText = text
+  if (!boldWord.isNullOrEmpty()) {
+    newText = text.replace(boldWord, "<span><b>${boldWord}</b></span>")
+  }
+  if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+    this.setText(Html.fromHtml(newText, HtmlCompat.FROM_HTML_MODE_LEGACY), TextView.BufferType.SPANNABLE)
+  } else {
+    this.setText(Html.fromHtml(newText), TextView.BufferType.SPANNABLE)
+  }
+}
+
 fun TextView.setEmpty() {
   this.text = ""
 }

@@ -7,7 +7,7 @@ import com.mguven.holysignal.db.entity.LanguageData
 @Dao
 interface LanguageDataDao {
 
-  @Query("SELECT * from Language")
+  @Query("SELECT * from Language ORDER BY originalVersion")
   suspend fun getAll(): List<LanguageData>
 
 }

@@ -6,6 +6,7 @@ import com.mguven.holysignal.cache.ApplicationCache
 import com.mguven.holysignal.constant.ConstantVariables
 import com.mguven.holysignal.db.ApplicationDatabase
 import com.mguven.holysignal.db.entity.AyahSampleData
+import com.mguven.holysignal.db.entity.EditionAdapterData
 import com.mguven.holysignal.db.entity.SurahTranslateData
 import com.mguven.holysignal.model.request.RequestMemberSession
 import com.mguven.holysignal.model.request.RequestSignIn
@@ -27,14 +28,17 @@ constructor(private val surahApi: SurahApi,
             private val cache: ApplicationCache,
             private val deviceUtil: DeviceUtil) : BaseViewModel() {
 
-
   val isMember = MutableLiveData<Int>()
   val memberShipData = MutableLiveData<SignInEntity>()
 
   suspend fun getMaxAyahCount() =
       database.ayahSampleDataDao().getMaxAyahCountByEditionId(cache.getTopTextEditionId())
 
-  suspend fun getEditionNameIdList() = database.editionDataDao().getNameIdList()
+  suspend fun getEditionNameIdList(retrieveOnlyDownloaded: Boolean): List<EditionAdapterData> {
+    val maxCount = if (retrieveOnlyDownloaded) ConstantVariables.MAX_AYAH_NUMBER else ConstantVariables.MAX_FREE_AYAH_NUMBER
+    return database.editionDataDao().getNameIdList(maxCount)
+  }
+
 
   suspend fun getDownloadableEditions() =
       database.editionDataDao().getDownloadableEditions()
@@ -58,8 +62,6 @@ constructor(private val surahApi: SurahApi,
           }
           if (textType == ConstantVariables.TOP_TEXT) {
             cache.updateTopDownloadCount(surahResult.data?.surahNumber?.toInt())
-          } else {
-            cache.updateBottomDownloadCount(surahResult.data?.surahNumber?.toInt())
           }
           Log.e("AAA", "$editionId -- ${surahResult.data?.surahNumber}")
         }
@@ -80,8 +82,6 @@ constructor(private val surahApi: SurahApi,
             database.surahTranslateDataDao().insert(SurahTranslateData(0, it.surahNumber, languageId, it.name, it.meaning, it.specification))
             if (textType == ConstantVariables.TOP_TEXT) {
               cache.updateTopDownloadSurahTranslateCount(surahTranslateResult.data.translationData.size, it.surahNumber)
-            } else {
-              cache.updateBottomDownloadSurahTranslateCount(surahTranslateResult.data.translationData.size, it.surahNumber)
             }
           }
         }

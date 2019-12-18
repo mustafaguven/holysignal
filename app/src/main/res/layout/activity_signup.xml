@@ -32,6 +32,7 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/tvName"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:textColorHint="@color/black"
@@ -55,6 +56,7 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/tvSurname"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:textColorHint="@color/black"
@@ -78,6 +80,7 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/tvEmail"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:textColorHint="@color/black"
@@ -102,6 +105,7 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/tvPassword"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:textColorHint="@color/black"
@@ -123,16 +127,16 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
-        <androidx.appcompat.widget.AppCompatButton
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/btnSignUp"
+            style="@style/TheButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
             android:layout_marginTop="10dp"
-            android:textAllCaps="false"
-            android:background="@drawable/rounded"
-            android:fontFamily="@font/gotham_narrow_book"
-            android:text="@string/ok"
-            android:textSize="20sp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="5dp"
+            android:text="@string/sign_up"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="@id/tvPassword"
             app:layout_constraintRight_toRightOf="@id/tvPassword"

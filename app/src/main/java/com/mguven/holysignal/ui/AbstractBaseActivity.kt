@@ -20,12 +20,13 @@ import com.mguven.holysignal.cache.ApplicationCache
 import com.mguven.holysignal.di.ViewModelFactory
 import com.mguven.holysignal.di.component.AbstractBaseComponent
 import com.mguven.holysignal.di.module.ActivityModule
+import com.mguven.holysignal.ui.fragment.AbstractBaseFragment
 import com.mguven.holysignal.util.ConnectivityReceiver
 import io.reactivex.disposables.CompositeDisposable
 import javax.inject.Inject
 
 
-abstract class AbstractBaseActivity : AppCompatActivity(), LifecycleObserver, ConnectivityReceiver.ConnectivityReceiverListener  {
+abstract class AbstractBaseActivity : AppCompatActivity(), LifecycleObserver, ConnectivityReceiver.ConnectivityReceiverListener {
 
   @Inject
   lateinit var viewModelFactory: ViewModelFactory
@@ -118,6 +119,14 @@ abstract class AbstractBaseActivity : AppCompatActivity(), LifecycleObserver, Co
   override fun onResume() {
     super.onResume()
     ConnectivityReceiver.connectivityReceiverListener = this
+  }
+
+
+  protected fun addFragment(fragment: AbstractBaseFragment) {
+    val ft = supportFragmentManager.beginTransaction()
+    ft.replace(R.id.fragment, fragment, fragment::class.java.simpleName)
+    ft.addToBackStack(null)
+    ft.commit()
   }
 
 }

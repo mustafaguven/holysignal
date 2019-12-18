@@ -7,6 +7,9 @@ import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.view.animation.DecelerateInterpolator
+import android.widget.FrameLayout
+import android.widget.TextView
 import androidx.lifecycle.lifecycleScope
 import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat
 import androidx.viewpager2.widget.ViewPager2
@@ -32,9 +35,11 @@ import com.mguven.holysignal.ui.fragment.SelectSurahFragment
 import com.mguven.holysignal.util.DepthPageTransformer
 import com.mguven.holysignal.util.DeviceUtil
 import com.mguven.holysignal.viewmodel.HolyBookViewModel
+import com.takusemba.spotlight.Spotlight
+import com.takusemba.spotlight.Target
+import com.takusemba.spotlight.shape.Circle
 import kotlinx.android.synthetic.main.activity_card.*
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
@@ -44,7 +49,8 @@ import kotlin.random.Random
 class CardActivity : AbstractBaseActivity(),
     SearchWordInAyahsFragment.OnFragmentInteractionListener,
     SelectSurahFragment.OnFragmentInteractionListener,
-    AyahViewPagerAdapter.MapValueListener {
+    AyahViewPagerAdapter.MapValueListener,
+    DeviceUtil.AudioListener {
 
   companion object {
     private const val MAX_SEARCH_KEYWORD_THRESHOLD = 3
@@ -89,27 +95,99 @@ class CardActivity : AbstractBaseActivity(),
     inject()
     holyBookViewModel = getViewModel(HolyBookViewModel::class.java)
     updateFirstAyahIfLastShownAyahIsNull()
-    playmode = cache.getPlaymode()
-    initPlaymode(playmode)
-    arrangeCacheForOpening()
+    deviceUtil.audioListener = this
 
-    viewpager.adapter = ayahViewPagerAdapter
-    populateAyahSet(playmode)
+    ivHelp.setOnClickListener {
+      showSpotlight()
+    }
 
-    initListeners()
+    ivAudio.setOnClickListener {
+      deviceUtil.playAudio("https://cdn.islamic.network/quran/audio/64/ar.saoodshuraym/${cache.getLastShownAyahNumber()}.mp3")
+    }
+  }
+
+  private fun showSpotlight() {
+    val targets = ArrayList<Target>()
+    val firstTarget = makeTarget(targetViewId = R.id.ivSearch, descriptionId = R.string.spotlight_layout_1_text)
+    targets.add(firstTarget)
+
+    val secondTarget = makeTarget(targetViewId = R.id.ivBookMarkAyah, descriptionId = R.string.spotlight_layout_2_text)
+    targets.add(secondTarget)
+
+    val thirdTarget = makeTarget(targetViewId = R.id.ivSelectSurah, descriptionId = R.string.spotlight_layout_3_text)
+    targets.add(thirdTarget)
+
+    val fourthTarget = makeTarget(targetViewId = R.id.ivPlayMode, descriptionId = R.string.spotlight_layout_4_text)
+    targets.add(fourthTarget)
+
+    val fifthTarget = makeTarget(targetViewId = R.id.progress, descriptionId = R.string.spotlight_layout_5_text)
+    targets.add(fifthTarget)
+
+    val sixthTarget = makeTarget(targetViewId = R.id.ivPreferences, descriptionId = R.string.spotlight_layout_6_text)
+    targets.add(sixthTarget)
+
+    val seventhTarget = makeTarget(targetViewId = R.id.ivShare, descriptionId = R.string.spotlight_layout_7_text, radius = 100f)
+    targets.add(seventhTarget)
+
+    val eightTarget = makeTarget(targetViewId = R.id.ivFavourite, descriptionId = R.string.spotlight_layout_8_text, radius = 100f)
+    targets.add(eightTarget)
+
+    val ninthTarget = makeTarget(targetViewId = R.id.ivAddNote, descriptionId = R.string.spotlight_layout_9_text)
+    targets.add(ninthTarget)
+
+    val tenthTarget = makeTarget(targetViewId = R.id.tvViewingCount, descriptionId = R.string.spotlight_layout_9_text, radius = 200f)
+    targets.add(tenthTarget)
+
+    val spotlight = Spotlight.Builder(this@CardActivity)
+        .setTargets(targets)
+        .setBackgroundColor(R.color.spotlight_background)
+        .setDuration(500L)
+        .setAnimation(DecelerateInterpolator(2f))
+        .build()
+
+    spotlight.start()
+
+    val nextTarget = View.OnClickListener { spotlight.next() }
+    firstTarget.overlay?.findViewById<View>(R.id.close_target)?.setOnClickListener(nextTarget)
+    secondTarget.overlay?.findViewById<View>(R.id.close_target)?.setOnClickListener(nextTarget)
+    thirdTarget.overlay?.findViewById<View>(R.id.close_target)?.setOnClickListener(nextTarget)
+    fourthTarget.overlay?.findViewById<View>(R.id.close_target)?.setOnClickListener(nextTarget)
+    fifthTarget.overlay?.findViewById<View>(R.id.close_target)?.setOnClickListener(nextTarget)
+    sixthTarget.overlay?.findViewById<View>(R.id.close_target)?.setOnClickListener(nextTarget)
+    seventhTarget.overlay?.findViewById<View>(R.id.close_target)?.setOnClickListener(nextTarget)
+    eightTarget.overlay?.findViewById<View>(R.id.close_target)?.setOnClickListener(nextTarget)
+    ninthTarget.overlay?.findViewById<View>(R.id.close_target)?.setOnClickListener(nextTarget)
+    tenthTarget.overlay?.findViewById<View>(R.id.close_target)?.setOnClickListener(nextTarget)
+  }
+
+  private fun makeTarget(layoutId: Int = R.layout.layout_target_1, targetViewId: Int, descriptionId: Int, radius: Float = 100f): Target {
+    val theRoot = FrameLayout(this)
+    val theLayout = layoutInflater.inflate(layoutId, theRoot)
+    theLayout.findViewById<TextView>(R.id.tvDescription).text = getString(descriptionId)
+    return Target.Builder()
+        .setAnchor(findViewById<View>(targetViewId))
+        .setShape(Circle(radius))
+        .setOverlay(theLayout)
+        .build()
   }
 
   private fun updateFirstAyahIfLastShownAyahIsNull() {
     if (cache.getLastShownAyah() == null) {
-      lifecycleScope.launch(Dispatchers.IO) {
-        val result = async {
-          val ayah = holyBookViewModel.getAyahTopText(1)[0]
-          cache.updateLastShownAyah(ayah)
-        }
-        result.await()
+      lifecycleScope.launch {
+        val ayah = holyBookViewModel.getAyahTopText(1)
+        cache.updateLastShownAyah(ayah[0])
+        updateFirstAyahIfLastShownAyahIsNull()
       }
+    } else {
+      playmode = cache.getPlaymode()
+      initPlaymode(playmode)
+      arrangeCacheForOpening()
+      viewpager.adapter = ayahViewPagerAdapter
+      populateAyahSet(playmode)
+      initListeners()
     }
   }
+
 
   private fun arrangeCacheForOpening() {
     if (cache.getLastShownAyah() != null) {
@@ -243,6 +321,11 @@ class CardActivity : AbstractBaseActivity(),
 
         updateLastShownAyah()
         refreshPageValues()
+
+        if (!firstOpening) {
+          deviceUtil.stopAudio()
+        }
+
 
         if (isFirstPage(pos)) {
           if (!firstOpening) {
@@ -571,6 +654,18 @@ class CardActivity : AbstractBaseActivity(),
 
   override fun onAyahLongPressed() {
     ivBookMarkAyah.performClick()
+  }
+
+  override fun onAudioFinished() {
+    ivAudio.setImageResource(R.drawable.ic_voice_over_off_24px)
+  }
+
+  override fun onAudioStarted() {
+    ivAudio.setImageResource(R.drawable.ic_record_voice_over_24px)
+  }
+
+  override fun onAudioWaiting() {
+    ivAudio.setImageResource(R.drawable.ic_import_export_24px)
   }
 
 }

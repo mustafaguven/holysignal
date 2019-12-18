@@ -23,8 +23,6 @@ interface ApplicationComponent {
 
   operator fun plus(activityModule: ActivityModule): AbstractBaseComponent
 
-  operator fun plus(newsActivityModule: NewsActivityModule): NewsActivityComponent
-
   operator fun plus(mainActivityModule: MainActivityModule): MainActivityComponent
 
   operator fun plus(cardActivityModule: CardActivityModule): CardActivityComponent

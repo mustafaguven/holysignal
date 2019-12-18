@@ -13,12 +13,6 @@
         <activity
             android:name="com.mguven.holysignal.ui.MainActivity"
             android:theme="@style/NoActionBarTheme">
-
-        </activity>
-
-        <activity
-            android:name="com.mguven.holysignal.ui.CardActivity"
-            android:theme="@style/NoActionBarTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -26,7 +20,17 @@
             </intent-filter>
         </activity>
 
-        <activity android:name="com.mguven.holysignal.ui.DownloadActivity" />
+        <activity
+            android:name="com.mguven.holysignal.ui.CardActivity"
+            android:theme="@style/NoActionBarTheme">
+
+        </activity>
+
+        <activity
+            android:name="com.mguven.holysignal.ui.DownloadActivity"
+            android:theme="@style/NoActionBarTheme">
+
+        </activity>
 
         <activity
             android:name="com.mguven.holysignal.ui.LoginActivity"

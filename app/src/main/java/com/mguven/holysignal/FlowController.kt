@@ -9,12 +9,6 @@ import com.mguven.holysignal.ui.*
 class FlowController {
 
   companion object {
-    fun launchArticleDetailActivity(context: Context, article: Article) {
-      context.startActivity(
-          Intent(context, ArticleDetailActivity::class.java)
-              .putExtra(BundleKey.ARTICLE, article)
-      )
-    }
 
     fun launchMainActivity(context: Context, clearTask: Boolean = false) {
       val i = Intent(context, MainActivity::class.java)
@@ -44,6 +38,12 @@ class FlowController {
             Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
       }
       context.startActivity(intent)
+    }
+
+    fun launchDownloadActivity(context: Context) {
+      context.startActivity(
+          Intent(context, DownloadActivity::class.java)
+      )
     }
 
   }

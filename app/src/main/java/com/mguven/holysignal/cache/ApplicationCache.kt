@@ -16,9 +16,6 @@ class ApplicationCache(private val applicationSharedPreferences: SharedPreferenc
   val downloadedTopSurah = MutableLiveData<Int>()
   val downloadedTopSurahTranslate = MutableLiveData<IntArray>()
 
-  val downloadedBottomSurah = MutableLiveData<Int>()
-  val downloadedBottomSurahTranslate = MutableLiveData<IntArray>()
-
   private fun <T> getObjectWithGenericDeserializer(key: String, clz: Class<T>): T {
     return gson.fromJson(applicationSharedPreferences.getString(key, null), clz)
   }
@@ -43,7 +40,7 @@ class ApplicationCache(private val applicationSharedPreferences: SharedPreferenc
   }
 
   fun getBottomTextEditionId() =
-      this.applicationSharedPreferences.getInt(CacheKey.BOTTOM_TEXT_EDITION_ID, 53)
+      this.applicationSharedPreferences.getInt(CacheKey.BOTTOM_TEXT_EDITION_ID, 60)
 
   fun updateLastShownAyah(lastShownAyah: SurahAyahSampleData?) {
     surahAyahSampleData = lastShownAyah
@@ -131,14 +128,6 @@ class ApplicationCache(private val applicationSharedPreferences: SharedPreferenc
     downloadedTopSurahTranslate.postValue(intArrayOf(total, surahNumber))
   }
 
-  fun updateBottomDownloadCount(surahNumber: Int?) {
-    downloadedBottomSurah.postValue(surahNumber)
-  }
-
-  fun updateBottomDownloadSurahTranslateCount(total: Int, surahNumber: Int) {
-    downloadedBottomSurahTranslate.postValue(intArrayOf(total, surahNumber))
-  }
-
   fun getToken() = this.applicationSharedPreferences.getString(CacheKey.TOKEN, "token")
 
   fun updateToken(token: String) = this.applicationSharedPreferences.edit().putString(CacheKey.TOKEN, token).apply()
@@ -158,7 +147,7 @@ class ApplicationCache(private val applicationSharedPreferences: SharedPreferenc
   fun updateActivePassive(activePassive: Boolean) =
       this.applicationSharedPreferences.edit().putBoolean(CacheKey.ACTIVE_PASSIVE, activePassive).apply()
 
-  fun hasSecondLanguageSupport() = this.applicationSharedPreferences.getBoolean(CacheKey.SECOND_LANGUAGE_SUPPORT, true)
+  fun hasSecondLanguageSupport() = this.applicationSharedPreferences.getBoolean(CacheKey.SECOND_LANGUAGE_SUPPORT, false)
 
   fun updateSecondLanguageSupport(hasSupport: Boolean) =
       this.applicationSharedPreferences.edit().putBoolean(CacheKey.SECOND_LANGUAGE_SUPPORT, hasSupport).apply()
@@ -176,6 +165,10 @@ class ApplicationCache(private val applicationSharedPreferences: SharedPreferenc
     if (getLastShownAyahNumber() != Int.MIN_VALUE) {
       updateLastShownAyahNumber(getLastShownAyahNumber() + 1)
     }
+  }
+
+  fun clear(){
+    this.applicationSharedPreferences.edit().clear().commit()
   }
 
 
