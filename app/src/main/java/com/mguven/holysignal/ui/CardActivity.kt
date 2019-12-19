@@ -2,14 +2,18 @@ package com.mguven.holysignal.ui
 
 import android.content.DialogInterface
 import android.content.Intent
+import android.content.res.ColorStateList
+import android.graphics.PorterDuff
 import android.graphics.drawable.AnimatedVectorDrawable
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import android.view.View
 import android.view.animation.DecelerateInterpolator
 import android.widget.FrameLayout
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat
 import androidx.viewpager2.widget.ViewPager2
@@ -58,6 +62,7 @@ class CardActivity : AbstractBaseActivity(),
   companion object {
     private const val MAX_SEARCH_KEYWORD_THRESHOLD = 3
     private const val AYAH_SET_MAX_SIZE = 5
+    private const val AUTO_MODE_LEVEL_MAX = 3
   }
 
   //injections
@@ -117,7 +122,7 @@ class CardActivity : AbstractBaseActivity(),
     }
 
     ivAutoMode.setOnClickListener {
-      autoModeLevel = (autoModeLevel + 1) % 2
+      autoModeLevel = (autoModeLevel + 1) % AUTO_MODE_LEVEL_MAX
       arrangeAutoModeLevel()
     }
   }
@@ -129,31 +134,38 @@ class CardActivity : AbstractBaseActivity(),
     progressAutoMode.progress = 0
   }
 
-  private fun doTimer() {
+  private fun incrementProgressAutoMode() {
     if (future != null) {
       future!!.cancel(true)
     }
 
-    if (cache.getLastShownAyah() != null) {
-      wordCount = cache.getLastShownAyah()!!.ayahText.split(" ").size
-      progressAutoMode.max = wordCount * 10
+    Log.e("AAA", "incrementProgressAutoMode 1")
+    if (cache.getLastShownAyah() == null) {
+      Handler().postDelayed({
+        incrementProgressAutoMode()
+      }, 1000)
     }
 
+    Log.e("AAA", "incrementProgressAutoMode 2")
     future = scheduledExecutor.schedule({
       runOnUiThread {
         progressAutoMode.visibility = View.VISIBLE
-        progressAutoMode.progress = progressAutoMode.progress + 10
+        progressAutoMode.progress = progressAutoMode.progress + (10 * (autoModeLevel))
         if (progressAutoMode.progress >= wordCount * 10) {
           if (ayahMap.size - 1 == viewpager.currentItem) {
+            Log.e("AAA", "incrementProgressAutoMode 3")
             autoModeOff()
           } else {
+            Log.e("AAA", "incrementProgressAutoMode 4")
             progressAutoMode.progress = 0
             viewpager.setCurrentItem(viewpager.currentItem + 1, true)
           }
         } else {
-          if ((autoModeLevel % 2) != 0) {
-            doTimer()
+          if ((autoModeLevel % AUTO_MODE_LEVEL_MAX) != 0) {
+            Log.e("AAA", "incrementProgressAutoMode 5")
+            incrementProgressAutoMode()
           } else {
+            Log.e("AAA", "incrementProgressAutoMode 6")
             autoModeOff()
           }
         }
@@ -163,10 +175,22 @@ class CardActivity : AbstractBaseActivity(),
   }
 
   private fun autoModeOnlyViewChange() {
-    ivAutoMode.setImageResource(R.drawable.ic_restore_24px)
+    ivAutoMode.setImageResource(if (autoModeLevel == 1) R.drawable.ic_schedule_24px_normal_speed else R.drawable.ic_schedule_24px_quick_speed)
+
+    val color = if (autoModeLevel == 1) R.color.button_green else R.color.orange
+    val mode = PorterDuff.Mode.SRC_IN
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+      progressAutoMode.progressTintList = ColorStateList.valueOf(ContextCompat.getColor(this, color))
+      progressAutoMode.progressBackgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(this, color))
+    } else {
+      val progressDrawable = (if (progressAutoMode.isIndeterminate) progressAutoMode.indeterminateDrawable else progressAutoMode.progressDrawable).mutate()
+      progressDrawable.setColorFilter(ContextCompat.getColor(this, color), mode)
+      progressAutoMode.progressDrawable = progressDrawable
+    }
+
     progressAutoMode.visibility = View.VISIBLE
     progressAutoMode.progress = 0
-    doTimer()
+    incrementProgressAutoMode()
   }
 
   private fun showSpotlight() {
@@ -462,6 +486,10 @@ class CardActivity : AbstractBaseActivity(),
   private fun updateLastShownAyah() {
     val lastShownAyah = ayahMap.getValue(viewpager.currentItem)
     cache.updateLastShownAyah(lastShownAyah)
+    if (lastShownAyah != null) {
+      wordCount = lastShownAyah.ayahText.split(" ").size
+      progressAutoMode.max = wordCount * 10
+    }
     Log.e("SELECTED_SURAH", lastShownAyah?.numberInSurah.toString())
   }
 
