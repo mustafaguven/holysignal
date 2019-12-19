@@ -49,12 +49,13 @@ class DeviceUtil(val context: Context) {
     }
   }
 
-  fun isAudioPlaying() = mediaPlayer.isPlaying
-
   interface AudioListener {
     fun onAudioWaiting()
     fun onAudioStarted()
     fun onAudioFinished()
   }
+
+  fun isEmailValid(email: CharSequence) = android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
+
 
 }

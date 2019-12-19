@@ -55,7 +55,7 @@
     <string name="ok">Ok</string>
     <string name="surname">Surname</string>
     <string name="name">Name</string>
-    <string name="signup_empty_fields">Please fill all the empty boxes</string>
+    <string name="signup_empty_fields">Please fill all the boxes correctly</string>
     <string name="signup_already_email">This email already in use</string>
     <string name="error">Error</string>
     <string name="warning">Warning</string>

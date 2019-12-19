@@ -25,6 +25,7 @@ import com.mguven.holysignal.viewmodel.DownloadViewModel
 import com.toptoche.searchablespinnerlibrary.SearchableSpinner
 import kotlinx.coroutines.launch
 
+
 class SelectBookByTheLanguageFragment : AbstractBaseFragment() {
 
   private lateinit var downloadViewModel: DownloadViewModel
@@ -35,7 +36,9 @@ class SelectBookByTheLanguageFragment : AbstractBaseFragment() {
   private lateinit var btnDownload: AppCompatButton
   private lateinit var progress: ProgressBar
   private lateinit var spBook: SearchableSpinner
+
   private var isDownloadingStarted = false
+  private var listener: BookListener? = null
 
   companion object {
     private const val LANGUAGE_DATA = "LANGUAGE_DATA"
@@ -44,6 +47,7 @@ class SelectBookByTheLanguageFragment : AbstractBaseFragment() {
           Bundle().apply { putSerializable(LANGUAGE_DATA, languageData) }
     }
   }
+
 
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
     val view = inflater.inflate(R.layout.select_book_by_the_language_fragment, container, false)
@@ -61,15 +65,19 @@ class SelectBookByTheLanguageFragment : AbstractBaseFragment() {
     arguments?.let {
       languageData = it.getSerializable(LANGUAGE_DATA) as LanguageData
     }
-
-    tvLanguage.bold(getString(R.string.selected_language_is, languageData.englishVersion), languageData.englishVersion)
+    tvLanguage.bold(getString(R.string.selected_language_is, languageData.originalVersion), languageData.originalVersion)
     updateSpannable()
     arrangePercentage()
     btnDownload.setOnClickListener {
-      if (!isDownloadingStarted && list.isNotEmpty()) {
-        isDownloadingStarted = true
-        downloadViewModel.download(list[spBook.selectedItemPosition].Id, ConstantVariables.TOP_TEXT)
-      }
+      listener?.downloadRequested()
+    }
+  }
+
+
+  fun downloadBook() {
+    if (!isDownloadingStarted && list.isNotEmpty()) {
+      isDownloadingStarted = true
+      downloadViewModel.download(list[spBook.selectedItemPosition].Id, ConstantVariables.TOP_TEXT)
     }
   }
 
@@ -95,7 +103,13 @@ class SelectBookByTheLanguageFragment : AbstractBaseFragment() {
     super.onAttach(context)
     activity?.let {
       downloadViewModel = (activity as AbstractBaseActivity).getViewModel(DownloadViewModel::class.java)
+      if (context is BookListener) {
+        listener = context
+      } else {
+        throw RuntimeException("$context must implement BookListener")
+      }
     }
+
   }
 
   private fun percentageSurahTranslate(it: IntArray?) {
@@ -140,5 +154,10 @@ class SelectBookByTheLanguageFragment : AbstractBaseFragment() {
   }
 
   private fun calculatePercentage(number: Int, total: Int): Int = (number * 100) / total
+
+  interface BookListener {
+    fun downloadRequested()
+  }
+
 
 }

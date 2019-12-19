@@ -42,6 +42,9 @@ import kotlinx.android.synthetic.main.activity_card.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import java.util.concurrent.Executors
+import java.util.concurrent.ScheduledFuture
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import kotlin.random.Random
 
@@ -73,6 +76,13 @@ class CardActivity : AbstractBaseActivity(),
   //other
   private var ayahMap = AyahMap()
 
+  private var future: ScheduledFuture<*>? = null
+  private val scheduledExecutor by lazy {
+    return@lazy Executors.newSingleThreadScheduledExecutor()
+  }
+  private var wordCount = 0
+  private var pagePosition = -1
+
   private var lastOpenedAyahNo = -100
   private var diffByPrevious = AYAH_SET_MAX_SIZE
   private var firstOpening = true
@@ -81,6 +91,7 @@ class CardActivity : AbstractBaseActivity(),
   private val playmodes by lazy {
     return@lazy resources.getStringArray(R.array.playmodes)
   }
+  private var autoModeLevel = 0
 
   private fun inject() {
     (application as TheApplication)
@@ -104,6 +115,58 @@ class CardActivity : AbstractBaseActivity(),
     ivAudio.setOnClickListener {
       deviceUtil.playAudio(ConstantVariables.getAudioUrl(cache.getLastShownAyahNumber()))
     }
+
+    ivAutoMode.setOnClickListener {
+      autoModeLevel = (autoModeLevel + 1) % 2
+      arrangeAutoModeLevel()
+    }
+  }
+
+  private fun autoModeOff() {
+    autoModeLevel = 0
+    ivAutoMode.setImageResource(R.drawable.ic_schedule_24px)
+    progressAutoMode.visibility = View.GONE
+    progressAutoMode.progress = 0
+  }
+
+  private fun doTimer() {
+    if (future != null) {
+      future!!.cancel(true)
+    }
+
+    if (cache.getLastShownAyah() != null) {
+      wordCount = cache.getLastShownAyah()!!.ayahText.split(" ").size
+      progressAutoMode.max = wordCount * 10
+    }
+
+    future = scheduledExecutor.schedule({
+      runOnUiThread {
+        progressAutoMode.visibility = View.VISIBLE
+        progressAutoMode.progress = progressAutoMode.progress + 10
+        if (progressAutoMode.progress >= wordCount * 10) {
+          if (ayahMap.size - 1 == viewpager.currentItem) {
+            autoModeOff()
+          } else {
+            progressAutoMode.progress = 0
+            viewpager.setCurrentItem(viewpager.currentItem + 1, true)
+          }
+        } else {
+          if ((autoModeLevel % 2) != 0) {
+            doTimer()
+          } else {
+            autoModeOff()
+          }
+        }
+      }
+    }, 1, TimeUnit.SECONDS)
+
+  }
+
+  private fun autoModeOnlyViewChange() {
+    ivAutoMode.setImageResource(R.drawable.ic_restore_24px)
+    progressAutoMode.visibility = View.VISIBLE
+    progressAutoMode.progress = 0
+    doTimer()
   }
 
   private fun showSpotlight() {
@@ -317,6 +380,7 @@ class CardActivity : AbstractBaseActivity(),
       }
 
       override fun onPageSelected(pos: Int) {
+        pagePosition = pos
         super.onPageSelected(pos)
         fun isFirstPage(position: Int) = position == 0
         fun isLastPage(position: Int) = position == ayahMap.size - 1
@@ -329,7 +393,6 @@ class CardActivity : AbstractBaseActivity(),
         if (!firstOpening) {
           deviceUtil.stopAudio()
         }
-
 
         if (isFirstPage(pos)) {
           if (!firstOpening) {
@@ -352,8 +415,16 @@ class CardActivity : AbstractBaseActivity(),
             }
           }
         }
+        arrangeAutoModeLevel()
       }
     })
+  }
+
+  private fun arrangeAutoModeLevel() {
+    when (autoModeLevel) {
+      -1, 0 -> autoModeOff()
+      else -> autoModeOnlyViewChange()
+    }
   }
 
   private fun refreshPageValues() {
@@ -675,6 +746,8 @@ class CardActivity : AbstractBaseActivity(),
   override fun onPause() {
     super.onPause()
     deviceUtil.stopAudio()
+    autoModeLevel = 0
+    arrangeAutoModeLevel()
   }
 
 }

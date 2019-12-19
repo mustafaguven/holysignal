@@ -19,7 +19,7 @@
         <item name="android:textAllCaps">false</item>
         <item name="android:textSize">18sp</item>
         <item name="android:fontFamily">@font/gotham_narrow_book</item>
-        <item name="android:background">@color/green</item>
+        <item name="android:background">@color/button_background</item>
     </style>
 
     <style name="TheButton.Outlined">
@@ -27,7 +27,7 @@
         <item name="android:textAllCaps">false</item>
         <item name="android:textSize">18sp</item>
         <item name="android:fontFamily">@font/gotham_narrow_book</item>
-        <item name="android:background">@color/green</item>
+        <item name="android:background">@color/button_background</item>
     </style>
 
     <style name="NoActionBarTheme" parent="FullScreen" />

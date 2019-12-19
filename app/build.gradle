@@ -9,7 +9,7 @@ android {
         applicationId "com.mguven.holysignal"
         minSdkVersion 19
         targetSdkVersion 29
-        versionCode 4
+        versionCode 5
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         //vectorDrawables.useSupportLibrary = true
@@ -104,5 +104,7 @@ dependencies {
     implementation "androidx.viewpager2:viewpager2:1.0.0"
     implementation 'com.android.support:multidex:1.0.3'
     implementation 'com.github.takusemba:spotlight:2.0.1'
+    implementation 'com.android.billingclient:billing:2.1.0'
+    implementation 'com.android.billingclient:billing-ktx:2.1.0'
 
 }

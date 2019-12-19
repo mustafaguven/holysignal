@@ -56,7 +56,7 @@
     <string name="surname">Surname</string>
     <string name="offline">Çevrimdışı</string>
     <string name="name">İsim</string>
-    <string name="signup_empty_fields">Lütfen tüm kutuları doldurun</string>
+    <string name="signup_empty_fields">Lütfen tüm kutuları olması gerektiği şekilde doldurun</string>
     <string name="signup_already_email">Bu eposta adresi zaten kullanılıyor</string>
     <string name="error">Hata</string>
     <string name="warning">Uyarı</string>

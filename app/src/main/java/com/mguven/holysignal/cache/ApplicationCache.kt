@@ -167,9 +167,21 @@ class ApplicationCache(private val applicationSharedPreferences: SharedPreferenc
     }
   }
 
-  fun clear(){
-    this.applicationSharedPreferences.edit().clear().commit()
+  fun clear() {
+    this.applicationSharedPreferences.edit().clear().apply()
   }
 
+
+//  fun getAutoModeLevel(): Int {
+//    if (autoModeLevel < 0) {
+//      autoModeLevel = this.applicationSharedPreferences.getInt(CacheKey.AUTO_MODE_LEVEL, 0)
+//    }
+//    return autoModeLevel
+//  }
+//
+//  fun updateAutoModeLevel(autoModeLevel: Int) {
+//    this.autoModeLevel = autoModeLevel
+//    this.applicationSharedPreferences.edit().putInt(CacheKey.AUTO_MODE_LEVEL, autoModeLevel).apply()
+//  }
 
 }

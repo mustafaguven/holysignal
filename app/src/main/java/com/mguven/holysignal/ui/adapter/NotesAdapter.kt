@@ -29,7 +29,7 @@ class NotesAdapter(val ayahNumber: Int, val context: Context) : RecyclerView.Ada
   var selectedId = NO_SELECTED_ID
 
   override fun getItemCount(): Int {
-    return if(result == null) 0 else result!!.notes.size
+    return if (result == null) 0 else result!!.notes.size
   }
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -49,8 +49,8 @@ class NotesAdapter(val ayahNumber: Int, val context: Context) : RecyclerView.Ada
       item.Id == it.ayahNoteId
     }.apply {
       whenNotNull(this) {
-        holder.ivUpVote.setImageResource(if (this!!.vote > 0) R.drawable.ic_keyboard_arrow_up_24px_selected else R.drawable.ic_keyboard_arrow_up_24px)
-        holder.ivDownVote.setImageResource(if (this.vote < 0) R.drawable.ic_keyboard_arrow_down_24px_selected else R.drawable.ic_keyboard_arrow_down_24px)
+        holder.ivUpVote.setImageResource(if (this!!.vote > 0) R.drawable.ic_thumb_up_alt_24px_selected else R.drawable.ic_thumb_up_alt_24px)
+        holder.ivDownVote.setImageResource(if (this.vote < 0) R.drawable.ic_thumb_down_alt_24px_selected else R.drawable.ic_thumb_down_alt_24px)
       }
     }
 
