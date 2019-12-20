@@ -7,6 +7,7 @@ import com.mguven.holysignal.db.entity.SurahAyahSampleData
 import com.mguven.holysignal.inline.whenNotNull
 import com.mguven.holysignal.model.AyahSearchResult
 import com.mguven.holysignal.model.FavouriteAyahList
+import com.mguven.holysignal.model.TimePreference
 import java.util.*
 
 
@@ -171,17 +172,25 @@ class ApplicationCache(private val applicationSharedPreferences: SharedPreferenc
     this.applicationSharedPreferences.edit().clear().apply()
   }
 
+  fun isTimePreferenceCheckboxChecked() = this.applicationSharedPreferences.getBoolean(CacheKey.DEFINE_WORK_HOURS, true)
 
-//  fun getAutoModeLevel(): Int {
-//    if (autoModeLevel < 0) {
-//      autoModeLevel = this.applicationSharedPreferences.getInt(CacheKey.AUTO_MODE_LEVEL, 0)
-//    }
-//    return autoModeLevel
-//  }
-//
-//  fun updateAutoModeLevel(autoModeLevel: Int) {
-//    this.autoModeLevel = autoModeLevel
-//    this.applicationSharedPreferences.edit().putInt(CacheKey.AUTO_MODE_LEVEL, autoModeLevel).apply()
-//  }
+  fun updateTimePreferenceCheckboxState(checked: Boolean) = this.applicationSharedPreferences.edit().putBoolean(CacheKey.DEFINE_WORK_HOURS, checked).apply()
+
+  private var timePreference: TimePreference? = null
+  fun getTimePreference(): TimePreference {
+    if (timePreference == null) {
+      timePreference = getObjectWithGenericDeserializer(CacheKey.TIME_PREFERENCE, TimePreference::class.java)
+      if (timePreference == null) {
+        timePreference = TimePreference(0, 23, 0, 59)
+      }
+    }
+    return timePreference!!
+  }
+
+  fun updateTimePreference(timePreference: TimePreference?) {
+    this.timePreference = timePreference
+    setObjectWithGenericSerializer(CacheKey.TIME_PREFERENCE, timePreference)
+  }
+
 
 }

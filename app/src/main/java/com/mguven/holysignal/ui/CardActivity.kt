@@ -129,7 +129,7 @@ class CardActivity : AbstractBaseActivity(),
 
   private fun autoModeOff() {
     autoModeLevel = 0
-    ivAutoMode.setImageResource(R.drawable.ic_schedule_24px)
+    ivAutoMode.setImageResource(R.drawable.ic_play_arrow_24px)
     progressAutoMode.visibility = View.GONE
     progressAutoMode.progress = 0
   }
@@ -175,7 +175,7 @@ class CardActivity : AbstractBaseActivity(),
   }
 
   private fun autoModeOnlyViewChange() {
-    ivAutoMode.setImageResource(if (autoModeLevel == 1) R.drawable.ic_schedule_24px_normal_speed else R.drawable.ic_schedule_24px_quick_speed)
+    ivAutoMode.setImageResource(if (autoModeLevel == 1) R.drawable.ic_fast_forward_24px else R.drawable.ic_stop_24px)
 
     val color = if (autoModeLevel == 1) R.color.button_green else R.color.orange
     val mode = PorterDuff.Mode.SRC_IN
@@ -213,13 +213,16 @@ class CardActivity : AbstractBaseActivity(),
     val sixthTarget = makeTarget(targetViewId = R.id.ivPreferences, descriptionId = R.string.spotlight_layout_6_text)
     targets.add(sixthTarget)
 
-    val eleventhTarget = makeTarget(targetViewId = R.id.ivAudio, descriptionId = R.string.spotlight_layout_11_text, radius = 100f)
+    val twelfthTarget = makeTarget(targetViewId = R.id.ivAutoMode, descriptionId = R.string.spotlight_layout_12_text)
+    targets.add(twelfthTarget)
+
+    val eleventhTarget = makeTarget(targetViewId = R.id.ivAudio, descriptionId = R.string.spotlight_layout_11_text)
     targets.add(eleventhTarget)
 
-    val seventhTarget = makeTarget(targetViewId = R.id.ivShare, descriptionId = R.string.spotlight_layout_7_text, radius = 100f)
+    val seventhTarget = makeTarget(targetViewId = R.id.ivShare, descriptionId = R.string.spotlight_layout_7_text)
     targets.add(seventhTarget)
 
-    val eightTarget = makeTarget(targetViewId = R.id.ivFavourite, descriptionId = R.string.spotlight_layout_8_text, radius = 100f)
+    val eightTarget = makeTarget(targetViewId = R.id.ivFavourite, descriptionId = R.string.spotlight_layout_8_text)
     targets.add(eightTarget)
 
     val ninthTarget = makeTarget(targetViewId = R.id.ivAddNote, descriptionId = R.string.spotlight_layout_9_text)
@@ -249,6 +252,7 @@ class CardActivity : AbstractBaseActivity(),
     ninthTarget.overlay?.findViewById<View>(R.id.close_target)?.setOnClickListener(nextTarget)
     tenthTarget.overlay?.findViewById<View>(R.id.close_target)?.setOnClickListener(nextTarget)
     eleventhTarget.overlay?.findViewById<View>(R.id.close_target)?.setOnClickListener(nextTarget)
+    twelfthTarget.overlay?.findViewById<View>(R.id.close_target)?.setOnClickListener(nextTarget)
   }
 
   private fun makeTarget(layoutId: Int = R.layout.layout_target_1, targetViewId: Int, descriptionId: Int, radius: Float = 100f): Target {
@@ -294,6 +298,7 @@ class CardActivity : AbstractBaseActivity(),
   private fun initListeners() {
     ivPreferences.setOnClickListener {
       FlowController.launchMainActivity(this)
+      ivPreferences.isEnabled = false
     }
 
     ivAllBookmarks.setOnClickListener {
@@ -776,6 +781,11 @@ class CardActivity : AbstractBaseActivity(),
     deviceUtil.stopAudio()
     autoModeLevel = 0
     arrangeAutoModeLevel()
+  }
+
+  override fun onResume() {
+    super.onResume()
+    ivPreferences.isEnabled = true
   }
 
 }

@@ -135,6 +135,72 @@
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/separator_10" />
 
+            <androidx.appcompat.widget.AppCompatCheckBox
+                android:id="@+id/cbTimePreference"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="40dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
+                android:checked="true"
+                android:fontFamily="@font/gotham_narrow_book"
+                android:gravity="start|center"
+                android:text="@string/works_all_day"
+                android:textColor="@color/black"
+                android:textSize="20sp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/cbActivePassive" />
+
+            <Spinner
+                android:id="@+id/spHourStart"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="70dp"
+                android:background="@drawable/rounded"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/cbTimePreference" />
+
+            <Spinner
+                android:id="@+id/spMinuteStart"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="3dp"
+                android:background="@drawable/rounded"
+                app:layout_constraintLeft_toRightOf="@id/spHourStart"
+                app:layout_constraintTop_toBottomOf="@id/cbTimePreference" />
+
+            <TextView
+                android:id="@+id/tvColon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:fontFamily="@font/gotham_narrow_book"
+                android:gravity="center"
+                android:text=":"
+                android:textSize="20sp"
+                app:layout_constraintBottom_toBottomOf="@id/spHourStart"
+                app:layout_constraintLeft_toRightOf="@id/spMinuteStart"
+                app:layout_constraintTop_toBottomOf="@id/cbTimePreference"
+                app:layout_constraintTop_toTopOf="@id/spHourStart" />
+
+            <Spinner
+                android:id="@+id/spHourFinish"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:background="@drawable/rounded"
+                app:layout_constraintLeft_toRightOf="@id/tvColon"
+                app:layout_constraintTop_toBottomOf="@id/cbTimePreference" />
+
+            <Spinner
+                android:id="@+id/spMinuteFinish"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="3dp"
+                android:background="@drawable/rounded"
+                app:layout_constraintLeft_toRightOf="@id/spHourFinish"
+                app:layout_constraintTop_toBottomOf="@id/cbTimePreference" />
+
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/separator_11"
                 android:layout_width="match_parent"
@@ -143,7 +209,7 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="10dp"
                 android:background="@color/gray"
-                app:layout_constraintTop_toBottomOf="@id/cbActivePassive" />
+                app:layout_constraintTop_toBottomOf="@id/spHourStart" />
 
             <androidx.appcompat.widget.AppCompatCheckBox
                 android:id="@+id/cbAltTextActivePassive"

@@ -4,6 +4,7 @@ import android.content.DialogInterface
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
@@ -17,6 +18,7 @@ import com.mguven.holysignal.db.entity.EditionAdapterData
 import com.mguven.holysignal.di.module.MainActivityModule
 import com.mguven.holysignal.extension.isNotNullAndNotEmpty
 import com.mguven.holysignal.job.LockScreenJob
+import com.mguven.holysignal.model.TimePreference
 import com.mguven.holysignal.ui.adapter.SearchableSpinnerAdapter
 import com.mguven.holysignal.viewmodel.PreferencesViewModel
 import kotlinx.android.synthetic.main.activity_main.*
@@ -29,19 +31,39 @@ class MainActivity : AbstractBaseActivity() {
   private lateinit var spannerList: List<EditionAdapterData>
   private lateinit var preferencesViewModel: PreferencesViewModel
   var membershipState = ConstantVariables.MEMBER_IS_NOT_FOUND
+  private val arrHours by lazy {
+    val arr = arrayListOf<String>()
+    for (x in 0..23) {
+      arr.add(if (x < 10) "0$x" else x.toString())
+    }
+    return@lazy arr
+  }
+
+  private val arrMinutes by lazy {
+    val arr = arrayListOf<String>()
+    for (x in 0..59) {
+      arr.add(if (x < 10) "0$x" else x.toString())
+    }
+    return@lazy arr
+  }
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_main)
     inject(MainActivityModule(this))
     preferencesViewModel = getViewModel(PreferencesViewModel::class.java)
+    initTimePreference()
 
     cbActivePassive.isChecked = cache.isActive()
-    cbActivePassive.text = if (cbActivePassive.isChecked) {
-      getString(R.string.active)
-    } else {
-      getString(R.string.passive)
+
+    cbTimePreference.isChecked = cache.isTimePreferenceCheckboxChecked()
+    cbTimePreference.setOnClickListener {
+      onTimePreferenceCheckboxChanged(cbTimePreference.isChecked)
     }
+
+    arrangeTimePreferenceCheckboxVisibility()
+    arrangeTimePreferences(cbTimePreference.isChecked)
+
     cbAltTextActivePassive.isChecked = cache.hasSecondLanguageSupport()
     clAlternateText.visibility = if (cbAltTextActivePassive.isChecked) View.VISIBLE else View.GONE
 
@@ -59,8 +81,20 @@ class MainActivity : AbstractBaseActivity() {
       cache.updateTopTextEditionId(topTextEditionSpinnerSelectedItem.value)
       cache.updateBottomTextEditionId(bottomTextEditionSpinnerSelectedItem.value)
       updateMaxAyahCount()
-      FlowController.launchCardActivity(this, true)
-      Toast.makeText(this, getString(R.string.preferences_saved), Toast.LENGTH_SHORT).show()
+
+      val spHourStart = (spHourStart.selectedItem as String).toInt()
+      val spMinuteStart = (spMinuteStart.selectedItem as String).toInt()
+      val spHourFinish = (spHourFinish.selectedItem as String).toInt()
+      val spMinuteFinish = (spMinuteFinish.selectedItem as String).toInt()
+
+      if (((spHourFinish * 60) + spMinuteFinish) <= ((spHourStart * 60) + spMinuteStart)) {
+        Toast.makeText(this, getString(R.string.finish_date_can_not_be_lower_than_start_date), Toast.LENGTH_SHORT).show()
+      } else {
+        val timePreference = TimePreference(spHourStart, spHourFinish, spMinuteStart, spMinuteFinish)
+        cache.updateTimePreference(timePreference)
+        Toast.makeText(this, getString(R.string.preferences_saved), Toast.LENGTH_SHORT).show()
+        FlowController.launchCardActivity(this, true)
+      }
     }
 
     preferencesViewModel.isMember.observe(this, Observer<Int> {
@@ -73,12 +107,7 @@ class MainActivity : AbstractBaseActivity() {
 
     cbActivePassive.setOnClickListener {
       cache.updateActivePassive(cbActivePassive.isChecked)
-      Log.e("AAA", cache.isActive().toString())
-      cbActivePassive.text = if (cbActivePassive.isChecked) {
-        getString(R.string.active)
-      } else {
-        getString(R.string.passive)
-      }
+      arrangeTimePreferenceCheckboxVisibility()
     }
 
     cbAltTextActivePassive.setOnClickListener {
@@ -103,6 +132,62 @@ class MainActivity : AbstractBaseActivity() {
     btnSignIn.setOnClickListener {
       FlowController.launchLoginActivity(this)
     }
+  }
+
+  private fun arrangeTimePreferenceCheckboxVisibility() {
+    cbTimePreference.visibility = if (cbActivePassive.isChecked) View.VISIBLE else View.GONE
+    val gone = (!cbActivePassive.isChecked) || (cbTimePreference.isChecked)
+    spHourStart.visibility = if (gone) View.GONE else View.VISIBLE
+    spMinuteStart.visibility = if (gone) View.GONE else View.VISIBLE
+    spHourFinish.visibility = if (gone) View.GONE else View.VISIBLE
+    spMinuteFinish.visibility = if (gone) View.GONE else View.VISIBLE
+    tvColon.visibility = if (gone) View.GONE else View.VISIBLE
+  }
+
+  private fun initTimePreference() {
+    val hourAdapter: ArrayAdapter<String> = timeAdapter(arrHours)
+    spHourStart.adapter = hourAdapter
+    spHourFinish.adapter = hourAdapter
+
+    val minutesAdapter: ArrayAdapter<String> = timeAdapter(arrMinutes)
+    spMinuteStart.adapter = minutesAdapter
+    spMinuteFinish.adapter = minutesAdapter
+  }
+
+  private fun onTimePreferenceCheckboxChanged(isChecked: Boolean) {
+    cache.updateTimePreferenceCheckboxState(isChecked)
+    arrangeTimePreferences(isChecked)
+  }
+
+  private fun arrangeTimePreferences(isChecked: Boolean) {
+    val gone = (!cbActivePassive.isChecked) || (isChecked)
+    spHourStart.visibility = if (gone) View.GONE else View.VISIBLE
+    spMinuteStart.visibility = if (gone) View.GONE else View.VISIBLE
+    spHourFinish.visibility = if (gone) View.GONE else View.VISIBLE
+    spMinuteFinish.visibility = if (gone) View.GONE else View.VISIBLE
+    tvColon.visibility = if (gone) View.GONE else View.VISIBLE
+
+    cbTimePreference.setText(if (isChecked) R.string.works_all_day else R.string.works_by_specific_time_period)
+    if (isChecked) {
+      spHourStart.setSelection(0)
+      spMinuteStart.setSelection(0)
+      spHourFinish.setSelection(spHourStart.adapter.count - 1)
+      spMinuteFinish.setSelection(spMinuteFinish.adapter.count - 1)
+    } else {
+      val timePreference = cache.getTimePreference()
+      spHourStart.setSelection(timePreference.hourStart)
+      spMinuteStart.setSelection(timePreference.minuteStart)
+      spHourFinish.setSelection(timePreference.hourFinish)
+      spMinuteFinish.setSelection(timePreference.minuteFinish)
+    }
+
+  }
+
+  private fun timeAdapter(arr: ArrayList<String>): ArrayAdapter<String> {
+    val dataAdapter: ArrayAdapter<String> = ArrayAdapter(this,
+        R.layout.support_simple_spinner_dropdown_item, arr)
+    dataAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item)
+    return dataAdapter
   }
 
   private fun checkLogin() {
@@ -133,15 +218,14 @@ class MainActivity : AbstractBaseActivity() {
         tvLoginMessage.isEnabled = true
         tvLoginMessage.text = getString(R.string.signup_warning)
         tvLoginMessage.setTextColor(ContextCompat.getColor(this, R.color.error))
-        //tvLoginMessage.setBackgroundColor(ContextCompat.getColor(this, R.color.black))
         btnSignIn.visibility = View.VISIBLE
       }
       ConstantVariables.SESSION_IS_DIFFERENT -> {
         showErrorDialog(getString(R.string.logout_due_to_session_number_is_different))
+        cache.updateToken("token")
         updateMaxAyahCount()
         tvLoginMessage.isEnabled = true
         tvLoginMessage.setTextColor(ContextCompat.getColor(this, R.color.error))
-        //tvLoginMessage.setBackgroundColor(ContextCompat.getColor(this, R.color.black))
         btnSignIn.visibility = View.VISIBLE
         tvLoginMessage.text = getString(R.string.signup_warning)
       }
@@ -208,7 +292,7 @@ class MainActivity : AbstractBaseActivity() {
         LockScreenJob.scheduleJobPeriodic()
       }
 
-      //Cancel pending job scheduler if mutiple instance are running.
+      //Cancel pending job scheduler if multiple instance are running.
       if (jobSets_P != null && jobSets_P.size > 2) {
         JobManager.instance().cancelAllForTag(LockScreenJob.TAG_P)
       }

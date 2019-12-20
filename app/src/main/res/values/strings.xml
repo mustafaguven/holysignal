@@ -60,7 +60,6 @@
     <string name="error">Error</string>
     <string name="warning">Warning</string>
     <string name="logout_due_to_session_number_is_different">Session is closed due to your active session number is different</string>
-    <string name="passive">Will NOT show ayahs after unlocking</string>
     <string name="active">Will show ayahs after unlocking</string>
     <string name="show_alternate_text">Show along with the second book</string>
     <string name="remember_password">Remember Password</string>
@@ -105,6 +104,10 @@
     <string name="spotlight_layout_9_text">Note spotlight text</string>
     <string name="spotlight_layout_10_text">viewingcount spotlight text</string>
     <string name="spotlight_layout_11_text">Audio text</string>
+    <string name="spotlight_layout_12_text">auto mode text</string>
+    <string name="works_all_day">Run all day long</string>
+    <string name="works_by_specific_time_period">Run by time period below</string>
+    <string name="finish_date_can_not_be_lower_than_start_date">Finish times can not be lower than start times</string>
 
     <string-array name="playmodes">
         <item>Shuffle all ayahs</item>
