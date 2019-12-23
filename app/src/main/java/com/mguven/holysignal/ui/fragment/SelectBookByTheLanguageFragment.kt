@@ -36,7 +36,6 @@ class SelectBookByTheLanguageFragment : AbstractBaseFragment() {
   private lateinit var btnDownload: AppCompatButton
   private lateinit var progress: ProgressBar
   private lateinit var spBook: SearchableSpinner
-
   private var isDownloadingStarted = false
   private var listener: BookListener? = null
 
@@ -68,6 +67,8 @@ class SelectBookByTheLanguageFragment : AbstractBaseFragment() {
     tvLanguage.bold(getString(R.string.selected_language_is, languageData.originalVersion), languageData.originalVersion)
     updateSpannable()
     arrangePercentage()
+
+
     btnDownload.setOnClickListener {
       listener?.downloadRequested()
     }
@@ -144,12 +145,12 @@ class SelectBookByTheLanguageFragment : AbstractBaseFragment() {
         btnDownload.context.getString(R.string.downloading, percentage)
       val isDone = it == ConstantVariables.MAX_SURAH_NUMBER
       btnDownload.visibility = if (isDone) View.VISIBLE else View.GONE
-      progress.visibility = if (isDone) View.GONE else View.VISIBLE
       tvProgress.visibility = if (isDone) View.GONE else View.VISIBLE
       spBook.isEnabled = isDone
-      if (percentage == 100) {
+      if (progress.visibility == View.VISIBLE && percentage == 100) {
         FlowController.launchMainActivity(btnDownload.context)
       }
+      progress.visibility = if (isDone) View.GONE else View.VISIBLE
     }
   }
 

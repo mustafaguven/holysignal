@@ -114,9 +114,23 @@
                 android:textColor="@color/black"
                 android:textSize="18sp"
                 app:layout_constraintLeft_toRightOf="@id/ivPlayMode"
-                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintRight_toLeftOf="@id/ivSearchClose"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintWidth_default="wrap" />
+
+            <ImageView
+                android:id="@+id/ivSearchClose"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginStart="15dp"
+                android:src="@drawable/ic_cancel_24px"
+                app:layout_constrainedWidth="true"
+                android:visibility="gone"
+                app:layout_constraintLeft_toRightOf="@id/ivBookMarkAyah"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -298,19 +312,6 @@
             android:layout_height="30dp"
             android:layout_marginStart="10dp"
             android:src="@drawable/ic_help_outline_24px"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toRightOf="@id/ivPreferences"
-            app:layout_constraintTop_toBottomOf="@id/bottom" />
-
-        <ImageView
-            android:id="@+id/ivSearchClose"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_marginStart="15dp"
-            android:layout_marginEnd="20dp"
-            android:src="@drawable/ic_cancel_24px"
-            android:visibility="gone"
-            app:layout_constrainedWidth="true"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toRightOf="@id/ivPreferences"
             app:layout_constraintTop_toBottomOf="@id/bottom" />

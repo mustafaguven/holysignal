@@ -2,6 +2,7 @@ package com.mguven.holysignal.ui.fragment
 
 import android.content.Context
 import android.os.Bundle
+import android.text.InputType
 import android.view.View
 import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
@@ -18,6 +19,7 @@ import com.mguven.holysignal.viewmodel.HolyBookViewModel
 import kotlinx.android.synthetic.main.search_word_in_ayahs.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+
 
 class SearchWordInAyahsFragment : BaseDialogFragment() {
 
@@ -59,9 +61,11 @@ class SearchWordInAyahsFragment : BaseDialogFragment() {
 
     rbWord.setOnClickListener {
       btnSearch.text = getString(R.string.search)
+      etWord.inputType = InputType.TYPE_CLASS_TEXT
     }
 
     rbAyahNo.setOnClickListener {
+      etWord.inputType = InputType.TYPE_NUMBER_FLAG_SIGNED or InputType.TYPE_CLASS_NUMBER
       btnSearch.text = getString(R.string.go)
     }
 
