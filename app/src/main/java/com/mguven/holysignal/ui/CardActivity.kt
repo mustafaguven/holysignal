@@ -241,18 +241,34 @@ class CardActivity : AbstractBaseActivity(),
     spotlight.start()
 
     val nextTarget = View.OnClickListener { spotlight.next() }
-    firstTarget.overlay?.findViewById<View>(R.id.close_target)?.setOnClickListener(nextTarget)
-    secondTarget.overlay?.findViewById<View>(R.id.close_target)?.setOnClickListener(nextTarget)
-    thirdTarget.overlay?.findViewById<View>(R.id.close_target)?.setOnClickListener(nextTarget)
-    fourthTarget.overlay?.findViewById<View>(R.id.close_target)?.setOnClickListener(nextTarget)
-    fifthTarget.overlay?.findViewById<View>(R.id.close_target)?.setOnClickListener(nextTarget)
-    sixthTarget.overlay?.findViewById<View>(R.id.close_target)?.setOnClickListener(nextTarget)
-    seventhTarget.overlay?.findViewById<View>(R.id.close_target)?.setOnClickListener(nextTarget)
-    eightTarget.overlay?.findViewById<View>(R.id.close_target)?.setOnClickListener(nextTarget)
-    ninthTarget.overlay?.findViewById<View>(R.id.close_target)?.setOnClickListener(nextTarget)
-    tenthTarget.overlay?.findViewById<View>(R.id.close_target)?.setOnClickListener(nextTarget)
-    eleventhTarget.overlay?.findViewById<View>(R.id.close_target)?.setOnClickListener(nextTarget)
-    twelfthTarget.overlay?.findViewById<View>(R.id.close_target)?.setOnClickListener(nextTarget)
+    val closeSpotlight = View.OnClickListener { spotlight.finish() }
+
+    firstTarget.overlay?.findViewById<View>(R.id.next_target)?.setOnClickListener(nextTarget)
+    secondTarget.overlay?.findViewById<View>(R.id.next_target)?.setOnClickListener(nextTarget)
+    thirdTarget.overlay?.findViewById<View>(R.id.next_target)?.setOnClickListener(nextTarget)
+    fourthTarget.overlay?.findViewById<View>(R.id.next_target)?.setOnClickListener(nextTarget)
+    fifthTarget.overlay?.findViewById<View>(R.id.next_target)?.setOnClickListener(nextTarget)
+    sixthTarget.overlay?.findViewById<View>(R.id.next_target)?.setOnClickListener(nextTarget)
+    seventhTarget.overlay?.findViewById<View>(R.id.next_target)?.setOnClickListener(nextTarget)
+    eightTarget.overlay?.findViewById<View>(R.id.next_target)?.setOnClickListener(nextTarget)
+    ninthTarget.overlay?.findViewById<View>(R.id.next_target)?.setOnClickListener(nextTarget)
+    tenthTarget.overlay?.findViewById<View>(R.id.next_target)?.setOnClickListener(nextTarget)
+    eleventhTarget.overlay?.findViewById<View>(R.id.next_target)?.setOnClickListener(nextTarget)
+    twelfthTarget.overlay?.findViewById<View>(R.id.next_target)?.setOnClickListener(nextTarget)
+
+    firstTarget.overlay?.findViewById<View>(R.id.close_target)?.setOnClickListener(closeSpotlight)
+    secondTarget.overlay?.findViewById<View>(R.id.close_target)?.setOnClickListener(closeSpotlight)
+    thirdTarget.overlay?.findViewById<View>(R.id.close_target)?.setOnClickListener(closeSpotlight)
+    fourthTarget.overlay?.findViewById<View>(R.id.close_target)?.setOnClickListener(closeSpotlight)
+    fifthTarget.overlay?.findViewById<View>(R.id.close_target)?.setOnClickListener(closeSpotlight)
+    sixthTarget.overlay?.findViewById<View>(R.id.close_target)?.setOnClickListener(closeSpotlight)
+    seventhTarget.overlay?.findViewById<View>(R.id.close_target)?.setOnClickListener(closeSpotlight)
+    eightTarget.overlay?.findViewById<View>(R.id.close_target)?.setOnClickListener(closeSpotlight)
+    ninthTarget.overlay?.findViewById<View>(R.id.close_target)?.setOnClickListener(closeSpotlight)
+    tenthTarget.overlay?.findViewById<View>(R.id.close_target)?.setOnClickListener(closeSpotlight)
+    eleventhTarget.overlay?.findViewById<View>(R.id.close_target)?.setOnClickListener(closeSpotlight)
+    twelfthTarget.overlay?.findViewById<View>(R.id.close_target)?.setOnClickListener(closeSpotlight)
+
   }
 
   private fun makeTarget(layoutId: Int = R.layout.layout_target_1, targetViewId: Int, descriptionId: Int, radius: Float = 100f): Target {
