@@ -53,8 +53,8 @@ class SignupActivity : AbstractBaseActivity() {
         FlowController.launchMainActivity(this, true)
         finish()
       } else {
-        when {
-          response.status == Exceptions.THIS_EMAIL_IS_ALREADY_IN_USE -> {
+        when (response.status) {
+          Exceptions.THIS_EMAIL_IS_ALREADY_IN_USE -> {
             Toast.makeText(this, R.string.signup_already_email, Toast.LENGTH_SHORT).show()
           }
           else -> showErrorDialog(response.message)

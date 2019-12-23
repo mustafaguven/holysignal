@@ -1,3 +1,17 @@
+buildscript {
+    repositories {
+        maven { url 'https://maven.fabric.io/public' }
+        maven { url 'https://plugins.gradle.org/m2/' }
+    }
+
+    dependencies {
+        classpath 'io.fabric.tools:gradle:1.27.0'
+        classpath 'gradle.plugin.com.onesignal:onesignal-gradle-plugin:0.12.6'
+    }
+}
+
+apply plugin: 'com.onesignal.androidsdk.onesignal-gradle-plugin'
+
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
@@ -14,6 +28,10 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         //vectorDrawables.useSupportLibrary = true
         multiDexEnabled true
+        manifestPlaceholders = [
+                onesignal_app_id               : '99c2ac8f-5386-454e-8fd6-77bf2e72fcd5',
+                onesignal_google_project_number: 'REMOTE'
+        ]
     }
     buildTypes {
 
@@ -41,7 +59,7 @@ def paging = "1.0.1"
 def timber = "4.7.0"
 def picasso = "2.71828"
 def joda = "2.9.6"
-def room_version = "2.2.2"
+def room_version = "2.2.3"
 def lifecycle = "2.2.0-rc03"
 def viewmodel = "2.2.0-rc03"
 
@@ -67,7 +85,7 @@ dependencies {
 // viewModelScope:
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle"
 
-    implementation 'androidx.paging:paging-runtime:2.1.0'
+    implementation 'androidx.paging:paging-runtime:2.1.1'
     implementation "android.arch.paging:rxjava2:$paging"
 
     implementation "com.squareup.picasso:picasso:$picasso"
@@ -106,5 +124,6 @@ dependencies {
     implementation 'com.github.takusemba:spotlight:2.0.1'
     implementation 'com.android.billingclient:billing:2.1.0'
     implementation 'com.android.billingclient:billing-ktx:2.1.0'
+    implementation 'com.onesignal:OneSignal:3.10.9'
 
 }

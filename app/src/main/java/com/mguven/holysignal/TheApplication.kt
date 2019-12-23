@@ -7,6 +7,9 @@ import com.mguven.holysignal.di.component.ApplicationComponent
 import com.mguven.holysignal.di.component.DaggerApplicationComponent
 import com.mguven.holysignal.di.module.ApplicationModule
 import com.mguven.holysignal.job.LockScreenJobCreator
+import com.mguven.holysignal.notification.OneSignalNotificationHandler
+import com.mguven.holysignal.notification.OneSignalNotificationReceivedHandler
+import com.onesignal.OneSignal
 import com.squareup.picasso.Picasso
 import javax.inject.Inject
 
@@ -25,6 +28,7 @@ class TheApplication : Application() {
     super.onCreate()
     JobManager.create(this).addJobCreator(LockScreenJobCreator())
     inject()
+    initOneSignal()
     cache.updateUUIDIfNeeded()
   }
 
@@ -35,5 +39,14 @@ class TheApplication : Application() {
         .build()
 
     applicationComponent.inject(this)
+  }
+
+  private fun initOneSignal() {
+    OneSignal.startInit(this)
+        .inFocusDisplaying(OneSignal.OSInFocusDisplayOption.Notification)
+        .setNotificationReceivedHandler(OneSignalNotificationReceivedHandler(this))
+        .setNotificationOpenedHandler(OneSignalNotificationHandler(this))
+        .unsubscribeWhenNotificationsAreDisabled(true)
+        .init()
   }
 }
