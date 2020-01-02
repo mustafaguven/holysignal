@@ -36,14 +36,14 @@
     <string name="total_viewing_count">%1$d kez görüntülendi</string>
     <string name="x_ayah_displayed">%1$d%%</string>
     <string name="preferences">Tercihler</string>
-    <string name="signup_warning"><![CDATA[50 ayetlik deneme versiyonunu kullanıyorsunuz.<br/><br/>10 saniyede hesap oluştur<br/>günün her anında<br/>dilediğin dillerde<br/>Kuran\'ı <span style="background-color:#FFEB3B; color:#000;">tekrar tekrar</span> oku.]]></string>
+    <string name="signup_warning"><![CDATA[50 ayetlik deneme versiyonunu kullanıyorsunuz.<br/><br/>10 saniyede hesap oluştur<br/>günün her anında<br/>dilediğin dillerde<br/>Kuran\'ı tekrar tekrar oku.]]></string>
     <string name="welcome_message_for_member">Merhaba\n%1$s</string>
     <string name="order">Satın Al</string>
     <string name="login_title">Giriş Yap</string>
     <string name="username">Kullanıcı Adı</string>
     <string name="password">Şifre</string>
     <string name="email">EPosta</string>
-    <string name="sign_in">Üye Giriş</string>
+    <string name="sign_in">Giriş Yap</string>
     <string name="phone_changed_warning">Kayıtlı telefonunuzundan farklı bir telefonla oturum açıyorsunuz, güvenlik sebepleriyle yıl içinde bunu 2 kez yapabilirsiniz. Devam etmek istiyor musunuz?</string>
     <string name="yes">Evet</string>
     <string name="no">Hayır</string>
@@ -53,7 +53,7 @@
     <string name="local_mode_warning">Kitap indirmek için internet bağlantınızın olması gerekmektedir</string>
     <string name="sign_up">Yeni Kullanıcı</string>
     <string name="ok">Tamam</string>
-    <string name="surname">Surname</string>
+    <string name="surname">Soyisim</string>
     <string name="offline">Çevrimdışı</string>
     <string name="name">İsim</string>
     <string name="signup_empty_fields">Lütfen tüm kutuları olması gerektiği şekilde doldurun</string>
@@ -62,7 +62,7 @@
     <string name="warning">Uyarı</string>
     <string name="logout_due_to_session_number_is_different">Bu cihazdaki oturumunuz başka bir cihazda açılan oturum dolayısıyla sonlandırıldı.</string>
     <string name="active">Ekran kilidinden sonra ayetleri göster</string>
-    <string name="show_alternate_text">İkinci kitabı göster</string>
+    <string name="show_alternate_text">İkinci kitap gösterilsin</string>
     <string name="remember_password">Şifremi hatırlat</string>
     <string name="forgot_password">Şifremi unuttum</string>
     <string name="new_bookmark_set_warning_message">Bu ayet ayraç olarak kaydedilecek, devam edilsin mi?</string>
@@ -94,30 +94,34 @@
     <string name="sign_out">Hesaptan Çık</string>
     <string name="sign_out_warning_message">Hesabınızdan çıkmak istediğinizden emin misiniz?</string>
     <string name="close">Close</string>
-    <string name="spotlight_layout_1_text">Aradığın kelimelerin geçtiği ayetleri kolayca bul, istediğin ayete hemen numarasıyla gidin</string>
-    <string name="spotlight_layout_2_text">Kaldığın yeri unutma, ister ayraç düğmesine basarak ister ayetin üzerine basılı tutarak kaldığın yeri kaydet</string>
-    <string name="spotlight_layout_3_text">Tüm sureleri listele, istediğin sureye direk ulaş</string>
-    <string name="spotlight_layout_4_text">Ayetleri farklı şekillerde görüntüle. Karışık, sırayla, sadece favoriler gibi</string>
+    <string name="spotlight_layout_1_text">Aradığın kelimelerin geçtiği ayetleri kolayca bul, istediğin ayete hemen numarasıyla git</string>
+    <string name="spotlight_layout_2_text">Kaldığın yeri unutma\n\nİster ayraç düğmesine basarak ister ayetin üzerine basılı tutarak kaldığın yeri kaydet</string>
+    <string name="spotlight_layout_3_text">Tüm sureleri listele\n\nİstediğin sureye direk ulaş</string>
+    <string name="spotlight_layout_4_text">Ayetleri farklı şekillerde görüntüle\n\nKarışık, sırayla, sadece favoriler gibi</string>
     <string name="spotlight_layout_5_text">Kitabın toplamda yüzde kaçını okuduğun burada</string>
-    <string name="spotlight_layout_6_text">Farklı dilde veya çeviride kitaplar indir, gösterimlere ikinci kitap ekle, uygulamanın tuş kilidi sonrası gösterilip gösterilmeyeceğine karar ver</string>
-    <string name="spotlight_layout_7_text">Ayetleri değer verdiklerin paylaş</string>
-    <string name="spotlight_layout_8_text">Senin için farklı anlam ifade eden ayeti favoriye al, daha sonra favoriler listende sadece favorilerini göstererek ezberlemende yardımcı olalım</string>
-    <string name="spotlight_layout_9_text">Ayet ile ilgili not ekle, eklenen notları gör ve puanla</string>
+    <string name="spotlight_layout_6_text">Farklı dilde veya çeviride kitaplar indir\n\nGösterimlere ikinci kitap ekle, uygulamanın tuş kilidi sonrası gösterilip gösterilmeyeceğine karar ver</string>
+    <string name="spotlight_layout_7_text">Ayetleri değer verdiklerinle paylaş</string>
+    <string name="spotlight_layout_8_text">Senin için farklı anlam ifade eden ayeti favoriye al\n\nDaha sonra favoriler listende sadece favorilerini göstererek ezberlemende yardımcı olalım</string>
+    <string name="spotlight_layout_9_text">Ayet ile ilgili not ekle\n\nEklenen notları gör ve puanla</string>
     <string name="spotlight_layout_10_text">Bir ayeti kaç kere görüntülediğini buradan gör</string>
     <string name="spotlight_layout_11_text">Ayetin arapça okunuşunu dinle</string>
-    <string name="spotlight_layout_12_text">Ayetleri otomatik modda oku, hiçbir şey yapmana gerek kalmadan sayfalar kendiliğinden çevrilsin.\n\nİlk mod (üstte yeşil çubuk) yavaş, ikinci mod (üstte turuncu çubuk) normal okuma hızında ilerler.</string>
+    <string name="spotlight_layout_12_text">Ayetleri otomatik modda oku\n\nHiçbir şey yapmana gerek kalmadan sayfalar kendiliğinden çevrilsin.\n\nİlk mod (üstte yeşil çubuk) yavaş, ikinci mod (üstte turuncu çubuk) normal okuma hızında ilerler.</string>
+    <string name="spotlight_layout_13_text">Ayetleri burada\n\nAynı anda 2 farklı dilde ayeti birlikte görüntülemek için ayarlar ekranından ikinci kitap gösterilsin seçeneğini aktif et</string>
     <string name="works_all_day">Tüm gün aktif</string>
     <string name="works_by_specific_time_period">Belirlediğim zaman aralığında çalış</string>
     <string name="finish_date_can_not_be_lower_than_start_date">Bitiş zamanı başlangıç zamanından önce olamaz</string>
     <string name="email_is_waiting_for_verification">Lütfen müsait bir zamanınızda onaylanmış kullanıcı olmak için gönderdiğimiz epostadaki linke tıklayın\n\nOnaylanmamış kullanıcılar kitap indirebilir ancak not eklemek gibi bazı fonksiyonları kullanamaz.</string>
     <string name="info">Bilgi</string>
     <string name="sign_up_with_google">Google Hesabın ile Bağlan</string>
+    <string name="sign_up_with_facebook">Facebook Hesabın ile Bağlan</string>
+
     <string name="user_canceled">Satın alma işlemini iptal ettiniz</string>
     <string name="error_occured_while_purchasing">Satın alma sırasında hata oluştu</string>
     <string name="billing_client_is_not_ready">Billing client is not ready</string>
     <string name="sku_detail_list_not_found">Satın alınacak ürün bulunamadı</string>
     <string name="item_already_owned">Bu ürün zaten alınmış</string>
     <string name="item_not_owned">Ürün alınmadı</string>
+    <string name="send_gift">Hediye Et</string>
 
     <string-array name="playmodes">
         <item>Ayetler karışık şekilde gösterilecek</item>
