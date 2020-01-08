@@ -36,7 +36,7 @@
     <string name="total_viewing_count">%1$d kez görüntülendi</string>
     <string name="x_ayah_displayed">%1$d%%</string>
     <string name="preferences">Tercihler</string>
-    <string name="signup_warning"><![CDATA[50 ayetlik deneme versiyonunu kullanıyorsunuz.<br/><br/>10 saniyede hesap oluştur<br/>günün her anında<br/>dilediğin dillerde<br/>Kuran\'ı tekrar tekrar oku.]]></string>
+    <string name="signup_warning">40\'tan fazla dil,\n100\'den fazla çeviri\n0 reklam\n\n10 saniyede hesap oluştur\nKuran\'ı tekrar tekrar oku</string>
     <string name="welcome_message_for_member">Merhaba\n%1$s</string>
     <string name="order">Satın Al</string>
     <string name="login_title">Giriş Yap</string>
@@ -61,7 +61,7 @@
     <string name="error">Hata</string>
     <string name="warning">Uyarı</string>
     <string name="logout_due_to_session_number_is_different">Bu cihazdaki oturumunuz başka bir cihazda açılan oturum dolayısıyla sonlandırıldı.</string>
-    <string name="active">Ekran kilidinden sonra ayetleri göster</string>
+    <string name="active">Her ekran kilidini açtığımda ayetler gösterilsin</string>
     <string name="show_alternate_text">İkinci kitap gösterilsin</string>
     <string name="remember_password">Şifremi hatırlat</string>
     <string name="forgot_password">Şifremi unuttum</string>
@@ -106,7 +106,7 @@
     <string name="spotlight_layout_10_text">Bir ayeti kaç kere görüntülediğini buradan gör</string>
     <string name="spotlight_layout_11_text">Ayetin arapça okunuşunu dinle</string>
     <string name="spotlight_layout_12_text">Ayetleri otomatik modda oku\n\nHiçbir şey yapmana gerek kalmadan sayfalar kendiliğinden çevrilsin.\n\nİlk mod (üstte yeşil çubuk) yavaş, ikinci mod (üstte turuncu çubuk) normal okuma hızında ilerler.</string>
-    <string name="spotlight_layout_13_text">Ayetleri burada\n\nAynı anda 2 farklı dilde ayeti birlikte görüntülemek için ayarlar ekranından ikinci kitap gösterilsin seçeneğini aktif et</string>
+    <string name="spotlight_layout_13_text">Aynı anda 2 dilde ayeti birlikte görüntülemek için ayarlar ekranından ikinci kitap gösterilsin\'i seç</string>
     <string name="works_all_day">Tüm gün aktif</string>
     <string name="works_by_specific_time_period">Belirlediğim zaman aralığında çalış</string>
     <string name="finish_date_can_not_be_lower_than_start_date">Bitiş zamanı başlangıç zamanından önce olamaz</string>
@@ -122,6 +122,14 @@
     <string name="item_already_owned">Bu ürün zaten alınmış</string>
     <string name="item_not_owned">Ürün alınmadı</string>
     <string name="send_gift">Hediye Et</string>
+    <string name="password_confirm">Tekrar Şifre</string>
+    <string name="enter_your_email">Eposta adresinizi belirtin</string>
+    <string name="validation_code">Onay Kodu</string>
+    <string name="new_password">Yeni Şifre</string>
+    <string name="new_password_confirm">Tekrar yeni şifre</string>
+    <string name="invalid_validation_code">Hatalı onay kodu. (Lütfen Eposta adresinize gelen onay kodunu doğru girdiğinizden emin olun)</string>
+    <string name="password_reset_step_2_tip">Eposta adresinize gönderdiğimiz onay koduyla birlikte yeni şifrenizi oluşturun</string>
+    <string name="new_password_has_been_set_successfully">Yeni şifre başarıyla oluşturuldu. Yeni şifrenizle sisteme giriş yapabilirsiniz.</string>
 
     <string-array name="playmodes">
         <item>Ayetler karışık şekilde gösterilecek</item>
