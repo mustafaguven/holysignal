@@ -4,4 +4,4 @@ import com.mguven.holysignal.ui.AbstractBaseActivity
 import dagger.Module
 
 @Module
-class ForgotActivityModule(activity: AbstractBaseActivity) : ActivityModule(activity)
+class ForgotPasswordActivityModule(activity: AbstractBaseActivity) : ActivityModule(activity)

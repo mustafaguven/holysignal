@@ -1,0 +1,8 @@
+{
+  "client_id": "313348877421-ma6okinddq0t0q4sncqs8gnnk5psehdu.apps.googleusercontent.com",
+  "redirect_uri": "com.mguven.holysignal:/oauth2redirect",
+  "authorization_scope": "email profile",
+  "authorization_endpoint_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_endpoint_uri": "https://accounts.google.com/o/oauth2/token",
+  "https_required": true
+}

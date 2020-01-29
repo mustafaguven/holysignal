@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:ads="http://schemas.android.com/apk/res-auto"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -61,7 +62,7 @@
             android:layout_marginTop="5dp"
             android:layout_marginEnd="5dp"
             android:background="@drawable/background_card_top"
-            android:padding="5dp"
+            android:padding="2dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvProgress">
@@ -76,8 +77,7 @@
                 app:layout_constrainedWidth="true"
                 app:layout_constraintHorizontal_chainStyle="packed"
                 app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintWidth_default="wrap" />
+                app:layout_constraintTop_toTopOf="parent" />
 
 
             <ImageView
@@ -85,11 +85,9 @@
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_marginStart="20dp"
-                android:layout_marginEnd="20dp"
                 android:src="@drawable/ic_low_priority_24px"
                 app:layout_constraintLeft_toRightOf="@id/ivSearch"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintWidth_default="wrap" />
+                app:layout_constraintTop_toTopOf="parent" />
 
 
             <ImageView
@@ -97,40 +95,38 @@
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_marginStart="20dp"
-                android:layout_marginEnd="20dp"
                 android:src="@drawable/ic_repeat_surah24px"
                 android:textColor="@color/black"
                 android:textSize="18sp"
                 app:layout_constraintLeft_toRightOf="@id/ivSelectSurah"
-                app:layout_constraintRight_toLeftOf="@id/ivBookMarkAyah"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintWidth_default="wrap" />
-
-            <ImageView
-                android:id="@+id/ivBookMarkAyah"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:src="@drawable/ic_bookmark_empty_24px"
-                android:textColor="@color/black"
-                android:textSize="18sp"
-                app:layout_constraintLeft_toRightOf="@id/ivPlayMode"
                 app:layout_constraintRight_toLeftOf="@id/ivSearchClose"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintWidth_default="wrap" />
+                app:layout_constraintTop_toTopOf="parent" />
+
 
             <ImageView
                 android:id="@+id/ivSearchClose"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:layout_marginStart="15dp"
                 android:src="@drawable/ic_cancel_24px"
-                app:layout_constrainedWidth="true"
                 android:visibility="gone"
-                app:layout_constraintLeft_toRightOf="@id/ivBookMarkAyah"
+                app:layout_constrainedWidth="true"
                 app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toRightOf="@id/ivPlayMode"
+                app:layout_constraintRight_toLeftOf="@id/ivBookMarkAyah"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
+
+            <ImageView
+                android:id="@+id/ivBookMarkAyah"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginStart="20dp"
+                android:src="@drawable/ic_bookmark_empty_24px"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                app:layout_constraintLeft_toRightOf="@id/ivSearchClose"
+                app:layout_constraintTop_toTopOf="parent" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -158,7 +154,7 @@
             android:clickable="true"
             android:focusable="true"
             android:overScrollMode="never"
-            app:layout_constraintBottom_toTopOf="@id/tvViewingCount"
+            app:layout_constraintBottom_toTopOf="@id/adBanner"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tvKeywords" />
@@ -173,7 +169,7 @@
             android:textColor="@color/black"
             android:textSize="24sp"
             android:visibility="gone"
-            app:layout_constraintBottom_toTopOf="@id/tvViewingCount"
+            app:layout_constraintBottom_toTopOf="@id/adBanner"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tvKeywords"
@@ -189,10 +185,23 @@
             android:src="@drawable/instagram_like"
             android:textColor="@color/black"
             android:visibility="gone"
-            app:layout_constraintBottom_toTopOf="@id/tvViewingCount"
+            app:layout_constraintBottom_toTopOf="@id/adBanner"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tvKeywords"
+            tools:visibility="visible" />
+
+
+        <com.google.android.gms.ads.AdView
+            android:id="@+id/adBanner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            ads:adSize="BANNER"
+            ads:adUnitId="@string/addmobs_banner_id"
+            app:layout_constraintBottom_toTopOf="@id/tvViewingCount"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
             tools:visibility="visible" />
 
         <TextView
@@ -214,107 +223,255 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/bottom"
             android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:layout_marginBottom="60dp"
-            android:background="@color/gray"
-            app:layout_constraintBottom_toBottomOf="parent" />
+            android:layout_height="1dp"
+            android:background="#3F51B5"
+            app:layout_constraintBottom_toTopOf="@id/bottomMenu" />
 
-        <ImageView
-            android:id="@+id/ivAllBookmarks"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_marginEnd="10dp"
-            android:src="@drawable/ic_bookmarks_24px"
-            android:textColor="@color/black"
-            android:textSize="18sp"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/bottom"
-            tools:visibility="visible" />
 
-        <ImageView
-            android:id="@+id/ivAddNote"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_marginEnd="15dp"
-            android:src="@drawable/ic_note"
-            android:textColor="@color/black"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/bottomMenu"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:background="#42A8DD"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintRight_toLeftOf="@id/ivAllBookmarks"
-            app:layout_constraintTop_toBottomOf="@id/bottom" />
+            app:layout_constraintRight_toRightOf="parent">
 
-        <ImageView
-            android:id="@+id/ivFavourite"
-            android:layout_width="28dp"
-            android:layout_height="28dp"
-            android:layout_marginEnd="15dp"
-            android:src="@drawable/ic_heart"
-            android:textColor="@color/black"
-            android:textSize="18sp"
-            app:layout_constrainedWidth="true"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintRight_toLeftOf="@id/ivAddNote"
-            app:layout_constraintTop_toBottomOf="@id/bottom" />
+            <FrameLayout
+                android:id="@+id/flAllBookmarks"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackground"
+                android:padding="2dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/flAddNote"
+                app:layout_constraintTop_toTopOf="parent"
+                android:visibility="gone">
 
-        <ImageView
-            android:id="@+id/ivShare"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_marginEnd="15dp"
-            android:src="@drawable/ic_share_24px"
-            android:textColor="@color/black"
-            android:textSize="18sp"
-            app:layout_constrainedWidth="true"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintRight_toLeftOf="@id/ivFavourite"
-            app:layout_constraintTop_toBottomOf="@id/bottom" />
+                <ImageView
+                    android:id="@+id/ivAllBookmarks"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/ic_bookmarks_24px"
+                    android:textColor="@color/black"
+                    android:textSize="18sp"
+                    android:visibility="visible"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toEndOf="@+id/flAddNote"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:visibility="visible" />
+            </FrameLayout>
 
-        <ImageView
-            android:id="@+id/ivAutoMode"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginEnd="15dp"
-            android:src="@drawable/ic_play_arrow_24px"
-            android:textColor="@color/black"
-            android:textSize="18sp"
-            app:layout_constrainedWidth="true"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintRight_toLeftOf="@id/ivAudio"
-            app:layout_constraintTop_toBottomOf="@id/bottom" />
+            <FrameLayout
+                android:id="@+id/flAddNote"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackground"
+                android:padding="2dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/flAllBookmarks"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/flFavourite"
+                app:layout_constraintTop_toTopOf="parent">
 
-        <ImageView
-            android:id="@+id/ivAudio"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_marginEnd="15dp"
-            android:src="@drawable/ic_voice_over_off_24px"
-            android:textColor="@color/black"
-            android:textSize="18sp"
-            app:layout_constrainedWidth="true"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintRight_toLeftOf="@id/ivShare"
-            app:layout_constraintTop_toBottomOf="@id/bottom" />
+                <ImageView
+                    android:id="@+id/ivAddNote"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/ic_note"
+                    android:textColor="@color/black"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/ivAllBookmarks"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toEndOf="@+id/flFavourite"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </FrameLayout>
 
-        <ImageView
-            android:id="@+id/ivPreferences"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_marginStart="10dp"
-            android:src="@drawable/ic_settings_applications_24px"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/bottom" />
 
-        <ImageView
-            android:id="@+id/ivHelp"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_marginStart="10dp"
-            android:src="@drawable/ic_help_outline_24px"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toRightOf="@id/ivPreferences"
-            app:layout_constraintTop_toBottomOf="@id/bottom" />
+            <FrameLayout
+                android:id="@+id/flFavourite"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackground"
+                android:padding="2dp"
+                app:layout_constrainedWidth="true"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/flAddNote"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/flShare"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:id="@+id/ivFavourite"
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:src="@drawable/ic_heart"
+                    android:textColor="@color/black"
+                    android:textSize="18sp"
+                    app:layout_constrainedWidth="true"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/ivAddNote"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toEndOf="@+id/flShare"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </FrameLayout>
+
+
+            <FrameLayout
+                android:id="@+id/flShare"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackground"
+                android:padding="2dp"
+                app:layout_constrainedWidth="true"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/flFavourite"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/flAudio"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:id="@+id/ivShare"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/ic_share_24px"
+                    android:textColor="@color/black"
+                    android:textSize="18sp" />
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/flAutoMode"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackground"
+                android:padding="2dp"
+                app:layout_constrainedWidth="true"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/flAudio"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/flHelp"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:id="@+id/ivAutoMode"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/ic_play_arrow_24px"
+                    android:textColor="@color/black"
+                    android:textSize="18sp"
+                    app:layout_constrainedWidth="true"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/flAudio"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toEndOf="@+id/flHelp"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/flAudio"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackground"
+                android:padding="2dp"
+                app:layout_constrainedWidth="true"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/flShare"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/flAutoMode"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:id="@+id/ivAudio"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/ic_voice_over_off_24px"
+                    android:textColor="@color/black"
+                    android:textSize="18sp" />
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/flPreferences"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackground"
+                android:padding="2dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/flDownload"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:id="@+id/ivPreferences"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/ic_settings_applications_24px" />
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/flHelp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackground"
+                android:padding="2dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/flAutoMode"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/flDownload"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:id="@+id/ivHelp"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/ic_help_outline_24px"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/flDownload"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackground"
+                android:padding="2dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/flHelp"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/flPreferences"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:id="@+id/ivDownload"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/ic_download"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </FrameLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

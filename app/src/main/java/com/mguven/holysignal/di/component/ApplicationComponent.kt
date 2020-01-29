@@ -34,4 +34,8 @@ interface ApplicationComponent {
   operator fun plus(signupActivityModule: SignupActivityModule): SignupActivityComponent
 
   operator fun plus(loginActivityModule: LoginActivityModule): LoginActivityComponent
+
+  operator fun plus(sendAsAGiftActivityModule: SendAsAGiftActivityModule): SendAsAGiftActivityComponent
+
+  operator fun plus(forgotPasswordActivityModule: ForgotPasswordActivityModule): ForgotPasswordActivityComponent
 }

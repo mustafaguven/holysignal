@@ -7,10 +7,11 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mguven.holysignal.R
 import com.mguven.holysignal.constant.ConstantVariables
-import com.mguven.holysignal.model.response.AddNoteEntity
-import com.mguven.holysignal.model.response.GetNotesByAyahNumberEntity
-import com.mguven.holysignal.model.response.InsertVoterEntity
-import com.mguven.holysignal.model.response.RemoveNoteEntity
+import com.mguven.holysignal.model.AddNoteResponseEntity
+import com.mguven.holysignal.model.InsertVoterResponseEntity
+import com.mguven.holysignal.model.NoteResponseEntity
+import com.mguven.holysignal.model.RemoveNoteResponseEntity
+import com.mguven.holysignal.model.response.ResponseEntity
 import com.mguven.holysignal.ui.AbstractBaseActivity
 import com.mguven.holysignal.ui.adapter.NotesAdapter
 import com.mguven.holysignal.viewmodel.HolyBookViewModel
@@ -53,7 +54,7 @@ class NotesFragment : BaseDialogFragment() {
     adapter = NotesAdapter(ayahNumber, activity!!)
     retrieveAllNotes()
 
-    holyBookViewModel.allNotesFromCloud.observe(viewLifecycleOwner, Observer<GetNotesByAyahNumberEntity> { list ->
+    holyBookViewModel.allNotesFromCloud.observe(viewLifecycleOwner, Observer<ResponseEntity<NoteResponseEntity>> { list ->
       if (list.data != null) {
         if (list.data.notes.isEmpty()) {
           tvEmpty.text = getString(R.string.no_notes_found)
@@ -69,7 +70,7 @@ class NotesFragment : BaseDialogFragment() {
       }
     })
 
-    holyBookViewModel.changeAyahNoteVoteCountObserver.observe(this, Observer<InsertVoterEntity> {
+    holyBookViewModel.changeAyahNoteVoteCountObserver.observe(this, Observer<ResponseEntity<InsertVoterResponseEntity>> {
       retrieveAllNotes()
     })
 
@@ -85,7 +86,7 @@ class NotesFragment : BaseDialogFragment() {
           DialogInterface.OnClickListener { dialog, no -> })
     })
 
-    holyBookViewModel.removeNoteObserver.observe(this, Observer<RemoveNoteEntity> {
+    holyBookViewModel.removeNoteObserver.observe(this, Observer<ResponseEntity<RemoveNoteResponseEntity>> {
       retrieveAllNotes()
     })
 
@@ -96,7 +97,7 @@ class NotesFragment : BaseDialogFragment() {
       }
     }
 
-    holyBookViewModel.addNoteObserver.observe(viewLifecycleOwner, Observer<AddNoteEntity> {
+    holyBookViewModel.addNoteObserver.observe(viewLifecycleOwner, Observer<ResponseEntity<AddNoteResponseEntity>> {
       etNote.setText("")
       retrieveAllNotes()
       btnAddVote.isEnabled = true

@@ -8,14 +8,15 @@ import com.mguven.holysignal.db.entity.FavouritesData
 import com.mguven.holysignal.db.entity.NotesData
 import com.mguven.holysignal.db.entity.ViewingCountsData
 import com.mguven.holysignal.extension.isNotNullAndNotEmpty
+import com.mguven.holysignal.model.AddNoteResponseEntity
+import com.mguven.holysignal.model.InsertVoterResponseEntity
+import com.mguven.holysignal.model.NoteResponseEntity
+import com.mguven.holysignal.model.RemoveNoteResponseEntity
 import com.mguven.holysignal.model.request.RequestAddFavourites
 import com.mguven.holysignal.model.request.RequestAddNote
 import com.mguven.holysignal.model.request.RequestInsertVoter
 import com.mguven.holysignal.model.request.RequestRemoveNote
-import com.mguven.holysignal.model.response.AddNoteEntity
-import com.mguven.holysignal.model.response.InsertVoterEntity
-import com.mguven.holysignal.model.response.GetNotesByAyahNumberEntity
-import com.mguven.holysignal.model.response.RemoveNoteEntity
+import com.mguven.holysignal.model.response.*
 import com.mguven.holysignal.network.FavouritesApi
 import com.mguven.holysignal.network.NotesApi
 import com.mguven.holysignal.util.DeviceUtil
@@ -34,10 +35,10 @@ constructor(private val database: ApplicationDatabase,
             private val deviceUtil: DeviceUtil) : BaseViewModel() {
 
   val totalFavouriteCount = MutableLiveData<Int>()
-  val allNotesFromCloud = MutableLiveData<GetNotesByAyahNumberEntity>()
-  val changeAyahNoteVoteCountObserver = MutableLiveData<InsertVoterEntity>()
-  val addNoteObserver = MutableLiveData<AddNoteEntity>()
-  val removeNoteObserver = MutableLiveData<RemoveNoteEntity>()
+  val allNotesFromCloud = MutableLiveData<ResponseEntity<NoteResponseEntity>>()
+  val changeAyahNoteVoteCountObserver = MutableLiveData<ResponseEntity<InsertVoterResponseEntity>>()
+  val addNoteObserver = MutableLiveData<ResponseEntity<AddNoteResponseEntity>>()
+  val removeNoteObserver = MutableLiveData<ResponseEntity<RemoveNoteResponseEntity>>()
 
   private var favouriteIdList: List<Long>? = null
   fun getFavouriteIdList(): List<Long>? {

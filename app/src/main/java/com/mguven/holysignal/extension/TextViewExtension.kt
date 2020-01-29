@@ -3,7 +3,9 @@ package com.mguven.holysignal.extension
 import android.os.Build
 import android.text.Html
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.core.text.HtmlCompat
+import com.mguven.holysignal.R
 
 fun TextView.highlighted(text: String, highlightKeywords: String? = "") {
   var newText = text
@@ -34,4 +36,14 @@ fun TextView.bold(text: String, boldWord: String) {
 
 fun TextView.setEmpty() {
   this.text = ""
+}
+
+
+fun TextView.withHighlightRaw(text: String) {
+  this.setTextColor(ContextCompat.getColor(context, R.color.black))
+  if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+    this.setText(Html.fromHtml(text, HtmlCompat.FROM_HTML_MODE_LEGACY), TextView.BufferType.SPANNABLE)
+  } else {
+    this.setText(Html.fromHtml(text), TextView.BufferType.SPANNABLE)
+  }
 }

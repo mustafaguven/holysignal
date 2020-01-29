@@ -5,130 +5,39 @@
     android:layout_height="match_parent"
     android:background="@drawable/bg_vector_6">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-
         android:paddingLeft="16dp"
         android:paddingRight="16dp">
 
-        <TextView
-            android:id="@+id/tvTitle"
-            android:layout_width="match_parent"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tvMail"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="10dp"
-            android:fontFamily="@font/gotham_narrow_bold"
-            android:gravity="center"
-            android:text="@string/sign_up"
-            android:textColor="@color/black"
-            android:textSize="22sp"
-            app:layout_constraintBottom_toTopOf="@+id/tvName"
+            android:textColorHint="@color/black"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/btnSendAsAGift"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_chainStyle="packed" />
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/tvName"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:textColorHint="@color/black"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintBottom_toTopOf="@+id/tvSurname"
-            app:layout_constraintLeft_toLeftOf="@id/tvTitle"
-            app:layout_constraintRight_toRightOf="@id/tvTitle"
-            app:layout_constraintTop_toBottomOf="@id/tvTitle">
+            app:layout_constraintVertical_chainStyle="packed">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etName"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/gotham_narrow_book"
-                android:hint="@string/name"
-                android:inputType="text"
-                android:textColor="@color/black"
-                android:textSize="20sp" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/tvSurname"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:textColorHint="@color/black"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintBottom_toTopOf="@+id/tvEmail"
-            app:layout_constraintLeft_toLeftOf="@id/tvName"
-            app:layout_constraintRight_toRightOf="@id/tvName"
-            app:layout_constraintTop_toBottomOf="@id/tvName">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etSurname"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/gotham_narrow_book"
-                android:hint="@string/surname"
-                android:inputType="text"
-                android:textColor="@color/black"
-                android:textSize="20sp" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/tvEmail"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:textColorHint="@color/black"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintBottom_toTopOf="@+id/tvPassword"
-            app:layout_constraintLeft_toLeftOf="@id/tvSurname"
-            app:layout_constraintRight_toRightOf="@id/tvSurname"
-            app:layout_constraintTop_toBottomOf="@id/tvSurname">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etEmail"
+                android:id="@+id/etMail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/gotham_narrow_book"
                 android:hint="@string/email"
-                android:inputType="textEmailAddress"
-                android:textColor="@color/black"
-                android:textSize="20sp" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/tvPassword"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:textColorHint="@color/black"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintBottom_toTopOf="@+id/btnSignUp"
-            app:layout_constraintLeft_toLeftOf="@id/tvEmail"
-            app:layout_constraintRight_toRightOf="@id/tvEmail"
-            app:layout_constraintTop_toBottomOf="@id/tvEmail">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etPassword"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/gotham_narrow_book"
-                android:hint="@string/password"
-                android:inputType="textPassword"
+                android:inputType="text"
                 android:textColor="@color/black"
                 android:textSize="20sp" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnSignUp"
+            android:id="@+id/btnSendAsAGift"
             style="@style/TheButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -136,11 +45,11 @@
             android:layout_marginTop="10dp"
             android:layout_marginEnd="10dp"
             android:layout_marginBottom="5dp"
-            android:text="@string/ok"
+            android:text="@string/send_gift"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="@id/tvPassword"
-            app:layout_constraintRight_toRightOf="@id/tvPassword"
-            app:layout_constraintTop_toBottomOf="@id/tvPassword" />
+            app:layout_constraintLeft_toLeftOf="@id/tvMail"
+            app:layout_constraintRight_toRightOf="@id/tvMail"
+            app:layout_constraintTop_toBottomOf="@id/tvMail" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

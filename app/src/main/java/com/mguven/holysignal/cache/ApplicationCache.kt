@@ -169,6 +169,7 @@ class ApplicationCache(private val applicationSharedPreferences: SharedPreferenc
   }
 
   fun clear() {
+    updateMemberId(-1)
     this.applicationSharedPreferences.edit().clear().apply()
   }
 
@@ -192,5 +193,6 @@ class ApplicationCache(private val applicationSharedPreferences: SharedPreferenc
     setObjectWithGenericSerializer(CacheKey.TIME_PREFERENCE, timePreference)
   }
 
+  fun showAdvertisement() = getMemberId() == -1
 
 }

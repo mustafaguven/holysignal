@@ -12,6 +12,8 @@
     <color name="error">#FF0000</color>
     <color name="blue">#95C4F1</color>
     <color name="orange">#FF9800</color>
+    <color name="yellow">#FFEB3B</color>
+    <color name="dark_orange">#AC6900</color>
     <color name="button_green">#3f974b</color>
     <color name="magenta">#bc13a0</color>
 </resources>

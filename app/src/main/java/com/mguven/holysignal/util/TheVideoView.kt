@@ -1,4 +1,4 @@
-package com.mavi.kartus.custom
+package com.mguven.holysignal.util
 
 import android.content.Context
 import android.media.MediaPlayer
@@ -10,12 +10,11 @@ import android.util.AttributeSet
 import android.view.View
 import android.widget.MediaController
 import android.widget.VideoView
-import com.mavi.kartus.KartusApplication
-import com.mavi.kartus.utility.DeviceUtil
+import com.mguven.holysignal.TheApplication
 import timber.log.Timber
 
 
-class MaviVideoView @JvmOverloads constructor(
+class TheVideoView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) :
     VideoView(context, attrs,
         defStyleAttr), OnPreparedListener, OnCompletionListener, OnErrorListener {
@@ -25,7 +24,7 @@ class MaviVideoView @JvmOverloads constructor(
     private const val MAX: Int = 100
   }
 
-  private val deviceUtil: DeviceUtil = DeviceUtil(context.applicationContext as KartusApplication)
+  private val deviceUtil: DeviceUtil = DeviceUtil(context.applicationContext as TheApplication)
   private var mediaPlayer: MediaPlayer? = null
   private var videoController: MediaController? = null
   private var boundedViews: Array<View>? = null

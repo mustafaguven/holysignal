@@ -17,6 +17,8 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat
 import androidx.viewpager2.widget.ViewPager2
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.MobileAds
 import com.mguven.holysignal.FlowController
 import com.mguven.holysignal.R
 import com.mguven.holysignal.TheApplication
@@ -112,18 +114,19 @@ class CardActivity : AbstractBaseActivity(),
     holyBookViewModel = getViewModel(HolyBookViewModel::class.java)
     updateFirstAyahIfLastShownAyahIsNull()
     deviceUtil.audioListener = this
+    initAdMob()
+  }
 
-    ivHelp.setOnClickListener {
-      showSpotlight()
-    }
-
-    ivAudio.setOnClickListener {
-      deviceUtil.playAudio(ConstantVariables.getAudioUrl(cache.getLastShownAyahNumber()))
-    }
-
-    ivAutoMode.setOnClickListener {
-      autoModeLevel = (autoModeLevel + 1) % AUTO_MODE_LEVEL_MAX
-      arrangeAutoModeLevel()
+  private fun initAdMob() {
+    if (cache.showAdvertisement()) {
+      flDownload.visibility = View.GONE
+      adBanner.visibility = View.VISIBLE
+      MobileAds.initialize(adBanner.context) {}
+      val adRequest = AdRequest.Builder().build()
+      adBanner.loadAd(adRequest)
+    } else {
+      flDownload.visibility = View.VISIBLE
+      adBanner.visibility = View.GONE
     }
   }
 
@@ -231,6 +234,10 @@ class CardActivity : AbstractBaseActivity(),
     val tenthTarget = makeTarget(targetViewId = R.id.tvViewingCount, descriptionId = R.string.spotlight_layout_10_text, radius = 200f)
     targets.add(tenthTarget)
 
+    val thirteenthTarget = makeTarget(layoutId = R.layout.layout_target_2, targetViewId = R.id.scrollview, descriptionId = R.string.spotlight_layout_13_text, radius = 500f)
+    targets.add(thirteenthTarget)
+
+
     val spotlight = Spotlight.Builder(this@CardActivity)
         .setTargets(targets)
         .setBackgroundColor(R.color.spotlight_background)
@@ -255,6 +262,7 @@ class CardActivity : AbstractBaseActivity(),
     tenthTarget.overlay?.findViewById<View>(R.id.next_target)?.setOnClickListener(nextTarget)
     eleventhTarget.overlay?.findViewById<View>(R.id.next_target)?.setOnClickListener(nextTarget)
     twelfthTarget.overlay?.findViewById<View>(R.id.next_target)?.setOnClickListener(nextTarget)
+    thirteenthTarget.overlay?.findViewById<View>(R.id.next_target)?.setOnClickListener(nextTarget)
 
     firstTarget.overlay?.findViewById<View>(R.id.close_target)?.setOnClickListener(closeSpotlight)
     secondTarget.overlay?.findViewById<View>(R.id.close_target)?.setOnClickListener(closeSpotlight)
@@ -296,9 +304,9 @@ class CardActivity : AbstractBaseActivity(),
       viewpager.adapter = ayahViewPagerAdapter
       populateAyahSet(playmode)
       initListeners()
+      cache.updateAyahSearchResult(null)
     }
   }
-
 
   private fun arrangeCacheForOpening() {
     if (cache.getLastShownAyah() != null) {
@@ -312,6 +320,20 @@ class CardActivity : AbstractBaseActivity(),
   }
 
   private fun initListeners() {
+    ivHelp.setOnClickListener {
+      stopAutoMode()
+      showSpotlight()
+    }
+
+    ivAudio.setOnClickListener {
+      deviceUtil.playAudio(ConstantVariables.getAudioUrl(cache.getLastShownAyahNumber()))
+    }
+
+    ivAutoMode.setOnClickListener {
+      autoModeLevel = (autoModeLevel + 1) % AUTO_MODE_LEVEL_MAX
+      arrangeAutoModeLevel()
+    }
+
     ivPreferences.setOnClickListener {
       FlowController.launchMainActivity(this)
       ivPreferences.isEnabled = false
@@ -346,7 +368,7 @@ class CardActivity : AbstractBaseActivity(),
         else R.string.bookmark_change_warning_message), DialogInterface.OnClickListener { dialog, yes ->
           cache.updateBookmark(cache.getLastShownAyahNumber())
           ivBookMarkAyah.setImageResource(R.drawable.ic_bookmark_filled_24px)
-          ivAllBookmarks.visibility = if (cache.getBookmark() == ConstantVariables.EMPTY_BOOKMARK) View.GONE else View.VISIBLE
+          flAllBookmarks.visibility = if (cache.getBookmark() == ConstantVariables.EMPTY_BOOKMARK) View.GONE else View.VISIBLE
           dialog.dismiss()
         }, DialogInterface.OnClickListener { dialog, no ->
           dialog.dismiss()
@@ -355,7 +377,7 @@ class CardActivity : AbstractBaseActivity(),
         showYesNoDialog(getString(R.string.remove_bookmark_warning_message), DialogInterface.OnClickListener { dialog, yes ->
           cache.updateBookmark(ConstantVariables.EMPTY_BOOKMARK)
           ivBookMarkAyah.setImageResource(R.drawable.ic_bookmark_empty_24px)
-          ivAllBookmarks.visibility = if (cache.getBookmark() == ConstantVariables.EMPTY_BOOKMARK) View.GONE else View.VISIBLE
+          flAllBookmarks.visibility = if (cache.getBookmark() == ConstantVariables.EMPTY_BOOKMARK) View.GONE else View.VISIBLE
           dialog.dismiss()
         }, DialogInterface.OnClickListener { dialog, no ->
           dialog.dismiss()
@@ -380,6 +402,7 @@ class CardActivity : AbstractBaseActivity(),
 
     ivAddNote.setOnClickListener {
       if (deviceUtil.isConnected()) {
+        stopAutoMode()
         notesFragment = NotesFragment.newInstance(cache.getLastShownAyahNumber())
         notesFragment.show(supportFragmentManager, notesFragment.javaClass.simpleName)
       } else {
@@ -388,11 +411,13 @@ class CardActivity : AbstractBaseActivity(),
     }
 
     ivSelectSurah.setOnClickListener {
+      stopAutoMode()
       selectSurahFragment = SelectSurahFragment.newInstance()
       selectSurahFragment.show(supportFragmentManager, selectSurahFragment.javaClass.simpleName)
     }
 
     ivSearch.setOnClickListener {
+      stopAutoMode()
       searchWordInAyahsFragment = SearchWordInAyahsFragment.newInstance()
       searchWordInAyahsFragment.show(supportFragmentManager, searchWordInAyahsFragment.javaClass.simpleName)
     }
@@ -414,9 +439,13 @@ class CardActivity : AbstractBaseActivity(),
       goToSelectedAyah()
     }
 
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-      viewpager.setPageTransformer(DepthPageTransformer())
+    viewpager.setPageTransformer(DepthPageTransformer())
+
+
+    flDownload.setOnClickListener {
+      FlowController.launchDownloadActivity(this)
     }
+
 
     viewpager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
       override fun onPageScrollStateChanged(state: Int) {
@@ -440,15 +469,13 @@ class CardActivity : AbstractBaseActivity(),
         }
 
         if (isFirstPage(pos)) {
-          if (!firstOpening) {
-            if (canGoBack()) {
+          if (canGoBack()) {
+            if (!firstOpening) {
               ayahMap.clear()
               if (!canNotMove()) {
                 populateAyahSet(playmode)
               }
             }
-          }
-          if (canGoBack()) {
             goToSelectedAyah()
           }
         }
@@ -489,6 +516,7 @@ class CardActivity : AbstractBaseActivity(),
     ivSearch.visibility = View.VISIBLE
     ivSearchClose.visibility = View.GONE
     tvKeywords.visibility = View.GONE
+    flHelp.visibility = View.VISIBLE
   }
 
   private fun onPlayModeChanged(newPlayMode: Int = (playmode + 1) % playmodes.size): Int {
@@ -515,20 +543,31 @@ class CardActivity : AbstractBaseActivity(),
   }
 
   private fun populateAyahSet(playmode: Int) {
-    val newAyahSet: Map<Int, SurahAyahSampleData?> = when (playmode) {
-      Playmode.RANDOM -> populateAyahByRandom()
-      Playmode.REPEAT_AYAH -> populateRepeatAyah()
-      Playmode.AYAH_BY_AYAH -> populateAyahSetByAyahByAyah()
-      Playmode.REPEAT_SURAH -> populateAyahSetByRepeatSurah()
-      Playmode.FAVOURITES -> populateAyahsByFavourites()
-      Playmode.SEARCH -> populateBySearchResult()
-      else -> {
-        populateRepeatAyah()
+    try {
+      val newAyahSet: Map<Int, SurahAyahSampleData?> = when (playmode) {
+        Playmode.RANDOM -> populateAyahByRandom()
+        Playmode.REPEAT_AYAH -> populateRepeatAyah()
+        Playmode.AYAH_BY_AYAH -> populateAyahSetByAyahByAyah()
+        Playmode.REPEAT_SURAH -> {
+          val lastShownAyah = cache.getLastShownAyah()!!
+          populateAyahSetByRepeatSurah(lastShownAyah.ayahNumber,
+              lastShownAyah.startingAyahNumber,
+              lastShownAyah.endingAyahNumber)
+        }
+        Playmode.FAVOURITES -> populateAyahsByFavourites()
+        Playmode.SEARCH -> populateBySearchResult()
+        else -> {
+          populateRepeatAyah()
+        }
       }
-    }
-    ayahMap.putAll(newAyahSet)
 
-    updateAdapter()
+      ayahMap.putAll(newAyahSet)
+
+      updateAdapter()
+    } catch (ex: Exception) {
+      ayahMap.clear()
+      updateAdapter()
+    }
   }
 
   private fun populateBySearchResult(): Map<Int, SurahAyahSampleData?> {
@@ -573,9 +612,9 @@ class CardActivity : AbstractBaseActivity(),
     return theMap
   }
 
-  private fun populateAyahSetByRepeatSurah(ayahNumber: Int = cache.getLastShownAyahNumber(),
-                                           start: Int = cache.getLastShownAyah()!!.startingAyahNumber,
-                                           end: Int = cache.getLastShownAyah()!!.endingAyahNumber): Map<Int, SurahAyahSampleData?> {
+  private fun populateAyahSetByRepeatSurah(ayahNumber: Int,
+                                           start: Int,
+                                           end: Int): Map<Int, SurahAyahSampleData?> {
     val theMap = mutableMapOf<Int, SurahAyahSampleData?>()
     val margin = ayahNumber - start
     diffByPrevious = if (margin >= AYAH_SET_MAX_SIZE) AYAH_SET_MAX_SIZE else margin
@@ -612,6 +651,9 @@ class CardActivity : AbstractBaseActivity(),
       ivFavourite.visibility = View.GONE
       ivAddNote.visibility = View.GONE
       ivBookMarkAyah.visibility = View.GONE
+      ivAutoMode.visibility = View.GONE
+      ivHelp.visibility = View.GONE
+      ivAudio.visibility = View.GONE
     } else {
       viewpager.visibility = View.VISIBLE
       tvEmptyMessage.visibility = View.GONE
@@ -620,6 +662,9 @@ class CardActivity : AbstractBaseActivity(),
       ivFavourite.visibility = View.VISIBLE
       ivAddNote.visibility = View.VISIBLE
       ivBookMarkAyah.visibility = View.VISIBLE
+      ivAutoMode.visibility = View.VISIBLE
+      ivHelp.visibility = View.VISIBLE
+      ivAudio.visibility = View.VISIBLE
       ayahViewPagerAdapter.updateAyahSet(ayahMap)
     }
     Log.e("AYAH_SET", "playmode: $playmode  mapSize: ${ayahMap.size} map: $ayahMap")
@@ -636,7 +681,7 @@ class CardActivity : AbstractBaseActivity(),
     //holyBookViewModel.getFavouriteCountByAyahNumber(ayahNumber)
     ivFavourite.visibility = View.VISIBLE
     ivBookMarkAyah.setImageResource(if (cache.getBookmark() == cache.getLastShownAyahNumber()) R.drawable.ic_bookmark_filled_24px else R.drawable.ic_bookmark_empty_24px)
-    ivAllBookmarks.visibility = if (cache.getBookmark() == ConstantVariables.EMPTY_BOOKMARK) View.GONE else View.VISIBLE
+    flAllBookmarks.visibility = if (cache.getBookmark() == ConstantVariables.EMPTY_BOOKMARK) View.GONE else View.VISIBLE
     lastOpenedAyahNo = cache.getLastShownAyahNumber()
 
   }
@@ -692,6 +737,7 @@ class CardActivity : AbstractBaseActivity(),
     tvKeywords.visibility = View.VISIBLE
     tvKeywords.text = getString(R.string.ayah_search_found_text, searchResult.keywords, searchResult.list?.size
         ?: 0)
+    flHelp.visibility = View.GONE
   }
 
   override fun onSearchWordEntered(words: MutableSet<String>) {
@@ -759,8 +805,8 @@ class CardActivity : AbstractBaseActivity(),
 
   override fun onAyahClicked() {
     isFavourite = !isFavourite
-    upsertFavourite()
     playHeartAnimation()
+    upsertFavourite()
   }
 
   private fun playHeartAnimation() {
@@ -795,6 +841,10 @@ class CardActivity : AbstractBaseActivity(),
   override fun onPause() {
     super.onPause()
     deviceUtil.stopAudio()
+    stopAutoMode()
+  }
+
+  private fun stopAutoMode() {
     autoModeLevel = 0
     arrangeAutoModeLevel()
   }

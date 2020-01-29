@@ -2,5 +2,5 @@ package com.mguven.holysignal.model.request
 
 import com.squareup.moshi.Json
 
-data class RequestDownload(@Json(name = "memberId") val memberId: Int,
-                                @Json(name = "orderId") val orderId: Int)
+data class RequestAddDownload(@Json(name = "memberId") val memberId: Int,
+                                @Json(name = "editionId") val editionId: Int)

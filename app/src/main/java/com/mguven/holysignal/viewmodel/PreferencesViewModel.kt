@@ -8,16 +8,21 @@ import com.mguven.holysignal.db.ApplicationDatabase
 import com.mguven.holysignal.db.entity.AyahSampleData
 import com.mguven.holysignal.db.entity.EditionAdapterData
 import com.mguven.holysignal.db.entity.SurahTranslateData
-import com.mguven.holysignal.model.request.RequestMemberSession
-import com.mguven.holysignal.model.request.RequestSignIn
-import com.mguven.holysignal.model.request.RequestSignUp
-import com.mguven.holysignal.model.response.SignInEntity
+import com.mguven.holysignal.exception.Exceptions
+import com.mguven.holysignal.model.SetNewPasswordResponseEntity
+import com.mguven.holysignal.model.SignInResponseEntity
+import com.mguven.holysignal.model.request.*
+import com.mguven.holysignal.model.response.GoogleUserProfileResponse
+import com.mguven.holysignal.model.response.ResponseEntity
+import com.mguven.holysignal.network.GoogleApi
 import com.mguven.holysignal.network.MemberApi
+import com.mguven.holysignal.network.PasswordRecoveryApi
 import com.mguven.holysignal.network.SurahApi
 import com.mguven.holysignal.util.DeviceUtil
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import net.openid.appauth.TokenResponse
 import javax.inject.Inject
 
 
@@ -26,10 +31,14 @@ constructor(private val surahApi: SurahApi,
             private val memberApi: MemberApi,
             private val database: ApplicationDatabase,
             private val cache: ApplicationCache,
-            private val deviceUtil: DeviceUtil) : BaseViewModel() {
+            private val deviceUtil: DeviceUtil,
+            private val googleApi: GoogleApi,
+            private val passwordRecoveryApi: PasswordRecoveryApi) : BaseViewModel() {
 
   val isMember = MutableLiveData<Int>()
-  val memberShipData = MutableLiveData<SignInEntity>()
+  val memberShipData = MutableLiveData<ResponseEntity<SignInResponseEntity>>()
+  val sendPasswordLiveData = MutableLiveData<ResponseEntity<Int>>()
+  val setPasswordLiveData = MutableLiveData<ResponseEntity<SetNewPasswordResponseEntity>>()
 
   suspend fun getMaxAyahCount() =
       database.ayahSampleDataDao().getMaxAyahCountByEditionId(cache.getTopTextEditionId())
@@ -142,13 +151,74 @@ constructor(private val surahApi: SurahApi,
     if (deviceUtil.isConnected()) {
       CoroutineScope(Dispatchers.IO).launch {
         val response = memberApi.save(RequestSignUp(name, surname, email, password, cache.getUUID()))
-        if (response.status == ConstantVariables.RESPONSE_OK) {
+        if (response.status == ConstantVariables.RESPONSE_OK
+            || (response.status == Exceptions.EMAIL_IS_WAITING_FOR_VERIFICATION)) {
           database.preferencesDataDao().updateUserInfo(response.data!!.memberId, name, surname)
           cache.updateToken(response.data.token)
           cache.updateMemberId(response.data.memberId)
         }
         memberShipData.postValue(response)
       }
+    }
+  }
+
+  fun signInWithGoogle(tokenResponse: TokenResponse) {
+    if (deviceUtil.isConnected()) {
+      CoroutineScope(Dispatchers.IO).launch {
+        val userInfo = googleApi.getUserInfo(tokenResponse.accessToken!!)
+        signInOrSignUp(userInfo)
+      }
+    }
+  }
+
+  private suspend fun signInOrSignUp(userInfo: GoogleUserProfileResponse) {
+    val password = userInfo.email.hashCode().toString()
+    val signInResponse = memberApi.signIn(RequestSignIn(userInfo.email, password, cache.getUUID()))
+    if (signInResponse.status == ConstantVariables.RESPONSE_OK
+        || (signInResponse.status == Exceptions.EMAIL_IS_WAITING_FOR_VERIFICATION)) {
+      database.preferencesDataDao().updateUserInfo(signInResponse.data!!.memberId, userInfo.given_name, userInfo.family_name)
+      cache.updateToken(signInResponse.data.token)
+      cache.updateMemberId(signInResponse.data.memberId)
+    } else if (signInResponse.status == Exceptions.SESSION_IS_DIFFERENT || signInResponse.status == Exceptions.STORED_PHONE_IS_CHANGED) {
+      updateSessionNo(userInfo.email, password)
+    } else if (signInResponse.status == Exceptions.STORED_PHONE_CHANGED_MORE_THAN_TWO_TIMES_AND_IS_UNUSABLE_NOW) {
+      memberShipData.postValue(signInResponse)
+    } else {
+      signUp(userInfo.given_name, userInfo.family_name, userInfo.email, password)
+    }
+  }
+
+  fun signInWithFacebook(email: String, firstName: String, lastName: String) {
+    CoroutineScope(Dispatchers.IO).launch {
+      Log.e("signInWithFacebook", "$email --- $firstName --- $lastName")
+      val password = firstName.plus(lastName).hashCode().toString()
+      val signInResponse = memberApi.signIn(RequestSignIn(email, password, cache.getUUID()))
+      if (signInResponse.status == ConstantVariables.RESPONSE_OK
+          || (signInResponse.status == Exceptions.EMAIL_IS_WAITING_FOR_VERIFICATION)) {
+        database.preferencesDataDao().updateUserInfo(signInResponse.data!!.memberId, firstName, lastName)
+        cache.updateToken(signInResponse.data.token)
+        cache.updateMemberId(signInResponse.data.memberId)
+      } else if (signInResponse.status == Exceptions.SESSION_IS_DIFFERENT || signInResponse.status == Exceptions.STORED_PHONE_IS_CHANGED) {
+        updateSessionNo(email, password)
+      } else if (signInResponse.status == Exceptions.STORED_PHONE_CHANGED_MORE_THAN_TWO_TIMES_AND_IS_UNUSABLE_NOW) {
+        memberShipData.postValue(signInResponse)
+      } else {
+        signUp(firstName, lastName, email, password)
+      }
+    }
+  }
+
+  fun sendPasswordRecoveryMail(email: String) {
+    CoroutineScope(Dispatchers.IO).launch {
+      val validationNumber= passwordRecoveryApi.reset(RequestPasswordReset(email))
+      sendPasswordLiveData.postValue(validationNumber)
+    }
+  }
+
+  fun setNewPassword(email: String, newPassword: String) {
+    CoroutineScope(Dispatchers.IO).launch {
+      val result= passwordRecoveryApi.setNewPassword(RequestSetNewPassword(email, newPassword))
+      setPasswordLiveData.postValue(result)
     }
   }
 

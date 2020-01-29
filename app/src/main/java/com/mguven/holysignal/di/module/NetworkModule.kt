@@ -18,6 +18,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import java.util.concurrent.TimeUnit
+import javax.inject.Named
 import javax.inject.Singleton
 
 
@@ -25,7 +26,8 @@ import javax.inject.Singleton
 class NetworkModule {
 
   companion object {
-    const val BASE_API = "https://talmmc6e1j.execute-api.eu-west-1.amazonaws.com/test/"
+    const val BASE_API = "https://api.holysignal.com/v1/"
+    const val GOOGLE_BASE_API = "https://www.googleapis.com/oauth2/v3/"
     const val CONNECTION_TIMEOUT = 60L //as milliseconds
     const val READ_TIMEOUT = 60L //as milliseconds
     const val APPLICATION_JSON = "application/json"
@@ -35,6 +37,7 @@ class NetworkModule {
 
   @Provides
   @Singleton
+  @Named("retrofit")
   fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
     return Retrofit.Builder()
         .baseUrl(BASE_API)
@@ -47,24 +50,51 @@ class NetworkModule {
 
   @Provides
   @Singleton
-  fun provideNewsApi(retrofit: Retrofit): NewsApi = retrofit.create(NewsApi::class.java)
+  @Named("google_retrofit")
+  fun provideGoogleRetrofit(okHttpClient: OkHttpClient): Retrofit {
+    return Retrofit.Builder()
+        .baseUrl(GOOGLE_BASE_API)
+        .client(okHttpClient)
+        .addCallAdapterFactory(CoroutineCallAdapterFactory())
+        .addConverterFactory(MoshiConverterFactory.create())
+        .build()
+  }
 
   @Provides
   @Singleton
-  fun provideSurahApi(retrofit: Retrofit): SurahApi = retrofit.create(SurahApi::class.java)
+  fun provideNewsApi(@Named("retrofit") retrofit: Retrofit): NewsApi = retrofit.create(NewsApi::class.java)
 
   @Provides
   @Singleton
-  fun provideMemberApi(retrofit: Retrofit): MemberApi = retrofit.create(MemberApi::class.java)
+  fun provideSurahApi(@Named("retrofit") retrofit: Retrofit): SurahApi = retrofit.create(SurahApi::class.java)
 
   @Provides
   @Singleton
-  fun provideNotesApi(retrofit: Retrofit): NotesApi = retrofit.create(NotesApi::class.java)
-
+  fun provideMemberApi(@Named("retrofit") retrofit: Retrofit): MemberApi = retrofit.create(MemberApi::class.java)
 
   @Provides
   @Singleton
-  fun provideFavouritesApi(retrofit: Retrofit): FavouritesApi = retrofit.create(FavouritesApi::class.java)
+  fun provideNotesApi(@Named("retrofit") retrofit: Retrofit): NotesApi = retrofit.create(NotesApi::class.java)
+
+  @Provides
+  @Singleton
+  fun provideFavouritesApi(@Named("retrofit") retrofit: Retrofit): FavouritesApi = retrofit.create(FavouritesApi::class.java)
+
+  @Provides
+  @Singleton
+  fun provideOrderApi(@Named("retrofit") retrofit: Retrofit): OrderApi = retrofit.create(OrderApi::class.java)
+
+  @Provides
+  @Singleton
+  fun provideDownloadApi(@Named("retrofit") retrofit: Retrofit): DownloadApi = retrofit.create(DownloadApi::class.java)
+
+  @Provides
+  @Singleton
+  fun providePasswordRecoveryApi(@Named("retrofit") retrofit: Retrofit): PasswordRecoveryApi = retrofit.create(PasswordRecoveryApi::class.java)
+
+  @Provides
+  @Singleton
+  fun provideGoogleApi(@Named("google_retrofit") retrofit: Retrofit): GoogleApi = retrofit.create(GoogleApi::class.java)
 
   @Provides
   @Singleton

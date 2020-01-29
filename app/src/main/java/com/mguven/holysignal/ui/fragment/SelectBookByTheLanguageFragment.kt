@@ -22,7 +22,7 @@ import com.mguven.holysignal.extension.bold
 import com.mguven.holysignal.ui.AbstractBaseActivity
 import com.mguven.holysignal.ui.adapter.SearchableSpinnerAdapter
 import com.mguven.holysignal.viewmodel.DownloadViewModel
-import com.toptoche.searchablespinnerlibrary.SearchableSpinner
+import com.mguven.holysignal.util.searchablespinner.SearchableSpinner
 import kotlinx.coroutines.launch
 
 
@@ -78,7 +78,9 @@ class SelectBookByTheLanguageFragment : AbstractBaseFragment() {
   fun downloadBook() {
     if (!isDownloadingStarted && list.isNotEmpty()) {
       isDownloadingStarted = true
-      downloadViewModel.download(list[spBook.selectedItemPosition].Id, ConstantVariables.TOP_TEXT)
+      val editionId = list[spBook.selectedItemPosition].Id
+      downloadViewModel.download(editionId)
+      downloadViewModel.addDownload(editionId)
     }
   }
 

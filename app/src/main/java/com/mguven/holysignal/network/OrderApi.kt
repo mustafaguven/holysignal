@@ -1,24 +1,15 @@
 package com.mguven.holysignal.network
 
 
-import com.mguven.holysignal.model.request.RequestAddFavourites
-import com.mguven.holysignal.model.request.RequestMemberSession
-import com.mguven.holysignal.model.response.AddFavouritesEntity
-import com.mguven.holysignal.model.response.GetFavouriteCountByAyahNumberEntity
-import com.mguven.holysignal.model.response.SurahEntity
-import com.mguven.holysignal.model.response.SurahTranslateResponseEntity
+import com.mguven.holysignal.model.request.RequestAddOrder
+import com.mguven.holysignal.model.response.AddOrderResponseEntity
+import com.mguven.holysignal.model.response.ResponseEntity
 import retrofit2.http.Body
-
-import retrofit2.http.GET
 import retrofit2.http.POST
-import retrofit2.http.Query
 
-interface FavouritesApi {
+interface OrderApi {
 
-  @POST("favourites/addorremove")
-  suspend fun addFavourite(@Body body: RequestAddFavourites): AddFavouritesEntity
-
-  @GET("favourites/getfavouritecountbyayahnumber")
-  suspend fun getFavouriteCountByAyahNumber(@Query("ayahNumber") ayahNumber: Int): GetFavouriteCountByAyahNumberEntity
+  @POST("order/add")
+  suspend fun addOrder(@Body body: RequestAddOrder): ResponseEntity<AddOrderResponseEntity>
 
 }

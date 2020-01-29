@@ -112,6 +112,16 @@ abstract class AbstractBaseActivity : AppCompatActivity(), LifecycleObserver, Co
         .setNeutralButton(getString(R.string.ok), dialog).show()
   }
 
+  fun showInfoDialog(info: String, dialogListener: DialogInterface.OnClickListener? = null) {
+    val dialog = DialogInterface.OnClickListener { dialog, neutral ->
+      dialog.dismiss()
+    }
+    val builder = AlertDialog.Builder(this)
+    builder.setMessage(info)
+        .setTitle(R.string.info)
+        .setNeutralButton(getString(R.string.ok), dialogListener ?: dialog).show()
+  }
+
   override fun onNetworkConnectionChanged(isConnected: Boolean) {
     Log.e("AAA", "network changed")
   }

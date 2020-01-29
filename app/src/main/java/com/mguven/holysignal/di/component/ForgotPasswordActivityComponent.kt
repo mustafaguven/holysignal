@@ -1,10 +1,10 @@
 package com.mguven.holysignal.di.component
 
-import com.mguven.holysignal.di.module.LoginActivityModule
-import com.mguven.holysignal.ui.LoginActivity
+import com.mguven.holysignal.di.module.ForgotPasswordActivityModule
+import com.mguven.holysignal.ui.ForgotPasswordActivity
 import dagger.Subcomponent
 
-@Subcomponent(modules = [LoginActivityModule::class])
-interface ForgotActivityComponent {
-  fun inject(loginActivity: LoginActivity)
+@Subcomponent(modules = [ForgotPasswordActivityModule::class])
+interface ForgotPasswordActivityComponent {
+  fun inject(forgotPasswordActivity: ForgotPasswordActivity)
 }

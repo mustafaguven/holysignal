@@ -4,15 +4,12 @@
     <string name="edition_select_text">Lütfen bir versiyon seçin</string>
     <string name="main_save_and_close">Kaydet</string>
     <string name="main_save">Kaydet</string>
-    <string name="main_primary_text">Birinci Kitabı Seç</string>
+    <string name="main_primary_text">Birinci Kitap</string>
     <string name="main_alternative_text">İkinci Kitap</string>
-
     <string name="added_to_favourites">Favorilere eklendi</string>
     <string name="removed_from_favourites">Favorilerden çıkarıldı</string>
-
     <string name="playmode_snackbar_message">Yeni oynatma listesi: %1$s</string>
     <string name="add_note_hint">Bu ayet ile ilgili notunuzu girin</string>
-
     <string name="note_saved_successfully">Notunuz başarıyla kaydedildi</string>
     <string name="note_should_be_filled">Lütfen eklemek istediğiniz notu girin</string>
     <string name="note">Not</string>
@@ -36,7 +33,7 @@
     <string name="total_viewing_count">%1$d kez görüntülendi</string>
     <string name="x_ayah_displayed">%1$d%%</string>
     <string name="preferences">Tercihler</string>
-    <string name="signup_warning">40\'tan fazla dil,\n100\'den fazla çeviri\n0 reklam\n\n10 saniyede hesap oluştur\nKuran\'ı tekrar tekrar oku</string>
+    <string name="signup_warning">40\'tan fazla dil,\n100\'den fazla çeviri\n\n10 saniyede hesap oluştur\nKuran\'ı tekrar tekrar oku</string>
     <string name="welcome_message_for_member">Merhaba\n%1$s</string>
     <string name="order">Satın Al</string>
     <string name="login_title">Giriş Yap</string>
@@ -126,10 +123,11 @@
     <string name="enter_your_email">Eposta adresinizi belirtin</string>
     <string name="validation_code">Onay Kodu</string>
     <string name="new_password">Yeni Şifre</string>
-    <string name="new_password_confirm">Tekrar yeni şifre</string>
+    <string name="new_password_confirm">Tekrar Yeni Şifre</string>
     <string name="invalid_validation_code">Hatalı onay kodu. (Lütfen Eposta adresinize gelen onay kodunu doğru girdiğinizden emin olun)</string>
     <string name="password_reset_step_2_tip">Eposta adresinize gönderdiğimiz onay koduyla birlikte yeni şifrenizi oluşturun</string>
-    <string name="new_password_has_been_set_successfully">Yeni şifre başarıyla oluşturuldu. Yeni şifrenizle sisteme giriş yapabilirsiniz.</string>
+    <string name="new_password_has_been_set_successfully">Şifre başarıyla tanımlandı. Yeni şifrenizle hemen sisteme giriş yapabilirsiniz.</string>
+    <string name="password_reset_error">Girilen bilgilerde hata var, lütfen tekrar deneyin</string>
 
     <string-array name="playmodes">
         <item>Ayetler karışık şekilde gösterilecek</item>

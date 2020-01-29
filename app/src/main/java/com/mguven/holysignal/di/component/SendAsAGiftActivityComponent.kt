@@ -1,10 +1,10 @@
 package com.mguven.holysignal.di.component
 
-import com.mguven.holysignal.di.module.SignupActivityModule
-import com.mguven.holysignal.ui.SignupActivity
+import com.mguven.holysignal.di.module.SendAsAGiftActivityModule
+import com.mguven.holysignal.ui.SendAsAGiftActivity
 import dagger.Subcomponent
 
-@Subcomponent(modules = [SignupActivityModule::class])
-interface SignupActivityComponent {
-  fun inject(signupActivity: SignupActivity)
+@Subcomponent(modules = [SendAsAGiftActivityModule::class])
+interface SendAsAGiftActivityComponent {
+  fun inject(sendAsAGiftActivity: SendAsAGiftActivity)
 }

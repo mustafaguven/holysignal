@@ -2,8 +2,6 @@ package com.mguven.holysignal
 
 import android.content.Context
 import android.content.Intent
-import com.mguven.holysignal.constant.BundleKey
-import com.mguven.holysignal.model.Article
 import com.mguven.holysignal.ui.*
 
 class FlowController {
@@ -18,15 +16,23 @@ class FlowController {
       context.startActivity(i)
     }
 
-    fun launchLoginActivity(context: Context) {
-      context.startActivity(
-          Intent(context, LoginActivity::class.java)
-      )
+    fun launchLoginActivity(context: Context, clearTask: Boolean = false) {
+      val i = Intent(context, LoginActivity::class.java)
+      if (clearTask) {
+        i.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+      }
+      context.startActivity(i)
     }
 
     fun launchSignUpActivity(context: Context) {
       context.startActivity(
           Intent(context, SignupActivity::class.java)
+      )
+    }
+
+    fun launchForgotPasswordActivity(context: Context) {
+      context.startActivity(
+          Intent(context, ForgotPasswordActivity::class.java)
       )
     }
 
@@ -43,6 +49,12 @@ class FlowController {
     fun launchDownloadActivity(context: Context) {
       context.startActivity(
           Intent(context, DownloadActivity::class.java)
+      )
+    }
+
+    fun launchSendAsAGift(context: Context) {
+      context.startActivity(
+          Intent(context, SendAsAGiftActivity::class.java)
       )
     }
 

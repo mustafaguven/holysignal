@@ -105,9 +105,14 @@
     <string name="spotlight_layout_10_text">viewingcount spotlight text</string>
     <string name="spotlight_layout_11_text">Audio text</string>
     <string name="spotlight_layout_12_text">auto mode text</string>
+    <string name="spotlight_layout_13_text">auto mode text</string>
     <string name="works_all_day">Run all day long</string>
     <string name="works_by_specific_time_period">Run by time period below</string>
     <string name="finish_date_can_not_be_lower_than_start_date">Finish times can not be lower than start times</string>
+    <string name="email_is_waiting_for_verification">In order to be a verified user please click the link in the email which we have sent you.\n\nUnverified users can download book however they will not be able to make some features such as writing a note</string>
+    <string name="info">Information</string>
+    <string name="sign_up_with_google">Sign In with Google</string>
+    <string name="sign_up_with_facebook">Sign In with Facebook</string>
 
     <string-array name="playmodes">
         <item>Shuffle all ayahs</item>
@@ -116,4 +121,25 @@
         <item>Retrieve ayahs by sequentially</item>
         <item>Retrieve favourite ayahs</item>
     </string-array>
+    <string name="twitterApiSecret">TWITTER_SECRET</string>
+    <string name="facebookApiSecret">FB_SECRET</string>
+    <string name="user_canceled">User canceled the purchase flow</string>
+    <string name="error_occured_while_purchasing">Satın alma sırasında hata oluştu</string>
+    <string name="billing_client_is_not_ready">Billing client is not ready</string>
+    <string name="sku_detail_list_not_found">Satın alınacak ürün bulunamadı</string>
+    <string name="item_already_owned">Bu ürün zaten alınmış</string>
+    <string name="item_not_owned">Ürün alınmadı</string>
+
+    <string name="facebook_app_id">812316465895896</string>
+    <string name="fb_login_protocol_scheme">fb812316465895896</string>
+    <string name="send_gift">Send as a Gift</string>
+    <string name="password_confirm">Confirm Password</string>
+    <string name="enter_your_email">Please enter your email</string>
+    <string name="validation_code">Validation Code</string>
+    <string name="new_password">New Password</string>
+    <string name="new_password_confirm">Confirm new password</string>
+    <string name="invalid_validation_code">Invalid validation code</string>
+    <string name="password_reset_step_2_tip">Eposta adresinize gönderdiğimiz onay koduyla birlikte yeni şifrenizi oluşturun</string>
+    <string name="new_password_has_been_set_successfully">Yeni şifre başarıyla oluşturuldu</string>
+    <string name="password_reset_error">Girilen bilgilerde hata var, lütfen tekrar deneyin</string>
 </resources>

@@ -2,5 +2,5 @@ package com.mguven.holysignal.model.response
 
 import com.squareup.moshi.Json
 
-data class AddOrderEntity(
-    @Json(name = "action") val action: String)
+data class AddOrderResponseEntity(
+    @Json(name = "orderId") val orderId: Int)

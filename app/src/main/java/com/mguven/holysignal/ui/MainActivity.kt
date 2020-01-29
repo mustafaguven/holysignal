@@ -6,11 +6,15 @@ import android.util.Log
 import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.Toast
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import com.evernote.android.job.JobManager
 import com.evernote.android.job.JobRequest
+import com.facebook.login.LoginManager
+import com.google.android.gms.ads.AdListener
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.InterstitialAd
+import com.google.android.gms.ads.MobileAds
 import com.mguven.holysignal.FlowController
 import com.mguven.holysignal.R
 import com.mguven.holysignal.constant.ConstantVariables
@@ -30,6 +34,8 @@ class MainActivity : AbstractBaseActivity() {
 
   private lateinit var spannerList: List<EditionAdapterData>
   private lateinit var preferencesViewModel: PreferencesViewModel
+  private lateinit var interstitialAd: InterstitialAd
+
   var membershipState = ConstantVariables.MEMBER_IS_NOT_FOUND
   private val arrHours by lazy {
     val arr = arrayListOf<String>()
@@ -75,6 +81,11 @@ class MainActivity : AbstractBaseActivity() {
 
     initEditionSpinners()
 
+//    val videoView = findViewById<TheVideoView>(R.id.videoView)
+//    val uri: Uri = Uri.parse("android.resource://" + packageName + "/" + R.raw.video)
+//    videoView.setVideoURI(uri)
+//    videoView.start()
+
     btnOk.setOnClickListener {
       val topTextEditionSpinnerSelectedItem = spannerList[spTopTextEdition.selectedItemPosition]
       val bottomTextEditionSpinnerSelectedItem = spannerList[spBottomTextEdition.selectedItemPosition]
@@ -115,6 +126,10 @@ class MainActivity : AbstractBaseActivity() {
       clAlternateText.visibility = if (cbAltTextActivePassive.isChecked) View.VISIBLE else View.GONE
     }
 
+    btnSendAsAGift.setOnClickListener {
+      FlowController.launchSendAsAGift(this)
+    }
+
     btnDownload.setOnClickListener {
       FlowController.launchDownloadActivity(this)
     }
@@ -122,6 +137,11 @@ class MainActivity : AbstractBaseActivity() {
     btnSignOut.setOnClickListener {
       showYesNoDialog(getString(R.string.sign_out_warning_message), DialogInterface.OnClickListener { dialog, yes ->
         cache.clear()
+        try {
+          LoginManager.getInstance().logOut()
+        } catch (ex: Exception) {
+          //do nothing
+        }
         FlowController.launchMainActivity(this, true)
         dialog.dismiss()
       }, DialogInterface.OnClickListener { dialog, no ->
@@ -131,6 +151,31 @@ class MainActivity : AbstractBaseActivity() {
 
     btnSignIn.setOnClickListener {
       FlowController.launchLoginActivity(this)
+    }
+
+    initAdMob()
+  }
+
+  private fun initAdMob() {
+    if (cache.showAdvertisement()) {
+      showInterstitialAd()
+      adBanner.visibility = View.VISIBLE
+      MobileAds.initialize(adBanner.context) {}
+      val adRequest = AdRequest.Builder().build()
+      adBanner.loadAd(adRequest)
+    } else {
+      adBanner.visibility = View.GONE
+    }
+  }
+
+  private fun showInterstitialAd() {
+    interstitialAd = InterstitialAd(this)
+    interstitialAd.adUnitId = getString(R.string.addmobs_interstitial_id)
+    interstitialAd.loadAd(AdRequest.Builder().build())
+    interstitialAd.adListener = object: AdListener(){
+      override fun onAdLoaded() {
+        interstitialAd.show()
+      }
     }
   }
 
@@ -210,22 +255,22 @@ class MainActivity : AbstractBaseActivity() {
     when (membershipState) {
       ConstantVariables.MEMBER_IS_FOUND -> lifecycleScope.launch {
         val memberInfo = preferencesViewModel.getMemberInfo()
-        tvLoginMessage.text = getString(R.string.welcome_message_for_member, "${memberInfo[0].name} ${memberInfo[0].surname}")
+        tvLoginMessage.text = getString(R.string.welcome_message_for_member, "${memberInfo[0].name}")
+        //btnSendAsAGift.visibility = View.VISIBLE
         btnDownload.visibility = View.VISIBLE
         btnSignOut.visibility = View.VISIBLE
       }
       ConstantVariables.MEMBER_IS_NOT_FOUND -> {
         tvLoginMessage.isEnabled = true
         tvLoginMessage.text = getString(R.string.signup_warning)
-        tvLoginMessage.setTextColor(ContextCompat.getColor(this, R.color.error))
         btnSignIn.visibility = View.VISIBLE
       }
       ConstantVariables.SESSION_IS_DIFFERENT -> {
         showErrorDialog(getString(R.string.logout_due_to_session_number_is_different))
         cache.updateToken("token")
+        cache.updateMemberId(-1)
         updateMaxAyahCount()
         tvLoginMessage.isEnabled = true
-        tvLoginMessage.setTextColor(ContextCompat.getColor(this, R.color.error))
         btnSignIn.visibility = View.VISIBLE
         tvLoginMessage.text = getString(R.string.signup_warning)
       }
@@ -238,6 +283,7 @@ class MainActivity : AbstractBaseActivity() {
 
   private fun initEditionSpinners(selectedItem: Int = 0) {
     spTopTextEdition.setTitle(getString(R.string.select_book))
+    spBottomTextEdition.setTitle(getString(R.string.select_book))
     lifecycleScope.launch {
       spannerList = preferencesViewModel.getEditionNameIdList(cbTopOnlyFull.isChecked)
       btnOk.visibility = if (spannerList.isNotNullAndNotEmpty()) View.VISIBLE else View.GONE

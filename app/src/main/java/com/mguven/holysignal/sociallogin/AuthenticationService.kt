@@ -1,4 +1,4 @@
-package com.mguven.holysignal.network
+package com.mguven.holysignal.sociallogin
 
 import okhttp3.ResponseBody
 import retrofit2.Call

@@ -7,9 +7,11 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.AdView
+import com.google.android.gms.ads.MobileAds
 import com.mguven.holysignal.R
 import com.mguven.holysignal.cache.ApplicationCache
-import com.mguven.holysignal.db.entity.SurahAyahSampleData
 import com.mguven.holysignal.extension.highlighted
 import com.mguven.holysignal.extension.isNotNullAndNotEmpty
 import com.mguven.holysignal.extension.setEmpty
@@ -29,15 +31,15 @@ class AyahViewPagerAdapter(var activity: AbstractBaseActivity?,
   private var ayahMap: AyahMap? = null
 
 
-
-  override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder =
-      ViewHolder(
-          LayoutInflater.from(parent.context).inflate(
-              R.layout.ayah_view_adapter,
-              parent,
-              false
-          )
-      )
+  override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+    return ViewHolder(
+        LayoutInflater.from(parent.context).inflate(
+            R.layout.ayah_view_adapter,
+            parent,
+            false
+        )
+    )
+  }
 
   override fun getItemCount() = ayahMap?.size ?: 0
 
@@ -51,6 +53,7 @@ class AyahViewPagerAdapter(var activity: AbstractBaseActivity?,
   }
 
   inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    private val adBanner = view.findViewById<AdView>(R.id.adBanner)
     private val tvAyahNumber = view.findViewById<TextView>(R.id.tvAyahNumber)
     private val tvAyahTopText = view.findViewById<TextView>(R.id.tvAyahTopText)
     private val tvAyahBottomText = view.findViewById<TextView>(R.id.tvAyahBottomText)
@@ -60,7 +63,7 @@ class AyahViewPagerAdapter(var activity: AbstractBaseActivity?,
       getAyahBottomText(ayahNumber)
     }
 
-    private val onTouchListener = object: OnSwipeTouchListener(tvAyahTopText.context){
+    private val onTouchListener = object : OnSwipeTouchListener(tvAyahTopText.context) {
       override fun onDoubleTap() {
         listener?.onAyahClicked()
       }

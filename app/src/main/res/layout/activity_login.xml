@@ -93,21 +93,135 @@
                 android:layout_marginBottom="5dp"
                 android:text="@string/ok"
                 app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/flGoogle"
                 app:layout_constraintLeft_toLeftOf="@id/tvPassword"
                 app:layout_constraintRight_toRightOf="@id/tvPassword"
                 app:layout_constraintTop_toBottomOf="@id/tvPassword" />
+
+
+            <FrameLayout
+                android:id="@+id/flGoogle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="50dp"
+                android:background="@drawable/rounded"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackground"
+                android:onClick="onAuthenticateClickListener"
+                android:tag="google"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/flFacebook"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/btnSignIn">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/google"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:id="@+id/ivGoogle"
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
+                        android:drawableStart="@drawable/google"
+                        android:padding="16dp"
+                        android:src="@drawable/google"
+                        android:text="@string/sign_up_with_google"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="0dp"
+                        android:gravity="start|center"
+                        android:paddingEnd="15dp"
+                        android:text="@string/sign_up_with_google"
+                        android:textColor="@color/black"
+                        android:textSize="18sp"
+                        app:layout_constraintBottom_toBottomOf="@id/ivGoogle"
+                        app:layout_constraintLeft_toRightOf="@id/ivGoogle"
+                        app:layout_constraintTop_toTopOf="@id/ivGoogle" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/flFacebook"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/rounded"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackground"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/flGoogle">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/facebook"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:id="@+id/ivFacebook"
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
+                        android:drawableStart="@drawable/ic_facebook"
+                        android:padding="16dp"
+                        android:src="@drawable/ic_facebook"
+                        android:text="@string/sign_up_with_facebook"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="0dp"
+                        android:gravity="start|center"
+                        android:paddingEnd="15dp"
+                        android:text="@string/sign_up_with_facebook"
+                        android:textColor="@color/black"
+                        android:textSize="18sp"
+                        app:layout_constraintBottom_toBottomOf="@id/ivFacebook"
+                        app:layout_constraintLeft_toRightOf="@id/ivFacebook"
+                        app:layout_constraintTop_toTopOf="@id/ivFacebook" />
+
+                    <com.facebook.login.widget.LoginButton
+                        android:id="@+id/login_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="30dp"
+                        android:layout_marginBottom="30dp"
+                        android:visibility="gone"
+                        app:layout_constraintBottom_toBottomOf="@id/ivFacebook"
+                        app:layout_constraintLeft_toRightOf="@id/ivFacebook"
+                        app:layout_constraintTop_toTopOf="@id/ivFacebook" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </FrameLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/separator"
             android:layout_width="match_parent"
-            android:layout_height="0.5dp"
+            android:layout_height="1dp"
             android:layout_marginTop="10dp"
-            android:layout_marginBottom="5dp"
-            android:background="@color/gray"
-            app:layout_constraintBottom_toTopOf="@id/btnSignUp"
-            app:layout_constraintLeft_toLeftOf="parent" />
+            android:background="#3F51B5"
+            android:visibility="visible"
+            app:layout_constraintBottom_toTopOf="@id/bottomMenu" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/bottomMenu"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:background="#42A8DD"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent">
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnSignUp"
@@ -115,9 +229,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginBottom="5dp"
+            android:layout_marginEnd="5dp"
             android:text="@string/sign_up"
             app:backgroundTintMode="multiply"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -125,18 +237,58 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnForgotPassword"
-            style="@style/TheButton.Outlined"
+            style="@style/TheButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginStart="5dp"
             android:layout_marginEnd="10dp"
-            android:layout_marginBottom="5dp"
             android:text="@string/forgot_password"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <LinearLayout
+        android:id="@+id/buttonsLinearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:orientation="horizontal"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_margin="5dp"
+            android:layout_weight="1"
+            android:onClick="onAuthenticateClickListener"
+            android:tag="facebook"
+            android:text="Facebook" />
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_margin="5dp"
+            android:layout_weight="1"
+            android:onClick="onAuthenticateClickListener"
+            android:tag="twitter"
+            android:text="Twitter" />
+    </LinearLayout>
+
+
+    <TextView
+        android:id="@+id/accessTokenTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="Access token"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@id/buttonsLinearLayout"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
 
     <include layout="@layout/loadingprogress" />
 

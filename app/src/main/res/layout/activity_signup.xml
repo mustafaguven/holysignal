@@ -102,7 +102,6 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
-
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/tvPassword"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -110,7 +109,7 @@
             android:layout_height="wrap_content"
             android:textColorHint="@color/black"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintBottom_toTopOf="@+id/btnSignUp"
+            app:layout_constraintBottom_toTopOf="@+id/tvPasswordConfirm"
             app:layout_constraintLeft_toLeftOf="@id/tvEmail"
             app:layout_constraintRight_toRightOf="@id/tvEmail"
             app:layout_constraintTop_toBottomOf="@id/tvEmail">
@@ -127,6 +126,31 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tvPasswordConfirm"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textColorHint="@color/black"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/btnSignUp"
+            app:layout_constraintLeft_toLeftOf="@id/tvPassword"
+            app:layout_constraintRight_toRightOf="@id/tvPassword"
+            app:layout_constraintTop_toBottomOf="@id/tvPassword">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etPasswordConfirm"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/gotham_narrow_book"
+                android:hint="@string/password_confirm"
+                android:inputType="textPassword"
+                android:textColor="@color/black"
+                android:textSize="20sp" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnSignUp"
             style="@style/TheButton"
@@ -136,11 +160,11 @@
             android:layout_marginTop="10dp"
             android:layout_marginEnd="10dp"
             android:layout_marginBottom="5dp"
-            android:text="@string/sign_up"
+            android:text="@string/ok"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="@id/tvPassword"
-            app:layout_constraintRight_toRightOf="@id/tvPassword"
-            app:layout_constraintTop_toBottomOf="@id/tvPassword" />
+            app:layout_constraintLeft_toLeftOf="@id/tvPasswordConfirm"
+            app:layout_constraintRight_toRightOf="@id/tvPasswordConfirm"
+            app:layout_constraintTop_toBottomOf="@id/tvPasswordConfirm" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
