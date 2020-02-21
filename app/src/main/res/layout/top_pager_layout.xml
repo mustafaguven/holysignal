@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <TextView
+        android:gravity="center"
+        android:id="@+id/tvTopPagerText"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:text="asdasd"
+        android:textSize="28sp"
+        android:textStyle="bold"
+        android:textColor="@color/white"
+        android:fontFamily="@font/gotham_narrow_book"/>
+
+</RelativeLayout>

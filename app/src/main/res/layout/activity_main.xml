@@ -35,22 +35,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <TextView
-                android:id="@+id/tvLoginMessage"
+            <androidx.viewpager2.widget.ViewPager2
+                android:id="@+id/topPager"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/gotham_narrow_bold"
-                android:gravity="center"
-                android:padding="10dp"
-                android:text="@string/checking"
-                android:textColor="@color/black"
-                android:textSize="24sp"
+                android:layout_height="120dp"
+                android:layout_margin="5dp"
+                android:background="@drawable/rounded_blue"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:text="@string/signup_warning"
-                tools:textColor="@color/error" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/separator_1"
@@ -60,7 +54,7 @@
                 android:layout_marginEnd="10dp"
                 android:background="@color/gray"
                 android:visibility="gone"
-                app:layout_constraintTop_toBottomOf="@id/tvLoginMessage" />
+                app:layout_constraintTop_toBottomOf="@id/topPager" />
 
 
             <com.google.android.material.button.MaterialButton
@@ -119,66 +113,12 @@
                 android:visibility="visible"
                 app:layout_constraintTop_toBottomOf="@id/btnDownload" />
 
-            <TextView
-                android:id="@+id/tvTopTextEdition"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginEnd="10dp"
-                android:fontFamily="@font/gotham_narrow_bold"
-                android:text="@string/main_primary_text"
-                android:textColor="@color/black"
-                android:textSize="20sp"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/separator_top" />
-
-            <androidx.appcompat.widget.AppCompatCheckBox
-                android:id="@+id/cbTopOnlyFull"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"
-                android:buttonTint="@color/black"
-                android:checked="false"
-                android:fontFamily="@font/gotham_narrow_book"
-                android:gravity="start|center"
-                android:text="@string/filtered_by_only_full_versions"
-                android:textColor="@color/black"
-                android:textSize="20sp"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tvTopTextEdition" />
-
-            <com.mguven.holysignal.util.searchablespinner.SearchableSpinner
-                android:id="@+id/spTopTextEdition"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_marginStart="40dp"
-                android:layout_marginEnd="10dp"
-                android:background="@drawable/rounded"
-                android:fontFamily="@font/gotham_narrow_book"
-                android:padding="10dp"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toLeftOf="@id/cbTopOnlyFull"
-                app:layout_constraintTop_toBottomOf="@id/cbTopOnlyFull" />
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/separator_10"
-                android:layout_width="match_parent"
-                android:layout_height="0.5dp"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginEnd="10dp"
-                android:background="@color/gray"
-                android:visibility="visible"
-                app:layout_constraintTop_toBottomOf="@id/spTopTextEdition" />
-
             <androidx.appcompat.widget.AppCompatCheckBox
                 android:id="@+id/cbActivePassive"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="5dp"
                 android:layout_marginEnd="10dp"
                 android:buttonTint="@color/black"
                 android:checked="true"
@@ -189,7 +129,7 @@
                 android:textSize="20sp"
                 tools:text="ahdkj hsd kahd ks jldhal ksdja dkjahs dkasljd kljahsd jad has kjdhlaksd kjahds khas kdh kashd kahs"
                 app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/separator_10" />
+                app:layout_constraintTop_toBottomOf="@id/separator_top" />
 
             <androidx.appcompat.widget.AppCompatCheckBox
                 android:id="@+id/cbTimePreference"
@@ -258,22 +198,66 @@
                 app:layout_constraintTop_toBottomOf="@id/cbTimePreference" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/separator_11"
+                android:id="@+id/separator_middle"
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
                 android:layout_marginStart="10dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="5dp"
                 android:layout_marginEnd="10dp"
                 android:background="@color/gray"
                 android:visibility="visible"
-                app:layout_constraintTop_toBottomOf="@id/spHourStart" />
+                app:layout_constraintTop_toBottomOf="@id/spMinuteFinish" />
+
+            <TextView
+                android:id="@+id/tvTopTextEdition"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="10dp"
+                android:fontFamily="@font/gotham_narrow_bold"
+                android:text="@string/main_primary_text"
+                android:textColor="@color/black"
+                android:textSize="20sp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/separator_middle" />
+
+            <androidx.appcompat.widget.AppCompatCheckBox
+                android:id="@+id/cbTopOnlyFull"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:buttonTint="@color/black"
+                android:checked="false"
+                android:fontFamily="@font/gotham_narrow_book"
+                android:gravity="start|center"
+                android:text="@string/filtered_by_only_full_versions"
+                android:textColor="@color/black"
+                android:textSize="20sp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvTopTextEdition" />
+
+            <com.mguven.holysignal.util.searchablespinner.SearchableSpinner
+                android:id="@+id/spTopTextEdition"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginStart="40dp"
+                android:layout_marginEnd="10dp"
+                android:background="@drawable/rounded"
+                android:fontFamily="@font/gotham_narrow_book"
+                android:padding="10dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toLeftOf="@id/cbTopOnlyFull"
+                app:layout_constraintTop_toBottomOf="@id/cbTopOnlyFull" />
+
 
             <androidx.appcompat.widget.AppCompatCheckBox
                 android:id="@+id/cbAltTextActivePassive"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="5dp"
                 android:layout_marginEnd="10dp"
                 android:buttonTint="@color/black"
                 android:checked="true"
@@ -283,7 +267,7 @@
                 android:textColor="@color/black"
                 android:textSize="20sp"
                 app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/separator_11" />
+                app:layout_constraintTop_toBottomOf="@id/spTopTextEdition" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/clAlternateText"

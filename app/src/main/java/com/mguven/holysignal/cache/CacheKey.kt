@@ -2,6 +2,7 @@ package com.mguven.holysignal.cache
 
 object CacheKey {
 
+  const val SPOTLIGHT_SHOWN_STATE = "SPOTLIGHT_SHOWN_STATE"
   const val MEMBER_ID = "MEMBER_ID"
   const val ACTIVE_PASSIVE = "ACTIVE_PASSIVE"
   const val DEFINE_WORK_HOURS = "DEFINE_WORK_HOURS"

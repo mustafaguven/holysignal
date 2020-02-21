@@ -2,12 +2,14 @@ package com.mguven.holysignal.ui
 
 import android.content.DialogInterface
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
+import androidx.viewpager2.widget.ViewPager2
 import com.evernote.android.job.JobManager
 import com.evernote.android.job.JobRequest
 import com.facebook.login.LoginManager
@@ -24,10 +26,13 @@ import com.mguven.holysignal.extension.isNotNullAndNotEmpty
 import com.mguven.holysignal.job.LockScreenJob
 import com.mguven.holysignal.model.TimePreference
 import com.mguven.holysignal.ui.adapter.SearchableSpinnerAdapter
+import com.mguven.holysignal.ui.adapter.TopPagerAdapter
 import com.mguven.holysignal.viewmodel.PreferencesViewModel
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.loadingprogress.*
 import kotlinx.coroutines.launch
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 class MainActivity : AbstractBaseActivity() {
@@ -35,7 +40,12 @@ class MainActivity : AbstractBaseActivity() {
   private lateinit var spannerList: List<EditionAdapterData>
   private lateinit var preferencesViewModel: PreferencesViewModel
   private lateinit var interstitialAd: InterstitialAd
+  private val topPagerList by lazy {
+    return@lazy resources.getStringArray(R.array.toppagerlist).toList()
+  }
 
+  private var currentPage = 0
+  val adapter = TopPagerAdapter()
   var membershipState = ConstantVariables.MEMBER_IS_NOT_FOUND
   private val arrHours by lazy {
     val arr = arrayListOf<String>()
@@ -77,6 +87,8 @@ class MainActivity : AbstractBaseActivity() {
       initEditionSpinners()
     }
 
+    initTopPager()
+
     runJobScheduler()
 
     initEditionSpinners()
@@ -112,9 +124,9 @@ class MainActivity : AbstractBaseActivity() {
       prepareScreenByMembership(it)
     })
 
-    tvLoginMessage.setOnClickListener {
-      openLoginActivity()
-    }
+//    tvLoginMessage.setOnClickListener {
+//      openLoginActivity()
+//    }
 
     cbActivePassive.setOnClickListener {
       cache.updateActivePassive(cbActivePassive.isChecked)
@@ -154,6 +166,30 @@ class MainActivity : AbstractBaseActivity() {
     }
 
     initAdMob()
+  }
+
+  private fun initTopPager(){
+    topPager.adapter = adapter
+    adapter.setItem(topPagerList)
+
+    topPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+      override fun onPageSelected(position: Int) {
+        super.onPageSelected(position)
+        currentPage = position
+      }
+    })
+
+    val handler = Handler()
+    val update = Runnable {
+      topPager.setCurrentItem(currentPage % topPagerList.size, true)
+      currentPage++
+    }
+    val timer = Timer()
+    timer.schedule(object : TimerTask() {
+      override fun run() {
+        handler.post(update)
+      }
+    }, 0, 3000)
   }
 
   private fun initAdMob() {
@@ -251,18 +287,18 @@ class MainActivity : AbstractBaseActivity() {
     btnSignIn.visibility = View.GONE
     this.membershipState = value
 
-    tvLoginMessage.isEnabled = false
+    //tvLoginMessage.isEnabled = false
     when (membershipState) {
       ConstantVariables.MEMBER_IS_FOUND -> lifecycleScope.launch {
         val memberInfo = preferencesViewModel.getMemberInfo()
-        tvLoginMessage.text = getString(R.string.welcome_message_for_member, "${memberInfo[0].name}")
+        //tvLoginMessage.text = getString(R.string.welcome_message_for_member, "${memberInfo[0].name}")
         //btnSendAsAGift.visibility = View.VISIBLE
         btnDownload.visibility = View.VISIBLE
         btnSignOut.visibility = View.VISIBLE
       }
       ConstantVariables.MEMBER_IS_NOT_FOUND -> {
-        tvLoginMessage.isEnabled = true
-        tvLoginMessage.text = getString(R.string.signup_warning)
+        //tvLoginMessage.isEnabled = true
+        //tvLoginMessage.text = getString(R.string.signup_warning)
         btnSignIn.visibility = View.VISIBLE
       }
       ConstantVariables.SESSION_IS_DIFFERENT -> {
@@ -270,13 +306,13 @@ class MainActivity : AbstractBaseActivity() {
         cache.updateToken("token")
         cache.updateMemberId(-1)
         updateMaxAyahCount()
-        tvLoginMessage.isEnabled = true
+        //tvLoginMessage.isEnabled = true
         btnSignIn.visibility = View.VISIBLE
-        tvLoginMessage.text = getString(R.string.signup_warning)
+        //tvLoginMessage.text = getString(R.string.signup_warning)
       }
       else -> {
         btnSignIn.visibility = View.VISIBLE
-        tvLoginMessage.text = getString(R.string.local_mode_warning)
+        //tvLoginMessage.text = getString(R.string.local_mode_warning)
       }
     }
   }

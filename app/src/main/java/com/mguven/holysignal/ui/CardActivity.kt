@@ -115,6 +115,12 @@ class CardActivity : AbstractBaseActivity(),
     updateFirstAyahIfLastShownAyahIsNull()
     deviceUtil.audioListener = this
     initAdMob()
+    if(!cache.isSpotlightShown()){
+      Handler().postDelayed({
+        showSpotlight()
+        cache.updateSpotlightShownState(true)
+      }, 1500)
+    }
   }
 
   private fun initAdMob() {

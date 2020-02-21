@@ -4,9 +4,9 @@
     <string name="edition_select_text">Lütfen bir versiyon seçin</string>
     <string name="main_save_and_close">Kaydet</string>
     <string name="main_save">Kaydet</string>
-    <string name="main_primary_text">Birinci Kitap</string>
-    <string name="main_alternative_text">İkinci Kitap</string>
-    <string name="added_to_favourites">Favorilere eklendi</string>
+    <string name="main_primary_text">Birinci Dili Seç</string>
+    <string name="main_alternative_text">İkinci Dil</string>
+    <string name="added_to_favourites">Favorilerime eklendi</string>
     <string name="removed_from_favourites">Favorilerden çıkarıldı</string>
     <string name="playmode_snackbar_message">Yeni oynatma listesi: %1$s</string>
     <string name="add_note_hint">Bu ayet ile ilgili notunuzu girin</string>
@@ -22,49 +22,49 @@
     <string name="next_ayah">sonraki\nayet</string>
     <string name="previous_ayah">önceki\nayet</string>
     <string name="none_favourite_found">Favori bulunamadı</string>
-    <string name="favourites_are_getting_randomly">(*) Favoriler karışık olarak getirilir</string>
+    <string name="favourites_are_getting_randomly">(*) Favorilerimi karışık olarak göster</string>
     <string name="download">İndir</string>
     <string name="download_book">Kuran İndir</string>
     <string name="download_finished">indirme tamamlandı</string>
-    <string name="ayah_not_found_on_alternative_book">(Seçtiğiniz alternatif versiyonda bu ayet bulunamadı. Seçenekler ekranından ilgili kitabı indirerek tekrar deneyin.)</string>
+    <string name="ayah_not_found_on_alternative_book">(Deneme sürümünü kullanıyorsunuz. Bu ayeti görüntülemek için lütfen tam sürüme geçin.</string>
     <string name="limited_version">%1$s (İlk 50 ayet)</string>
     <string name="surah_ayahs_is_downloading">Ayetler indiriliyor (%1$s)</string>
     <string name="surah_translate_is_downloading">Sure isimleri indiriliyor (%1$s)</string>
     <string name="total_viewing_count">%1$d kez görüntülendi</string>
     <string name="x_ayah_displayed">%1$d%%</string>
     <string name="preferences">Tercihler</string>
-    <string name="signup_warning">40\'tan fazla dil,\n100\'den fazla çeviri\n\n10 saniyede hesap oluştur\nKuran\'ı tekrar tekrar oku</string>
+    <string name="signup_warning">40\'tan fazla dil,\n100\'den fazla çeviri\n\nHemen hesap oluştur\nTelefona her baktığında\nYeni bir ayet oku</string>
     <string name="welcome_message_for_member">Merhaba\n%1$s</string>
     <string name="order">Satın Al</string>
     <string name="login_title">Giriş Yap</string>
     <string name="username">Kullanıcı Adı</string>
     <string name="password">Şifre</string>
-    <string name="email">EPosta</string>
+    <string name="email">E-Posta</string>
     <string name="sign_in">Giriş Yap</string>
-    <string name="phone_changed_warning">Kayıtlı telefonunuzundan farklı bir telefonla oturum açıyorsunuz, güvenlik sebepleriyle yıl içinde bunu 2 kez yapabilirsiniz. Devam etmek istiyor musunuz?</string>
+    <string name="phone_changed_warning">Farklı bir cihazla oturum açıyorsunuz, güvenlik sebebiyle bunu yılda 2 kez yapabilirsiniz. Devam etmek istiyor musunuz?</string>
     <string name="yes">Evet</string>
     <string name="no">Hayır</string>
-    <string name="sign_in_error">Hatalı eposta ya da şifre girdiniz</string>
-    <string name="phone_invalid">1 yıl içinde 2\'den fazla farklı telefonla oturum açmak istediniz ve güvenlik nedeniyle oturumunuz kilitlendi. Tekrar aktif hale getirmek için lütfen iletişim bölümünden bize başvurun.</string>
-    <string name="session_no_is_different">Uygulama bilgilerinizde değişiklik var, yeni ayarlar kaydedilerek devam edilsin mi?</string>
-    <string name="local_mode_warning">Kitap indirmek için internet bağlantınızın olması gerekmektedir</string>
+    <string name="sign_in_error">Hatalı e-posta ya da şifre girdiniz</string>
+    <string name="phone_invalid">1 yıl içinde 2\'den fazla farklı cihazla oturum açmak istediniz ve güvenlik nedeniyle oturumunuz kilitlendi. Tekrar aktif hale getirmek için lütfen iletişim bölümünden bize ulaşın.</string>
+    <string name="session_no_is_different">Uygulama bilgilerinizde değişiklik var, bilgiler güncellensin mi?</string>
+    <string name="local_mode_warning">Kuran\’ı indirmek için internete bağlı olduğunuzdan emin olun</string>
     <string name="sign_up">Yeni Kullanıcı</string>
     <string name="ok">Tamam</string>
     <string name="surname">Soyisim</string>
     <string name="offline">Çevrimdışı</string>
     <string name="name">İsim</string>
-    <string name="signup_empty_fields">Lütfen tüm kutuları olması gerektiği şekilde doldurun</string>
-    <string name="signup_already_email">Bu eposta adresi zaten kullanılıyor</string>
+    <string name="signup_empty_fields">Lütfen tüm kutuları eksiksiz doldurun</string>
+    <string name="signup_already_email">Bu e-posta adresi zaten kullanılıyor</string>
     <string name="error">Hata</string>
     <string name="warning">Uyarı</string>
     <string name="logout_due_to_session_number_is_different">Bu cihazdaki oturumunuz başka bir cihazda açılan oturum dolayısıyla sonlandırıldı.</string>
-    <string name="active">Her ekran kilidini açtığımda ayetler gösterilsin</string>
-    <string name="show_alternate_text">İkinci kitap gösterilsin</string>
+    <string name="active">Ekran kilidini her açtığımda ayetleri göster</string>
+    <string name="show_alternate_text">İkinci dili göster</string>
     <string name="remember_password">Şifremi hatırlat</string>
     <string name="forgot_password">Şifremi unuttum</string>
-    <string name="new_bookmark_set_warning_message">Bu ayet ayraç olarak kaydedilecek, devam edilsin mi?</string>
-    <string name="remove_bookmark_warning_message">Bu ayetle ilişkilendirilmiş ayraç kaldırılacak, devam edilsin mi?</string>
-    <string name="bookmark_change_warning_message">Başka bir ayet ayraçlanmış, ayracı bu ayete atarsanız önceki ayete ait kayıt silinecek, devam edilsin mi?</string>
+    <string name="new_bookmark_set_warning_message">Bu ayete ayraç eklenecek, devam edilsin mi?</string>
+    <string name="remove_bookmark_warning_message">Bu ayete eklenmiş ayraç kaldırılacak, devam edilsin mi?</string>
+    <string name="bookmark_change_warning_message">Başka bir ayet ayraçlanmış, ayracı bu ayete atarsanız önceki ayraç silinecek, devam edilsin mi?</string>
     <string name="go_to_bookmark_warning_message">Ayraç olarak işaretlediğiniz ayete (%1$s) gidilecek, devam edilsin mi?</string>
     <string name="total_cloud_favourite_count">%1$d kişi favoriledi</string>
     <string name="no_notes_found">Bu ayetle ilgili not bulunamadı</string>
@@ -87,27 +87,27 @@
     <string name="downloading">İndiriliyor %%%1$d</string>
     <string name="checking">kontrol ediliyor…</string>
     <string name="select_book">Kitap Seç</string>
-    <string name="filtered_by_only_full_versions">Sadece indirdiklerimi listele</string>
+    <string name="filtered_by_only_full_versions">Sadece indirdiğim çevirileri listele</string>
     <string name="sign_out">Hesaptan Çık</string>
     <string name="sign_out_warning_message">Hesabınızdan çıkmak istediğinizden emin misiniz?</string>
     <string name="close">Close</string>
     <string name="spotlight_layout_1_text">Aradığın kelimelerin geçtiği ayetleri kolayca bul, istediğin ayete hemen numarasıyla git</string>
-    <string name="spotlight_layout_2_text">Kaldığın yeri unutma\n\nİster ayraç düğmesine basarak ister ayetin üzerine basılı tutarak kaldığın yeri kaydet</string>
+    <string name="spotlight_layout_2_text">Kaldığın yeri unutma!\n\nAyraç düğmesine bas ya da ayetin üzerine basılı tutarak kaldığın yeri kaydet</string>
     <string name="spotlight_layout_3_text">Tüm sureleri listele\n\nİstediğin sureye direk ulaş</string>
-    <string name="spotlight_layout_4_text">Ayetleri farklı şekillerde görüntüle\n\nKarışık, sırayla, sadece favoriler gibi</string>
-    <string name="spotlight_layout_5_text">Kitabın toplamda yüzde kaçını okuduğun burada</string>
-    <string name="spotlight_layout_6_text">Farklı dilde veya çeviride kitaplar indir\n\nGösterimlere ikinci kitap ekle, uygulamanın tuş kilidi sonrası gösterilip gösterilmeyeceğine karar ver</string>
-    <string name="spotlight_layout_7_text">Ayetleri değer verdiklerinle paylaş</string>
-    <string name="spotlight_layout_8_text">Senin için farklı anlam ifade eden ayeti favoriye al\n\nDaha sonra favoriler listende sadece favorilerini göstererek ezberlemende yardımcı olalım</string>
-    <string name="spotlight_layout_9_text">Ayet ile ilgili not ekle\n\nEklenen notları gör ve puanla</string>
-    <string name="spotlight_layout_10_text">Bir ayeti kaç kere görüntülediğini buradan gör</string>
-    <string name="spotlight_layout_11_text">Ayetin arapça okunuşunu dinle</string>
-    <string name="spotlight_layout_12_text">Ayetleri otomatik modda oku\n\nHiçbir şey yapmana gerek kalmadan sayfalar kendiliğinden çevrilsin.\n\nİlk mod (üstte yeşil çubuk) yavaş, ikinci mod (üstte turuncu çubuk) normal okuma hızında ilerler.</string>
-    <string name="spotlight_layout_13_text">Aynı anda 2 dilde ayeti birlikte görüntülemek için ayarlar ekranından ikinci kitap gösterilsin\'i seç</string>
+    <string name="spotlight_layout_4_text">Ayetleri görüntüleme seçenekleri\n\n(Karışık, sıralı, tekrarlı, favori ayetler)</string>
+    <string name="spotlight_layout_5_text">Kuran\’ın yüzde kaçını okuduğunu gör</string>
+    <string name="spotlight_layout_6_text">Kuran\’ı 100’den fazla çeviri, 40’dan fazla dilde indir\n\nGösterimlere ikinci dili ekle, ayetlerin gösterim sıklığına karar ver </string>
+    <string name="spotlight_layout_7_text">Ayetleri sevdiklerinle paylaş</string>
+    <string name="spotlight_layout_8_text">Beğendiğin ayetleri favorile\n\nDaha sonra favorilerini görüntüleyerek kolayca ezberle</string>
+    <string name="spotlight_layout_9_text">Ayet ile ilgili not ekle</string>
+    <string name="spotlight_layout_10_text">Bir ayeti kaç kere okuduğunu gör</string>
+    <string name="spotlight_layout_11_text">Ayetleri orijinal dilde sesli dinle</string>
+    <string name="spotlight_layout_12_text">Ayetleri otomatik hızda oku\n\nHiçbir şey yapmana gerek kalmadan sayfalar okuma hızına göre kendiliğinden çevrilsin.\n\n Yeşil çubuk yavaş, turuncu çubuk normal hızda ilerler.</string>
+    <string name="spotlight_layout_13_text">Kuran\’ı 2 farklı dil ve çeviride görüntülemek için ayarlar ekranından ikinci dili göster\'i seç</string>
     <string name="works_all_day">Tüm gün aktif</string>
     <string name="works_by_specific_time_period">Belirlediğim zaman aralığında çalış</string>
     <string name="finish_date_can_not_be_lower_than_start_date">Bitiş zamanı başlangıç zamanından önce olamaz</string>
-    <string name="email_is_waiting_for_verification">Lütfen müsait bir zamanınızda onaylanmış kullanıcı olmak için gönderdiğimiz epostadaki linke tıklayın\n\nOnaylanmamış kullanıcılar kitap indirebilir ancak not eklemek gibi bazı fonksiyonları kullanamaz.</string>
+    <string name="email_is_waiting_for_verification">Hesabınızın onaylanması için gönderdiğimiz e-postadaki linke tıklayın\n\nOnaylanmamış kullanıcılar kitap indirebilir ancak tüm fonksiyonları kullanamaz.</string>
     <string name="info">Bilgi</string>
     <string name="sign_up_with_google">Google Hesabın ile Bağlan</string>
     <string name="sign_up_with_facebook">Facebook Hesabın ile Bağlan</string>
@@ -119,21 +119,36 @@
     <string name="item_already_owned">Bu ürün zaten alınmış</string>
     <string name="item_not_owned">Ürün alınmadı</string>
     <string name="send_gift">Hediye Et</string>
-    <string name="password_confirm">Tekrar Şifre</string>
-    <string name="enter_your_email">Eposta adresinizi belirtin</string>
+    <string name="password_confirm">Şifre Tekrar</string>
+    <string name="enter_your_email">E-posta adresinizi belirtin</string>
     <string name="validation_code">Onay Kodu</string>
     <string name="new_password">Yeni Şifre</string>
     <string name="new_password_confirm">Tekrar Yeni Şifre</string>
-    <string name="invalid_validation_code">Hatalı onay kodu. (Lütfen Eposta adresinize gelen onay kodunu doğru girdiğinizden emin olun)</string>
-    <string name="password_reset_step_2_tip">Eposta adresinize gönderdiğimiz onay koduyla birlikte yeni şifrenizi oluşturun</string>
+    <string name="invalid_validation_code">Hatalı onay kodu. (Lütfen E-posta adresinize gelen onay kodunu doğru girdiğinizden emin olun)</string>
+    <string name="password_reset_step_2_tip">E-posta adresinize gönderdiğimiz onay koduyla birlikte yeni şifrenizi oluşturun</string>
     <string name="new_password_has_been_set_successfully">Şifre başarıyla tanımlandı. Yeni şifrenizle hemen sisteme giriş yapabilirsiniz.</string>
     <string name="password_reset_error">Girilen bilgilerde hata var, lütfen tekrar deneyin</string>
 
     <string-array name="playmodes">
-        <item>Ayetler karışık şekilde gösterilecek</item>
-        <item>Sadece seçili sureye ait ayetler gösterilecek</item>
-        <item>Hep bu ayet gösterilecek</item>
-        <item>Ayetler sırayla gösterilecek</item>
-        <item>Favori ayetler gösterilecek</item>
+        <item>Ayetleri karışık şekilde göster</item>
+        <item>Sadece seçili suredeki ayetleri göster</item>
+        <item>Sadece bu ayeti göster</item>
+        <item>Ayetleri sırayla göster</item>
+        <item>Favori ayetlerimi göster</item>
     </string-array>
+
+    <string-array name="toppagerlist">
+        <item>Ekran kilidini her açtığında\nyeni bir ayet gör</item>
+        <item>En kısa ve kolay şekilde\nKuran\'ı öğren</item>
+        <item>40\'tan fazla dil</item>
+        <item>100\'den fazla çeviri</item>
+        <item>Aynı anda 2 farklı dil\nve çeviride okuma seçeneği</item>
+        <item>Okuma hızına göre\notomatik gösterim</item>
+        <item>Ayetleri orijinal\nsesiyle dinleyebilme</item>
+        <item>Kaldığın ayete ayraç koyma</item>
+        <item>Favorilenen ayetlerden\nliste oluşturma</item>
+        <item>Sevdiklerinle istediğin\nayeti paylaşabilme</item>
+        <item>Ve daha bir çok özellik ile\nen kolay Kuran uygulaması</item>
+    </string-array>
+
 </resources>

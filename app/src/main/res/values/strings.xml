@@ -1,145 +1,159 @@
 <resources>
     <string name="app_name">Holy Signal</string>
-    <string name="preferences_saved">Preferences are saved successfully</string>
-    <string name="edition_select_text">Please select an edition</string>
+    <string name="preferences_saved">Preferences saved successfully</string>
+    <string name="edition_select_text">Please select a version</string>
     <string name="main_save_and_close">Save</string>
     <string name="main_save">Save</string>
-    <string name="main_primary_text">Select Primary Book</string>
-    <string name="main_alternative_text">Second Book</string>
-
-    <string name="added_to_favourites">Added to favourites</string>
-    <string name="removed_from_favourites">Removed from favourites</string>
-
-    <string name="playmode_snackbar_message">New playmode is: %1$s</string>
-    <string name="add_note_hint">Please enter your note about the ayah</string>
-    <string name="note_saved_successfully">Note saved successfully</string>
-    <string name="note_should_be_filled">Please fill the content area</string>
+    <string name="main_primary_text">Select primary language</string>
+    <string name="main_alternative_text">Second language</string>
+    <string name="added_to_favourites">Added to My Favorites</string>
+    <string name="removed_from_favourites">Deleted from My Favorites</string>
+    <string name="playmode_snackbar_message">New Playlist: %1$s</string>
+    <string name="add_note_hint">Add a note to this verse</string>
+    <string name="note_saved_successfully">Your note saved successfully</string>
+    <string name="note_should_be_filled">Please add your note</string>
     <string name="note">Note</string>
-    <string name="via_holy_signal">(via www.holysignal.com)</string>
+    <string name="via_holy_signal">(Via www.holysignal.com)</string>
     <string name="search">Search</string>
     <string name="ayah_search_hint">mercy, ramadan, book</string>
-    <string name="ayah_search_validation_error">Maximum 3 words can be filled</string>
-    <string name="ayah_search_no_data_found">None ayah found.\n\n(keywords: %1$s)</string>
-    <string name="ayah_search_found_text">%1$s\n(%2$d ayahs found)</string>
-    <string name="next_ayah">next\nayah</string>
-    <string name="previous_ayah">previous\nayah</string>
-    <string name="none_favourite_found">None Favourite Found</string>
-    <string name="favourites_are_getting_randomly">(*) Favourites are getting randomly</string>
+    <string name="ayah_search_validation_error">Max. 3 words</string>
+    <string name="ayah_search_no_data_found">Verses cannot be found.\n\n(Search keywords: %1$s)</string>
+    <string name="ayah_search_found_text">%1$s\n(%2$d verses has been found)</string>
+    <string name="next_ayah">next\nverse</string>
+    <string name="previous_ayah">previous\nverse</string>
+    <string name="none_favourite_found">No favorite to display</string>
+    <string name="favourites_are_getting_randomly">(*) Shuffle favorites</string>
     <string name="download">Download</string>
-    <string name="download_book">Download Book</string>
-    <string name="download_finished">download is finished</string>
-    <string name="ayah_not_found_on_alternative_book">This ayah is not available on this book. Please download it.</string>
-    <string name="limited_version">%1$s (First 50 ayahs)</string>
-    <string name="surah_ayahs_is_downloading">Ayahs are downloading (%1$s)</string>
-    <string name="surah_translate_is_downloading">Translated surah names are downloading (%1$s)</string>
-    <string name="total_viewing_count">%1$d time(s) viewed</string>
+    <string name="download_book">Download Qur\'an</string>
+    <string name="download_finished">Download completed</string>
+    <string name="ayah_not_found_on_alternative_book">(Now you are using Holy Signal trial version. To see the whole verses please download Holy Signal Pro.</string>
+    <string name="limited_version">%1$s (First 50 verses)</string>
+    <string name="surah_ayahs_is_downloading">Downloading Verses (%1$s)</string>
+    <string name="surah_translate_is_downloading">Downloading Verse names (%1$s)</string>
+    <string name="total_viewing_count">viewed %1$d times</string>
     <string name="x_ayah_displayed">%1$d%%</string>
     <string name="preferences">Preferences</string>
-    <string name="signup_warning">You are using free version which has only 50 ayahs.\n\nSign up in 30 seconds, download tens of quran in different languages and read the whole of the quran from start to end within the way you want.</string>
-    <string name="welcome_message_for_member">Hello\n%1$s</string>
-    <string name="order">Order</string>
-    <string name="login_title">Sign In</string>
-    <string name="username">Username</string>
+    <string name="signup_warning">More than 40 languages, more than \n100 translations\n\nSign up now\nEvery time you look at the screen\nRead a new Verse</string>
+    <string name="welcome_message_for_member">Welcome\n%1$s</string>
+    <string name="order">Buy Now</string>
+    <string name="login_title">Login</string>
+    <string name="username">User name</string>
     <string name="password">Password</string>
-    <string name="email">Email</string>
-    <string name="sign_in">Sign In</string>
-    <string name="phone_changed_warning">You are changing your stored phone, this can be only 2 times in a year for security reasons. Do you want to change your stored phone?</string>
+    <string name="email">E-mail</string>
+    <string name="sign_in">Login</string>
+    <string name="phone_changed_warning">You\'re Signing in from a different device, for security reasons you can change max.2 devices in a year. Do you want to continue?</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
-    <string name="sign_in_error">Incorrect email or password</string>
-    <string name="phone_invalid">You have changed your stored phone more than 2 times in a year, this is invalid for security reasons. To make valid your phone please contact us via communication screen</string>
-    <string name="session_no_is_different">Session seems different, please choose yes to change with the new one to use full version again</string>
-    <string name="offline">Offline</string>
-    <string name="local_mode_warning">To download any book you must connect to the internet</string>
-    <string name="sign_up">Sign Up</string>
-    <string name="ok">Ok</string>
+    <string name="sign_in_error">Invalid e-mail or password</string>
+    <string name="phone_invalid">In a year you tried to sign in from more than 2 different devices and for the security reasons your account has been blocked. To reactivate your account please contact us.</string>
+    <string name="session_no_is_different">You made new changes, do you want to update?</string>
+    <string name="local_mode_warning">You\’re not connected to the internet. Please check your connection for downloading Qur\'an.</string>
+    <string name="sign_up">New User</string>
+    <string name="ok">OK</string>
     <string name="surname">Surname</string>
+    <string name="offline">Offline</string>
     <string name="name">Name</string>
-    <string name="signup_empty_fields">Please fill all the boxes correctly</string>
-    <string name="signup_already_email">This email already in use</string>
+    <string name="signup_empty_fields">Please fill the boxes</string>
+    <string name="signup_already_email">This e-mail address is already in use.</string>
     <string name="error">Error</string>
     <string name="warning">Warning</string>
-    <string name="logout_due_to_session_number_is_different">Session is closed due to your active session number is different</string>
-    <string name="active">Will show ayahs after unlocking</string>
-    <string name="show_alternate_text">Show along with the second book</string>
-    <string name="remember_password">Remember Password</string>
+    <string name="logout_due_to_session_number_is_different">As you are logged in from another device,your session has been ended.</string>
+    <string name="active">Show verses at every screen unlock</string>
+    <string name="show_alternate_text">Show second language</string>
+    <string name="remember_password">Password reminder</string>
     <string name="forgot_password">Forgot password</string>
-    <string name="new_bookmark_set_warning_message">Do you want to bookmark on this ayah?</string>
-    <string name="remove_bookmark_warning_message">Do you want to remove the bookmark on ayah?</string>
-    <string name="bookmark_change_warning_message">Another ayah was bookmarked, do you want to change with this?</string>
-    <string name="go_to_bookmark_warning_message">Do you want to go to your bookmarked ayah? (%1$s)</string>
-    <string name="total_cloud_favourite_count">liked by %1$d people</string>
-    <string name="no_notes_found">No notes found</string>
-    <string name="not_connected">Not connected to the internet</string>
-    <string name="notes_are_retrieving">Notes are retrieving</string>
+    <string name="new_bookmark_set_warning_message">Bookmark will be added. Do you want to continue?</string>
+    <string name="remove_bookmark_warning_message">Bookmark will be removed from this verse. Do you want to continue?</string>
+    <string name="bookmark_change_warning_message">Another verse has been bookmarked. If you bookmark this verse you will lose the previous one. Do you want to continue?</string>
+    <string name="go_to_bookmark_warning_message">Do you want to continue to the bookmarked verse(%1$s)?</string>
+    <string name="total_cloud_favourite_count">%1$d people liked</string>
+    <string name="no_notes_found">No notes found for this verse</string>
+    <string name="not_connected">No internet connection</string>
+    <string name="notes_are_retrieving">Retrieving notes…</string>
     <string name="word">Word</string>
-    <string name="ayah_number">Ayah Number</string>
-    <string name="not_an_ayah_number">Invalid ayah number</string>
-    <string name="go">Go</string>
-    <string name="select_surah">Select Surah</string>
-    <string name="ayah_not_found_on_primary_book">This ayah is not available on the book you have chosen as primarily. Please download it.</string>
-    <string name="none_items_found">None items found</string>
-    <string name="delete_note_warning_message">Are you sure to delete this note?</string>
-    <string name="language_selection">Language Selection</string>
-    <string name="please_select_language_description">Please choose the language</string>
+    <string name="ayah_number">Verse Number</string>
+    <string name="not_an_ayah_number">Invalid verse number</string>
+    <string name="go">Proceed</string>
+    <string name="select_surah">Choose a verse</string>
+    <string name="ayah_not_found_on_primary_book">This verse has not been found in the primary book selected. Download the book from the Preferences and try again.</string>
+    <string name="none_items_found">Nothing to display</string>
+    <string name="delete_note_warning_message">Are you sure you want to delete this note?</string>
+    <string name="language_selection">Language selection</string>
+    <string name="please_select_language_description">Please select the language of the book you want to download</string>
     <string name="next">Next</string>
-    <string name="book_selection">Book Selection</string>
+    <string name="book_selection">Select the book</string>
     <string name="please_select_book_description">Please select available book by the language</string>
-    <string name="selected_language_is">Available books for %1$s</string>
-    <string name="downloading">Downloading %1$d%%</string>
-    <string name="checking">checking…</string>
-    <string name="select_book">Select Book</string>
-    <string name="filtered_by_only_full_versions">Retrieve only downloads</string>
+    <string name="selected_language_is">Selected Language: %1$s</string>
+    <string name="downloading">Downloading %%%1$d</string>
+    <string name="checking">Checking…</string>
+    <string name="select_book">Select the book</string>
+    <string name="filtered_by_only_full_versions">List only downloaded translations</string>
     <string name="sign_out">Sign out</string>
-    <string name="sign_out_warning_message">Do you really want to sign out?</string>
+    <string name="sign_out_warning_message">Are you sure you want to sign out?</string>
     <string name="close">Close</string>
-    <string name="spotlight_layout_1_text">By clicking here you can search ayahs by word or ayah number. Also you can search 3 different words at the same time by putting comma between them</string>
-    <string name="spotlight_layout_2_text">Bookmark spotlight text</string>
-    <string name="spotlight_layout_3_text">Select surah spotlight text</string>
-    <string name="spotlight_layout_4_text">Playmode surah spotlight text</string>
-    <string name="spotlight_layout_5_text">Progress spotlight text</string>
-    <string name="spotlight_layout_6_text">Settings spotlight text</string>
-    <string name="spotlight_layout_7_text">Share spotlight text</string>
-    <string name="spotlight_layout_8_text">Like spotlight text</string>
-    <string name="spotlight_layout_9_text">Note spotlight text</string>
-    <string name="spotlight_layout_10_text">viewingcount spotlight text</string>
-    <string name="spotlight_layout_11_text">Audio text</string>
-    <string name="spotlight_layout_12_text">auto mode text</string>
-    <string name="spotlight_layout_13_text">auto mode text</string>
-    <string name="works_all_day">Run all day long</string>
-    <string name="works_by_specific_time_period">Run by time period below</string>
-    <string name="finish_date_can_not_be_lower_than_start_date">Finish times can not be lower than start times</string>
-    <string name="email_is_waiting_for_verification">In order to be a verified user please click the link in the email which we have sent you.\n\nUnverified users can download book however they will not be able to make some features such as writing a note</string>
+    <string name="spotlight_layout_1_text">Find verses by entering keywords. Go to the chosen verse by its number</string>
+    <string name="spotlight_layout_2_text">Don\'t forget where you are!\n\nPress bookmark button or keep pressed on the verse to save where you are.</string>
+    <string name="spotlight_layout_3_text">List all verses.\n\nGo to the selected verse promptly</string>
+    <string name="spotlight_layout_4_text">Verse display options:\n\n(Shuffle, in-line, repeat, liked verses)</string>
+    <string name="spotlight_layout_5_text">Completion percentage of Qur\'an</string>
+    <string name="spotlight_layout_6_text">More than 100 translations, Download more than in 40 languages.\n\nAdd secondary language on display, choose display frequency of the verses.</string>
+    <string name="spotlight_layout_7_text">Share verses with friends.</string>
+    <string name="spotlight_layout_8_text">Add verses you like to the Favorites\n\nLater revise your Favorites and memorize them easily!</string>
+    <string name="spotlight_layout_9_text">Add a note to the verse</string>
+    <string name="spotlight_layout_10_text">See how many times you read the verse</string>
+    <string name="spotlight_layout_11_text">Listen the verses in the original language.</string>
+    <string name="spotlight_layout_12_text">Read verses in automatic speed.\n\nWithout touching, turn the pages automatically key to your reading speed.\n\n Green bar for slow, Orange bar for normal speed.</string>
+    <string name="spotlight_layout_13_text">For displaying Qur\'an in 2 languages at the same time, select "Show second language" from the Preferences.</string>
+    <string name="works_all_day">Work all day</string>
+    <string name="works_by_specific_time_period">Work between selected hours</string>
+    <string name="finish_date_can_not_be_lower_than_start_date">Ending time cannot be later than the beginning</string>
+    <string name="email_is_waiting_for_verification">For activating your account please click on the link sent your e-mail.\n\nUsers with unactivated accounts can download the books, but cannot use all the functions. </string>
     <string name="info">Information</string>
-    <string name="sign_up_with_google">Sign In with Google</string>
-    <string name="sign_up_with_facebook">Sign In with Facebook</string>
+    <string name="sign_up_with_google">Login with Google</string>
+    <string name="sign_up_with_facebook">Login with Facebook</string>
+
+    <string name="user_canceled">You cancelled purchasing</string>
+    <string name="error_occured_while_purchasing">An error has occurred during purchasing</string>
+    <string name="billing_client_is_not_ready">Billing client is not ready</string>
+    <string name="sku_detail_list_not_found">Item cannot be found</string>
+    <string name="item_already_owned">You already purchased this item</string>
+    <string name="item_not_owned">Item purchase is not successful</string>
+    <string name="send_gift">Send as a Gift</string>
+    <string name="password_confirm">Confirm your Password</string>
+    <string name="enter_your_email">Enter your E-mail</string>
+    <string name="validation_code">Validation code</string>
+    <string name="new_password">New Password</string>
+    <string name="new_password_confirm">Confirm New Password</string>
+    <string name="invalid_validation_code">Invalid validation code. (Please enter the validation code sent to your e-mail correctly)</string>
+    <string name="password_reset_step_2_tip">Reset your password with a validation code sent to your e-mail.</string>
+    <string name="new_password_has_been_set_successfully">New password has been set. Login to your account with your new password.</string>
+    <string name="password_reset_error">Password reset error, please try again.</string>
 
     <string-array name="playmodes">
-        <item>Shuffle all ayahs</item>
-        <item>Retrieve ayahs from the selected surah only</item>
-        <item>Repeat this ayah</item>
-        <item>Retrieve ayahs by sequentially</item>
-        <item>Retrieve favourite ayahs</item>
+        <item>Display verses in Shuffling mode</item>
+        <item>Display verses only from the selected Surah</item>
+        <item>Display only this verse</item>
+        <item>Display verses in-line</item>
+        <item>Display Favorite verses</item>
     </string-array>
+
+    <string-array name="toppagerlist">
+        <item>Show a new verse\nat every screen unlock</item>
+        <item>Learn Qur\'an\nin the fastest and easiest way</item>
+        <item>More than 40 languages</item>
+        <item>More than 100 translations</item>
+        <item>In 2 languages\nat the same time reading option</item>
+        <item>Automatic display\nkey to your reading speed</item>
+        <item>Listening option\nin the original language</item>
+        <item>Bookmark where you left</item>
+        <item>Make a list of\nyour liked verses</item>
+        <item>Share the verses you like\nwith the loved ones</item>
+        <item>And with many other features\nThe easiest Qur\'an application</item>
+    </string-array>
+
     <string name="twitterApiSecret">TWITTER_SECRET</string>
     <string name="facebookApiSecret">FB_SECRET</string>
-    <string name="user_canceled">User canceled the purchase flow</string>
-    <string name="error_occured_while_purchasing">Satın alma sırasında hata oluştu</string>
-    <string name="billing_client_is_not_ready">Billing client is not ready</string>
-    <string name="sku_detail_list_not_found">Satın alınacak ürün bulunamadı</string>
-    <string name="item_already_owned">Bu ürün zaten alınmış</string>
-    <string name="item_not_owned">Ürün alınmadı</string>
-
     <string name="facebook_app_id">812316465895896</string>
     <string name="fb_login_protocol_scheme">fb812316465895896</string>
-    <string name="send_gift">Send as a Gift</string>
-    <string name="password_confirm">Confirm Password</string>
-    <string name="enter_your_email">Please enter your email</string>
-    <string name="validation_code">Validation Code</string>
-    <string name="new_password">New Password</string>
-    <string name="new_password_confirm">Confirm new password</string>
-    <string name="invalid_validation_code">Invalid validation code</string>
-    <string name="password_reset_step_2_tip">Eposta adresinize gönderdiğimiz onay koduyla birlikte yeni şifrenizi oluşturun</string>
-    <string name="new_password_has_been_set_successfully">Yeni şifre başarıyla oluşturuldu</string>
-    <string name="password_reset_error">Girilen bilgilerde hata var, lütfen tekrar deneyin</string>
+
 </resources>
